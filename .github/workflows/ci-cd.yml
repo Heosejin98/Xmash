@@ -67,7 +67,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.0
+        with:
+          ssh-private-key: ${{ secrets.GCP_SSH_KEY }}
+
+      - name: Add server to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_PUBLIC_IP }} >> ~/.ssh/known_hosts 
+          
+      - name: Test SSH Connection and Output Hostname
+        run: |
+          ssh ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} -p ${{ secrets.GCP_SSH_PORT }} 'hostname'
+
       - name: Deploy to server
         run: |
+          ssh ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} -p ${{ secrets.GCP_SSH_PORT }} << 'EOF'
           # Your deployment commands here
           echo "Deploying application"
+          EOF
