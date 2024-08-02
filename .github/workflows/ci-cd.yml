@@ -71,10 +71,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup SSH
-        uses: web-factory/ssh-agent@v0.5.0
-        with:
-          ssh-private-key: ${{ secrets.GCP_SSH_KEY }}
+      - name: Set up SSH
+        run: |
+          # Create the .ssh directory
+          mkdir -p ~/.ssh
+
+          # Add the private key
+          echo "${{ secrets.GCP_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          # Add the known_hosts file to avoid SSH host key verification
+          ssh-keyscan -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_PUBLIC_IP }} >> ~/.ssh/known_hosts
+
 
       - name: Add server to known_hosts
         run: |
