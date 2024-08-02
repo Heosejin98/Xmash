@@ -34,6 +34,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: List directory contents
+        run: ls -la
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
