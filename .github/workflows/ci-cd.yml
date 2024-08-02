@@ -82,12 +82,7 @@ jobs:
 
           # Add the known_hosts file to avoid SSH host key verification
           ssh-keyscan -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_PUBLIC_IP }} >> ~/.ssh/known_hosts
-
-
-      - name: Add server to known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_PUBLIC_IP }} >> ~/.ssh/known_hosts 
+ 
           
       - name: Test SSH Connection and Output Hostname
         run: |
