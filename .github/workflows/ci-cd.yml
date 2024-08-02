@@ -34,17 +34,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: List directory contents
-        run: ls -la
-
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+        working-directory: be/xmash
 
       - name: Build with Gradle
         run: ./gradlew build
+        working-directory: be/xmash
 
       - name: Run backend tests
         run: ./gradlew test
+        working-directory: be/xmash
 
 #  build-frontend: 만들꺼면 쓰시오
 #    name: Build Frontend
