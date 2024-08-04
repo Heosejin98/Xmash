@@ -71,11 +71,12 @@ jobs:
 
           # Add the known_hosts file to avoid SSH host key verification
           ssh-keyscan -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_PUBLIC_IP }} >> ~/.ssh/known_hosts
- 
-          
+
       - name: Transfer files
         run: |
-          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/build/libs/*.jar ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/xmash
+          ls -la
+          ls -la be/xmash/build/libs
+          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/build/libs/xmash-0.0.1-SNAPSHOT.jar ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/xmash
 
       - name: Deploy to server
         run: |
