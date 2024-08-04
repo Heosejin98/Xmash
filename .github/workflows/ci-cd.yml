@@ -14,7 +14,7 @@ on:
       - 'be/**'
 
 jobs:
-  build-backend:
+  build-deploy:
     name: Build Backend
     runs-on: ubuntu-latest
 
@@ -71,11 +71,12 @@ jobs:
 
       - name: Deploy to server
         run: |
-          ssh ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} -p ${{ secrets.GCP_SSH_PORT }} << 'EOF'
+          ssh -t ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} -p ${{ secrets.GCP_SSH_PORT }} << 'EOF'
           # Stop the running application if any
+          pkill -f 'java -jar /home/sejin/xmash/xmash-0.0.1-SNAPSHOT.jar'
         
-          java -jar /home/sejin/xmash/*.jar &
-        
+          nohup java -jar /home/sejin/xmash/xmash-0.0.1-SNAPSHOT.jar &
+          
           # Remove the old jar file 
           echo "Deployment completed successfully"
           EOF
