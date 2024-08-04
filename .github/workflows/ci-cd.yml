@@ -50,16 +50,6 @@ jobs:
         run: ./gradlew test
         working-directory: be/xmash
 
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    needs : [build-backend]
-#    needs: [build-backend, build-frontend]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Set up SSH
         run: |
           # Create the .ssh directory
