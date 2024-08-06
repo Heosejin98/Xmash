@@ -6,11 +6,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 @Entity
 @Getter
 @AllArgsConstructor
-public class User {
+@ToString
+public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,6 +22,6 @@ public class User {
     private String password;
     private String gender;
 
-    protected User() {}
+    protected AppUser() {}
 
 }
