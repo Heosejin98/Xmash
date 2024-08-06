@@ -1,0 +1,39 @@
+name: FE CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "fe/**"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+        working-directory: fe
+
+      - name: Build
+        run: bun run build
+        working-directory: fe
+
+      - name: Set up SSH
+        run: |
+          # Create the .ssh directory
+          mkdir -p ~/.ssh
+
+          # Add the private key
+          echo "${{ secrets.GCP_FE_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          # Add the known_hosts file to avoid SSH host key verification
+          ssh-keyscan -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_PUBLIC_IP }} >> ~/.ssh/known_hosts
+
+      - name: Transfer files
+        run: |
+          scp -P ${{ secrets.GCP_SSH_PORT }} -r fe/dist/ ${{ secrets.GCP_FE_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/${{secrets.GCP_FE_SSH_USER}}/build/
