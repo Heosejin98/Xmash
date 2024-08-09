@@ -1,5 +1,5 @@
-import { FormSchema } from "@/entities/login";
-import { login, useLoginForm } from "@/features/login";
+import { FormSchema, useLoginForm } from "@/entities/login";
+import { useLogin } from "@/features/login";
 import {
   Button,
   Form,
@@ -11,10 +11,13 @@ import {
   Input,
 } from "@/shared/ui";
 
+
+
 export function LoginForm() {
   const form = useLoginForm();
-  const onSubmit = (data: FormSchema) => {
-    login(data);
+  const {login} = useLogin();
+  const onSubmit = async (data: FormSchema) => {
+    login(data)
   };
 
   return (

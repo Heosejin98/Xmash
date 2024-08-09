@@ -15,7 +15,7 @@ const useStore = create<AuthStore>()((set) => ({
 
 export const useAuthStore = () => {
   const store = useStore();
-  const isAuthenticated = true;// = useMemo(() => store.user !== null, [store.user]);
+  const isAuthenticated = false;// = useMemo(() => store.user !== null, [store.user]);
 
   const login = (user: UserScheme) => {
     store.setUser(user);
@@ -34,7 +34,7 @@ export const useAuthStore = () => {
   }, []);
 
   return {
-    ...store,
+    user: store.user,
     login,
     logout,
     isAuthenticated,
