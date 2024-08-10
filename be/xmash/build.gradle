@@ -29,8 +29,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'com.h2database:h2:2.2.220'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 
+	implementation 'mysql:mysql-connector-java:8.0.33'
+
+	//test
+	testImplementation 'com.h2database:h2:2.2.220'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
