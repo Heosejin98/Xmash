@@ -9,7 +9,7 @@ export interface Result<T> {
   error: Error | null;
 }
 
-const withAsync = <Fn extends (...args: never[]) => Promise<any>, R extends ReturnType<Fn>>(fn: Fn)=> {
+const withAsync = <Fn extends (...args: never[]) => Promise<any>, R extends ReturnType<Fn>>(fn: Fn) => {
   return async (...args: Parameters<Fn>): Promise<Result<R>> => {
     try {
       const data = await fn(...args);
@@ -32,13 +32,15 @@ const withAsync = <Fn extends (...args: never[]) => Promise<any>, R extends Retu
 }
 
 export class Fetcher {
-  private static request:RequestInit = {
+  private static request: RequestInit = {
+    mode: 'cors',
     credentials: 'same-origin',
+    keepalive: false,
     headers: {
       "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
     },
   };
-
 
   static post = withAsync(async (url: string, data: Params) => {
     const request = {
@@ -47,8 +49,11 @@ export class Fetcher {
       body: JSON.stringify(data),
     }
 
-    const response = await fetch(url, request);
-    return response.json();
+    console.log(request);
+    //401 id, pw 틀릴때
+
+    const response = await fetch(import.meta.env.VITE_API_URL + url, request);
+    return await response.json();
   })
 
   static get = withAsync(async (url: string, data: Params) => {
@@ -58,12 +63,12 @@ export class Fetcher {
     }
     const queryString = new URLSearchParams(data).toString();
 
-    const response = await fetch(
+    const response = await fetch(import.meta.env.VITE_API_URL +
       queryString ? `${url}?${queryString}` : url
       , request
     );
 
-    return response.json();
+    return await response.json();
 
   });
 
@@ -73,8 +78,8 @@ export class Fetcher {
       method: "PUT",
       body: JSON.stringify(data),
     }
-    const response = await fetch(url, request);
-    return response.json();
+    const response = await fetch(import.meta.env.VITE_API_URL + url, request);
+    return await response.json();
   });
 
   static delete = withAsync(async (url: string, data: Params) => {
@@ -85,10 +90,10 @@ export class Fetcher {
       method: "DELETE",
     }
 
-    const response = await fetch(
+    const response = await fetch(import.meta.env.VITE_API_URL +
       queryString ? `${url}?${queryString}` : url
       , request);
-    return response.json();
+    return await response.json();
   });
 
   static patch = withAsync(async (url: string, data: Params) => {
@@ -99,11 +104,9 @@ export class Fetcher {
       method: "PATCH",
     }
 
-    const response = await fetch(
+    const response = await fetch(import.meta.env.VITE_API_URL +
       queryString ? `${url}?${queryString}` : url
       , request);
-    return response.json();
+    return await response.json();
   });
-
-
 }

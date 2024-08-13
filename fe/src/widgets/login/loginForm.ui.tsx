@@ -11,13 +11,11 @@ import {
   Input,
 } from "@/shared/ui";
 
-
-
 export function LoginForm() {
   const form = useLoginForm();
-  const {login} = useLogin();
+  const { login } = useLogin();
   const onSubmit = async (data: FormSchema) => {
-    login(data)
+    login(data);
   };
 
   return (
@@ -30,7 +28,7 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="Email address" {...field} />
+                <Input placeholder="Email address" autoComplete="username" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -43,7 +41,12 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="password" {...field} />
+                <Input
+                  type="password"
+                  placeholder="password"
+                  autoComplete="current-password"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -4,8 +4,9 @@ import { useAuthStore } from "../user/useAuthStore";
 
 export const useLogin = () => {
   const store = useAuthStore();
+
   const login = async (data: FormSchema) => {
-    const result = await Fetcher.post('http://localhost:3000/ogin', data);
+    const result = await Fetcher.post('login2', data);
     store.login(result.data);
     return result.data;
   }

@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './pages/__root'
+import { Route as SuccessPageImport } from './pages/success-page'
 import { Route as LoginImport } from './pages/login'
 import { Route as AuthImport } from './pages/_auth'
 
@@ -22,6 +23,11 @@ const IndexLazyImport = createFileRoute('/')()
 const AuthAboutLazyImport = createFileRoute('/_auth/about')()
 
 // Create/Update Routes
+
+const SuccessPageRoute = SuccessPageImport.update({
+  path: '/success-page',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LoginRoute = LoginImport.update({
   path: '/login',
@@ -68,6 +74,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/success-page': {
+      id: '/success-page'
+      path: '/success-page'
+      fullPath: '/success-page'
+      preLoaderRoute: typeof SuccessPageImport
+      parentRoute: typeof rootRoute
+    }
     '/_auth/about': {
       id: '/_auth/about'
       path: '/about'
@@ -84,6 +97,7 @@ export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   AuthRoute: AuthRoute.addChildren({ AuthAboutLazyRoute }),
   LoginRoute,
+  SuccessPageRoute,
 })
 
 /* prettier-ignore-end */
@@ -96,7 +110,8 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/_auth",
-        "/login"
+        "/login",
+        "/success-page"
       ]
     },
     "/": {
@@ -110,6 +125,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/success-page": {
+      "filePath": "success-page.tsx"
     },
     "/_auth/about": {
       "filePath": "_auth/about.lazy.tsx",

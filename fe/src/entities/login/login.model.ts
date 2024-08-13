@@ -5,9 +5,6 @@ export const FormSchema = z.object({
     .string()
     .min(2, {
       message: "UserId must be at least 2 characters.",
-    })
-    .email({
-      message: "UserId must be a valid email address.",
     }),
   password: z.string().min(8, {
     message: "Password must be at least 8 characters.",
