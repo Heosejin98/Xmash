@@ -1,5 +1,5 @@
 import { UserScheme } from "@/entities/user";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { create } from "zustand";
 
 
