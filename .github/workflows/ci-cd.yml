@@ -75,4 +75,5 @@ jobs:
           
           # Remove the old jar file 
           echo "Deployment completed successfully"
+          exit
           EOF
