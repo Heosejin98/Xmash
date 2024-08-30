@@ -2,10 +2,12 @@ spring:
   application:
     name: xmash
   datasource:
-    url: jdbc:mysql://${DB_IP_PORT}/xmash?allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://34.28.183.24:3306/xmash?allowPublicKeyRetrieval=true&useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    username: 'xuser'
+    password: 'qwer1234!@'
   h2:
     console:
       enabled: false  # H2 콘솔 비활성화
+  session:
+    timeout: 30m  # 세션 만료 시간 (30분)
