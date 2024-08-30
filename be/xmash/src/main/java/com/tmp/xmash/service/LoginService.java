@@ -1,9 +1,11 @@
 package com.tmp.xmash.service;
 
+import com.tmp.xmash.db.entity.AppUser;
 import com.tmp.xmash.db.repositroy.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -14,9 +16,19 @@ public class LoginService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public boolean login(String userId, String password) {
-        return userRepository.findByUserId(userId)
-                .map(user -> passwordEncoder.matches(password, user.getPassword()))
-                .orElse(false);
+    @Transactional
+    public String login(String userId, String password) {
+        AppUser appUser = userRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        if (!passwordEncoder.matches(password, appUser.getPassword())) {
+            throw new IllegalArgumentException("Password not matched");
+        }
+
+        return passwordEncoder.encode(userId);
+    }
+
+    @Transactional
+    public void signUp(String userId, String password) {
+        userRepository.save(new AppUser(userId, passwordEncoder.encode(password)));
     }
 }

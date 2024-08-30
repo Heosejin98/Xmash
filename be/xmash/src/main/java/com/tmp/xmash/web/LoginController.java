@@ -4,9 +4,11 @@ import com.tmp.xmash.db.entity.AppUser;
 import com.tmp.xmash.db.repositroy.UserRepository;
 import com.tmp.xmash.dto.LoginRequest;
 import com.tmp.xmash.service.LoginService;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,10 +28,15 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginPage(@RequestBody LoginRequest loginRequest) {
-        return loginService.login(loginRequest.getUserId(), loginRequest.getPassword())
-                ? ResponseEntity.ok(loginRequest.getUserId())
-                : ResponseEntity.status(401).body("Login Failed");
+    public ResponseEntity<Void> loginPage(HttpSession session, @RequestBody LoginRequest loginRequest) {
+        try {
+            String token = loginService.login(loginRequest.getUserId(), loginRequest.getPassword());
+            session.setAttribute("userId", token);  //
+
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();  // 로그인 실패 메시지;
+        }
     }
 
 }
