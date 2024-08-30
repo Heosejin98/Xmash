@@ -3,5 +3,6 @@ export * from './form';
 export * from './input';
 export * from './label';
 export * from './toast';
+export * from './table';
 export * from './toaster';
 export * from './use-toast';

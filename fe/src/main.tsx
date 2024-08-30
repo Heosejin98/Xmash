@@ -6,7 +6,7 @@ import "./index.css";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useAuthStore } from "./features/user/useAuthStore";
+import { useAuthStore } from "./entities/user/user.store";
 
 // Create a new router instance
 const router = createRouter({ routeTree, context: { isAuthenticated: false } });

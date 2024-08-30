@@ -13,21 +13,21 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './pages/__root'
-import { Route as SuccessPageImport } from './pages/success-page'
 import { Route as LoginImport } from './pages/login'
 import { Route as AuthImport } from './pages/_auth'
 
 // Create Virtual Routes
 
+const LeaderBoardLazyImport = createFileRoute('/leader-board')()
 const IndexLazyImport = createFileRoute('/')()
 const AuthAboutLazyImport = createFileRoute('/_auth/about')()
 
 // Create/Update Routes
 
-const SuccessPageRoute = SuccessPageImport.update({
-  path: '/success-page',
+const LeaderBoardLazyRoute = LeaderBoardLazyImport.update({
+  path: '/leader-board',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./pages/leader-board.lazy').then((d) => d.Route))
 
 const LoginRoute = LoginImport.update({
   path: '/login',
@@ -74,11 +74,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/success-page': {
-      id: '/success-page'
-      path: '/success-page'
-      fullPath: '/success-page'
-      preLoaderRoute: typeof SuccessPageImport
+    '/leader-board': {
+      id: '/leader-board'
+      path: '/leader-board'
+      fullPath: '/leader-board'
+      preLoaderRoute: typeof LeaderBoardLazyImport
       parentRoute: typeof rootRoute
     }
     '/_auth/about': {
@@ -97,7 +97,7 @@ export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   AuthRoute: AuthRoute.addChildren({ AuthAboutLazyRoute }),
   LoginRoute,
-  SuccessPageRoute,
+  LeaderBoardLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -111,7 +111,7 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/_auth",
         "/login",
-        "/success-page"
+        "/leader-board"
       ]
     },
     "/": {
@@ -126,8 +126,8 @@ export const routeTree = rootRoute.addChildren({
     "/login": {
       "filePath": "login.tsx"
     },
-    "/success-page": {
-      "filePath": "success-page.tsx"
+    "/leader-board": {
+      "filePath": "leader-board.lazy.tsx"
     },
     "/_auth/about": {
       "filePath": "_auth/about.lazy.tsx",

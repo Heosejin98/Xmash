@@ -10,12 +10,22 @@ import {
   FormMessage,
   Input,
 } from "@/shared/ui";
+import { useRouter } from "@tanstack/react-router";
 
 export function LoginForm() {
   const form = useLoginForm();
   const { login } = useLogin();
+  const router = useRouter();
   const onSubmit = async (data: FormSchema) => {
-    login(data);
+    const result = await login(data);
+    if (result.isSuccess) {
+      router.navigate({
+        to: "/",
+        replace: true,
+      });
+    } else {
+      alert(result.error?.message);
+    }
   };
 
   return (

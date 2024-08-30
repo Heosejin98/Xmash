@@ -12,15 +12,45 @@ export interface Result<T> {
 const withAsync = <Fn extends (...args: never[]) => Promise<any>, R extends ReturnType<Fn>>(fn: Fn) => {
   return async (...args: Parameters<Fn>): Promise<Result<R>> => {
     try {
-      const data = await fn(...args);
+      const data: Response = await fn(...args);
+      if (!data.ok) {
+        throw data;
+      }
+
       return {
         isSuccess: true,
         isError: false,
-        data,
+        data: await data.json(),
         error: null
       }
     } catch (error: unknown) {
-      console.error(error);
+      if (error instanceof Response) {
+        if (error.status === 401) {
+          return {
+            isSuccess: false,
+            isError: true,
+            data: null,
+            error: new Error("Unauthorized")
+          }
+        }
+        if (error.status === 404) {
+          return {
+            isSuccess: false,
+            isError: true,
+            data: null,
+            error: new Error("Not Found")
+          }
+        }
+        if (error.status === 500) {
+          return {
+            isSuccess: false,
+            isError: true,
+            data: null,
+            error: new Error("Internal Server Error")
+          }
+        }
+      }
+
       return {
         isSuccess: false,
         isError: true,
@@ -49,11 +79,7 @@ export class Fetcher {
       body: JSON.stringify(data),
     }
 
-    console.log(request);
-    //401 id, pw 틀릴때
-
-    const response = await fetch(import.meta.env.VITE_API_URL + url, request);
-    return await response.json();
+    return fetch(import.meta.env.VITE_API_URL + url, request);
   })
 
   static get = withAsync(async (url: string, data: Params) => {
@@ -63,12 +89,11 @@ export class Fetcher {
     }
     const queryString = new URLSearchParams(data).toString();
 
-    const response = await fetch(import.meta.env.VITE_API_URL +
+    return fetch(import.meta.env.VITE_API_URL +
       queryString ? `${url}?${queryString}` : url
       , request
     );
 
-    return await response.json();
 
   });
 
@@ -78,8 +103,7 @@ export class Fetcher {
       method: "PUT",
       body: JSON.stringify(data),
     }
-    const response = await fetch(import.meta.env.VITE_API_URL + url, request);
-    return await response.json();
+    return fetch(import.meta.env.VITE_API_URL + url, request);
   });
 
   static delete = withAsync(async (url: string, data: Params) => {
@@ -90,10 +114,9 @@ export class Fetcher {
       method: "DELETE",
     }
 
-    const response = await fetch(import.meta.env.VITE_API_URL +
+    return fetch(import.meta.env.VITE_API_URL +
       queryString ? `${url}?${queryString}` : url
       , request);
-    return await response.json();
   });
 
   static patch = withAsync(async (url: string, data: Params) => {
@@ -104,9 +127,8 @@ export class Fetcher {
       method: "PATCH",
     }
 
-    const response = await fetch(import.meta.env.VITE_API_URL +
+    return fetch(import.meta.env.VITE_API_URL +
       queryString ? `${url}?${queryString}` : url
       , request);
-    return await response.json();
   });
 }

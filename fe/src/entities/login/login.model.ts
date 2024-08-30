@@ -6,8 +6,8 @@ export const FormSchema = z.object({
     .min(2, {
       message: "UserId must be at least 2 characters.",
     }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
+  password: z.string().min(4, {
+    message: "Password must be at least 4 characters.",
   }),
 });
 
