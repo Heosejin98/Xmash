@@ -65,5 +65,13 @@
   }
   body {
     @apply bg-background text-foreground;
+
+    height: 100%;
+    margin: 0;
+  }
+
+  #root {
+    max-width: 600px;
+    margin-inline: auto;
   }
 }

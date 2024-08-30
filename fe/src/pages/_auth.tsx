@@ -1,4 +1,5 @@
-import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
+import { useAuthStore } from "@/entities/user/user.store";
+import { Outlet, createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_auth")({
   beforeLoad: ({ context, location }) => {
@@ -19,13 +20,23 @@ export const Route = createFileRoute("/_auth")({
 });
 
 function AuthLayout() {
+  const { logout } = useAuthStore();
+  const router = useRouter();
+  const onClickLogout = () => {
+    logout();
+    router.navigate({
+      to: "/login",
+      replace: true,
+    });
+  };
+
   return (
     <div className="p-2 h-full">
       <h1>Authenticated Route</h1>
       <p>This route's content is only visible to authenticated users.</p>
       <ul className="py-2 flex gap-2">
         <li>
-          <button type="button" className="hover:underline">
+          <button type="button" className="hover:underline" onClick={() => onClickLogout()}>
             Logout
           </button>
         </li>

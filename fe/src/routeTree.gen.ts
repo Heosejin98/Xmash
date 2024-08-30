@@ -18,10 +18,16 @@ import { Route as AuthImport } from './pages/_auth'
 
 // Create Virtual Routes
 
+const LeaderBoardLazyImport = createFileRoute('/leader-board')()
 const IndexLazyImport = createFileRoute('/')()
 const AuthAboutLazyImport = createFileRoute('/_auth/about')()
 
 // Create/Update Routes
+
+const LeaderBoardLazyRoute = LeaderBoardLazyImport.update({
+  path: '/leader-board',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./pages/leader-board.lazy').then((d) => d.Route))
 
 const LoginRoute = LoginImport.update({
   path: '/login',
@@ -68,6 +74,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/leader-board': {
+      id: '/leader-board'
+      path: '/leader-board'
+      fullPath: '/leader-board'
+      preLoaderRoute: typeof LeaderBoardLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/_auth/about': {
       id: '/_auth/about'
       path: '/about'
@@ -84,6 +97,7 @@ export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   AuthRoute: AuthRoute.addChildren({ AuthAboutLazyRoute }),
   LoginRoute,
+  LeaderBoardLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -96,7 +110,8 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/_auth",
-        "/login"
+        "/login",
+        "/leader-board"
       ]
     },
     "/": {
@@ -110,6 +125,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/leader-board": {
+      "filePath": "leader-board.lazy.tsx"
     },
     "/_auth/about": {
       "filePath": "_auth/about.lazy.tsx",

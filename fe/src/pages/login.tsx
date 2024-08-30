@@ -1,4 +1,4 @@
-import { LoginForm } from "@/widgets/login/loginForm.ui";
+import { LoginForm } from "@/features/login/login.ui";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { z } from "zod";
 
