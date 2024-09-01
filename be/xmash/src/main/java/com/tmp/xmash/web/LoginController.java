@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @CrossOrigin(origins = "*")  // 모든 도메인에서의 요청 허용
-public class LoginController {
+public class LoginController implements LoginApi {
 
     private final LoginService loginService;
 

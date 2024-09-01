@@ -1,0 +1,45 @@
+openapi: 3.0.3
+info:
+  title: Title
+  description: Title
+  version: 1.0.0
+servers:
+  - url: 'http'
+paths:
+  /login:
+    post:
+      summary: '사용자 로그인'
+      description: '사용자를 인증하고 세션 속성을 설정합니다.'
+      requestBody:
+        description: '사용자 자격 증명을 포함한 로그인 요청입니다.'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: '사용자의 ID'
+                password:
+                  type: string
+                  description: '사용자의 비밀번호'
+              required:
+                - userId
+                - password
+      responses:
+        '200':
+          description: '로그인 성공'
+        '401':
+          description: '인증 실패, 잘못된 자격 증명'
+      tags:
+        - Authentication
+      security:
+        - api_key: []
+
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: Authorization
