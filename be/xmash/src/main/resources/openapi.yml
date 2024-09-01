@@ -1,45 +1,53 @@
 openapi: 3.0.3
 info:
-  title: Title
-  description: Title
+  title: Xmash
+  description: Xmash
   version: 1.0.0
 servers:
   - url: 'http'
 paths:
-  /login:
-    post:
-      summary: '사용자 로그인'
-      description: '사용자를 인증하고 세션 속성을 설정합니다.'
-      requestBody:
-        description: '사용자 자격 증명을 포함한 로그인 요청입니다.'
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: string
-                  description: '사용자의 ID'
-                password:
-                  type: string
-                  description: '사용자의 비밀번호'
-              required:
-                - userId
-                - password
+  /ranking:
+    get:
+      summary: Retrieve Ranking Information
+      description: Retrieves a list of ranking information.
+      operationId: getRanking
       responses:
         '200':
-          description: '로그인 성공'
-        '401':
-          description: '인증 실패, 잘못된 자격 증명'
+          description: A list of ranking information successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RankingResponse'
+        '500':
+          description: Server error or unexpected issue.
       tags:
-        - Authentication
-      security:
-        - api_key: []
+        - Ranking
 
 components:
-  securitySchemes:
-    api_key:
-      type: apiKey
-      in: header
-      name: Authorization
+  schemas:
+    RankingResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: '사용자의 고유 식별자입니다.'
+        userName:
+          type: string
+          description: '사용자의 이름입니다.'
+        lp:
+          type: integer
+          description: '사용자의 LP(랭킹 포인트)입니다.'
+        rank:
+          type: integer
+          description: '사용자의 랭크입니다.'
+        tier:
+          type: string
+          description: '사용자의 티어입니다.'
+      required:
+        - userId
+        - userName
+        - lp
+        - rank
+        - tier

@@ -2,7 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.2'
 	id 'io.spring.dependency-management' version '1.1.6'
-	id 'org.openapi.generator' version '6.0.0'
+	id "org.openapi.generator" version "7.8.0"
+	id "com.diffplug.eclipse.apt" version "3.26.0"
 }
 
 group = 'com.tmp'
@@ -33,8 +34,21 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-crypto:5.7.1'
 
 	implementation 'mysql:mysql-connector-java:8.0.33'
-//
-//	implementation 'org.springdoc:springdoc-openapi-ui:2.6.0'
+
+	// springdoc-openapi 적용 정보 (Swagger 적용을 위한 정보)
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+
+	// openapi generator 적용을 위한 정보
+	implementation 'org.openapitools:openapi-generator:6.5.0'
+	implementation "org.openapitools:openapi-generator-gradle-plugin:6.5.0"
+	implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+	implementation 'javax.validation:validation-api:2.0.1.Final'
+	implementation 'javax.annotation:javax.annotation-api:1.3.2'
+	implementation 'javax.servlet:javax.servlet-api:4.0.1'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
+
+	implementation 'ch.qos.logback:logback-classic:1.4.7'
 
 	//test
 	testImplementation 'com.h2database:h2:2.2.220'
@@ -45,21 +59,29 @@ dependencies {
 }
 
 openApiGenerate {
-	generatorName = "spring" // Java Spring 애플리케이션을 위한 설정
-	inputSpec = "$rootDir/src/main/resources/openapi.yml" // OpenAPI 스펙 파일 경로
-	outputDir = "build/generated" // 생성된 코드가 저장될 경로
-	apiPackage = "com.tmp.xmash.web"
-	modelPackage = "com.tmp.xmash.dto"
+	generatorName = "spring"
+	library = "spring-boot"
+	inputSpec = "$rootDir/src/main/resources/openapi.yml"
+	outputDir = "$buildDir/generated"
+	apiPackage = "com.tmp.xmash.openapi.rest"
+	modelPackage = "com.tmp.xmash.openapi.domain"
 	configOptions = [
-			dateLibrary: "java21",
-			useBeanValidation: "true",
-			interfaceOnly: "true"
-	]
+					interfaceOnly: "true",
+					useBeanValidation: "true",
+					performBeanValidation: "true",
+					serializableModel: "true",
+					sourceFolder: "/java",
+					implFolder: "/java",
+			]
 }
+
+compileJava.dependsOn tasks.named("openApiGenerate")
 
 sourceSets {
 	main {
-		java.srcDir(file("build/generated/src/main/java") as Object)
+		java {
+			srcDirs = ['src/main/java', 'build/generated/java']
+		}
 	}
 }
 

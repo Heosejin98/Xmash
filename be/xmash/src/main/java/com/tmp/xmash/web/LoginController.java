@@ -14,15 +14,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @CrossOrigin(origins = "*")  // 모든 도메인에서의 요청 허용
-public class LoginController implements LoginApi {
+public class LoginController {
 
     private final LoginService loginService;
 
+
     @PostMapping("/login")
-    public ResponseEntity<Void> loginPage(HttpSession session, @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Void> loginPost(
+            HttpSession session,
+            @RequestBody LoginRequest loginRequest)
+    {
         try {
             String token = loginService.login(loginRequest.userId(), loginRequest.password());
-            session.setAttribute("userId", token);  //
+            session.setAttribute("userId", token);
 
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException ex) {
