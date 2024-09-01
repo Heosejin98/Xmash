@@ -17,7 +17,7 @@ public class RankingService {
 
     public List<RankingResponse> getRanking() {
 
-        return userRankingRepository.findAllByOrderByRankingDesc().stream()
+        return userRankingRepository.findAllByOrderByRanking().stream()
                 .map(RankingResponse::from)
                 .collect(toList());
     }

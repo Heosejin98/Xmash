@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRankingRepository extends JpaRepository<UserRanking, Long> {
 
-    List<UserRanking> findAllByOrderByRankingDesc();
+    List<UserRanking> findAllByOrderByRanking();
 }
