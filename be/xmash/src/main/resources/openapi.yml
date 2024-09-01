@@ -1,0 +1,53 @@
+openapi: 3.0.3
+info:
+  title: Xmash
+  description: Xmash
+  version: 1.0.0
+servers:
+  - url: 'http'
+paths:
+  /ranking:
+    get:
+      summary: Retrieve Ranking Information
+      description: Retrieves a list of ranking information.
+      operationId: getRanking
+      responses:
+        '200':
+          description: A list of ranking information successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RankingResponse'
+        '500':
+          description: Server error or unexpected issue.
+      tags:
+        - Ranking
+
+components:
+  schemas:
+    RankingResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: '사용자의 고유 식별자입니다.'
+        userName:
+          type: string
+          description: '사용자의 이름입니다.'
+        lp:
+          type: integer
+          description: '사용자의 LP(랭킹 포인트)입니다.'
+        rank:
+          type: integer
+          description: '사용자의 랭크입니다.'
+        tier:
+          type: string
+          description: '사용자의 티어입니다.'
+      required:
+        - userId
+        - userName
+        - lp
+        - rank
+        - tier

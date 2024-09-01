@@ -2,7 +2,6 @@ package com.tmp.xmash.db.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.apache.catalina.User;
 
 @Entity
 @Getter
@@ -22,7 +21,7 @@ public class AppUser {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_ranking_id", unique = true)
-    UserRanking userRanking;
+    private UserRanking userRanking;
 
 
     public AppUser(String userId, String password) {

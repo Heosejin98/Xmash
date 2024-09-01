@@ -18,11 +18,15 @@ public class LoginController {
 
     private final LoginService loginService;
 
+
     @PostMapping("/login")
-    public ResponseEntity<Void> loginPage(HttpSession session, @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Void> loginPost(
+            HttpSession session,
+            @RequestBody LoginRequest loginRequest)
+    {
         try {
             String token = loginService.login(loginRequest.userId(), loginRequest.password());
-            session.setAttribute("userId", token);  //
+            session.setAttribute("userId", token);
 
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException ex) {
