@@ -1,3 +1,4 @@
+import { Route } from "@/pages/leader-board";
 import { Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui";
 import {
   ColumnDef,
@@ -8,7 +9,7 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useLeaderBoard } from "./leaderBoard.api";
 import { LeaderBoardScheme } from "./list.model";
 
@@ -31,13 +32,38 @@ const columns: ColumnDef<LeaderBoardScheme>[] = [
   },
 ];
 
+const useTableFilter = () => {
+  const { username } = Route.useSearch();
+  const navigate = Route.useNavigate();
+
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
+    {
+      id: "username",
+      value: username ?? "",
+    },
+  ]);
+
+  const onSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    navigate({
+      search: (prev) => ({ ...prev, username: e.target.value }),
+    });
+    setColumnFilters((prev) => ({
+      ...prev,
+      username: e.target.value,
+    }));
+  };
+
+  return { onSearch, columnFilters, setColumnFilters };
+};
+
 export function LeaderBoardList() {
   const [list, setList] = useState<LeaderBoardScheme[]>([]);
+  const { onSearch, columnFilters, setColumnFilters } = useTableFilter();
 
   const { getLeaderBoard } = useLeaderBoard();
 
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
   const table = useReactTable({
     data: list,
     columns,
@@ -63,7 +89,7 @@ export function LeaderBoardList() {
         <Input
           placeholder="Filter names..."
           value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => table.getColumn("username")?.setFilterValue(event.target.value)}
+          onChange={onSearch}
           className="max-w-sm"
         />
       </div>

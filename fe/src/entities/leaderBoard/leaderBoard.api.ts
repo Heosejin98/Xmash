@@ -4,25 +4,25 @@ export const useLeaderBoard = () => {
 
   const leaderBoard: LeaderBoardScheme[] = [
     {
-      id: "1",
-      "ranking": 1,
+      userId: "1",
+      "rank": 1,
       username: "John",
       tier: "Gold",
-      rating: 1000,
+      lp: 1000,
     },
     {
-      id: "2",
-      ranking: 2,
+      userId: "2",
+      rank: 2,
       username: "Jane",
       tier: "Silver",
-      rating: 900,
+      lp: 900,
     },
     {
-      id: "3",
-      ranking: 3,
+      userId: "3",
+      rank: 3,
       username: "Doe",
       tier: "Bronze",
-      rating: 800,
+      lp: 800,
     }
   ];
 

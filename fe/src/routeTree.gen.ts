@@ -14,23 +14,23 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './pages/__root'
 import { Route as LoginImport } from './pages/login'
+import { Route as LeaderBoardImport } from './pages/leader-board'
 import { Route as AuthImport } from './pages/_auth'
 
 // Create Virtual Routes
 
-const LeaderBoardLazyImport = createFileRoute('/leader-board')()
 const IndexLazyImport = createFileRoute('/')()
 const AuthAboutLazyImport = createFileRoute('/_auth/about')()
 
 // Create/Update Routes
 
-const LeaderBoardLazyRoute = LeaderBoardLazyImport.update({
-  path: '/leader-board',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./pages/leader-board.lazy').then((d) => d.Route))
-
 const LoginRoute = LoginImport.update({
   path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LeaderBoardRoute = LeaderBoardImport.update({
+  path: '/leader-board',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -67,18 +67,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
+    '/leader-board': {
+      id: '/leader-board'
+      path: '/leader-board'
+      fullPath: '/leader-board'
+      preLoaderRoute: typeof LeaderBoardImport
+      parentRoute: typeof rootRoute
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
-    '/leader-board': {
-      id: '/leader-board'
-      path: '/leader-board'
-      fullPath: '/leader-board'
-      preLoaderRoute: typeof LeaderBoardLazyImport
       parentRoute: typeof rootRoute
     }
     '/_auth/about': {
@@ -96,8 +96,8 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   AuthRoute: AuthRoute.addChildren({ AuthAboutLazyRoute }),
+  LeaderBoardRoute,
   LoginRoute,
-  LeaderBoardLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -110,8 +110,8 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/_auth",
-        "/login",
-        "/leader-board"
+        "/leader-board",
+        "/login"
       ]
     },
     "/": {
@@ -123,11 +123,11 @@ export const routeTree = rootRoute.addChildren({
         "/_auth/about"
       ]
     },
+    "/leader-board": {
+      "filePath": "leader-board.tsx"
+    },
     "/login": {
       "filePath": "login.tsx"
-    },
-    "/leader-board": {
-      "filePath": "leader-board.lazy.tsx"
     },
     "/_auth/about": {
       "filePath": "_auth/about.lazy.tsx",

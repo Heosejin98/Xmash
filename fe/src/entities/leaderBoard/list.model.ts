@@ -1,11 +1,11 @@
 import { z } from "zod";
 
 export const LeaderBoardSchema = z.object({
-  id: z.string(),
-  ranking: z.number(),
+  userId: z.string(),
+  rank: z.number(),
   username: z.string(),
   tier: z.string(),
-  rating: z.number(),
+  lp: z.number(),
   // email: z.string().email(),
   // profilePicture: z.string(),
 })
