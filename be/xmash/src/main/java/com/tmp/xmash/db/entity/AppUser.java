@@ -1,16 +1,11 @@
 package com.tmp.xmash.db.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString
 public class AppUser {
@@ -24,7 +19,10 @@ public class AppUser {
     private String password;
     private String gender;
 
-    protected AppUser() {}
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_ranking_id", unique = true)
+    private UserRanking userRanking;
+
 
     public AppUser(String userId, String password) {
         this.userId = userId;

@@ -1,23 +1,14 @@
 package com.tmp.xmash.web;
 
-import com.tmp.xmash.db.entity.AppUser;
-import com.tmp.xmash.db.repositroy.UserRepository;
 import com.tmp.xmash.dto.LoginRequest;
 import com.tmp.xmash.service.LoginService;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,11 +18,15 @@ public class LoginController {
 
     private final LoginService loginService;
 
+
     @PostMapping("/login")
-    public ResponseEntity<Void> loginPage(HttpSession session, @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Void> loginPost(
+            HttpSession session,
+            @RequestBody LoginRequest loginRequest)
+    {
         try {
-            String token = loginService.login(loginRequest.getUserId(), loginRequest.getPassword());
-            session.setAttribute("userId", token);  //
+            String token = loginService.login(loginRequest.userId(), loginRequest.password());
+            session.setAttribute("userId", token);
 
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException ex) {

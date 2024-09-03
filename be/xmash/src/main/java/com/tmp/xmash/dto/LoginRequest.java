@@ -1,13 +1,5 @@
 package com.tmp.xmash.dto;
 
+public record LoginRequest(String userId, String password) {
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
-public class LoginRequest {
-
-    private final String userId;
-    private final String password;
 }
