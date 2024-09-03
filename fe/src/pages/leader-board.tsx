@@ -2,7 +2,7 @@ import { LeaderBoardList } from "@/entities/leaderBoard/leaderBoard.ui";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
-const UserSearchSchema = z.object({
+export const UserSearchSchema = z.object({
   username: z.string().optional(),
 });
 export type UserSearch = z.infer<typeof UserSearchSchema>;

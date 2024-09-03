@@ -1,4 +1,4 @@
-import { LeaderBoardScheme } from "./list.model";
+import { LeaderBoardSchema, LeaderBoardScheme } from "./list.model";
 
 export const useLeaderBoard = () => {
 
@@ -27,11 +27,19 @@ export const useLeaderBoard = () => {
   ];
 
   const getLeaderBoard: () => Promise<LeaderBoardScheme[]> = async () => {
-    return new Promise((resolve) => {
+    const list = await new Promise((resolve) => {
       setTimeout(() => {
         resolve(leaderBoard);
       }, 1000);
     });
+
+    const ret = LeaderBoardSchema.array().safeParse(list);
+
+    if (ret.success) {
+      return ret.data;
+    }
+
+    return [];
   }
 
   return {

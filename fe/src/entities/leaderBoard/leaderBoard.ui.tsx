@@ -15,7 +15,7 @@ import { LeaderBoardScheme } from "./list.model";
 
 const columns: ColumnDef<LeaderBoardScheme>[] = [
   {
-    accessorKey: "ranking",
+    accessorKey: "rank",
     header: "#",
   },
   {
@@ -27,8 +27,8 @@ const columns: ColumnDef<LeaderBoardScheme>[] = [
     header: "Tier",
   },
   {
-    accessorKey: "rating",
-    header: "Rating",
+    accessorKey: "lp",
+    header: "LP",
   },
 ];
 
