@@ -8,12 +8,12 @@ servers:
 paths:
   /ranking:
     get:
-      summary: Retrieve Ranking Information
-      description: Retrieves a list of ranking information.
+      summary: '순위 정보 조회'
+      description: '순위 정보 목록을 조회합니다.'
       operationId: getRanking
       responses:
         '200':
-          description: A list of ranking information successfully retrieved.
+          description: '순위 정보 목록을 성공적으로 조회했습니다'
           content:
             application/json:
               schema:
@@ -24,6 +24,36 @@ paths:
           description: Server error or unexpected issue.
       tags:
         - Ranking
+  /game/{gameType}:
+    post:
+      summary: '게임 결과 등록'
+      description: '게임 결과를 등록합니다'
+      operationId: updateGameResult
+      parameters:
+        - name: gameType
+          in: path
+          description: '게임 타입을 지정합니다.'
+          required: true
+          schema:
+            $ref: '#/components/schemas/GameType'
+      requestBody:
+        description: '게임 결과 등록 요청 데이터'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GameRequest'
+      responses:
+        '200':
+          description: '게임 결과 업데이트 완료 했습니다.'
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '500':
+          description: '서버 오류 또는 예기치 않은 문제 발생.'
+      tags:
+        - Game
 
 components:
   schemas:
@@ -51,3 +81,23 @@ components:
         - lp
         - rank
         - tier
+    GameRequest:
+      type: object
+      properties:
+        myScore:
+          type: integer
+          description: '내 점수'
+          example: 15
+        opponentScore:
+          type: integer
+          description: '상대 점수'
+          example: 10
+        opponentPlayerId:
+          type: string
+          description: '상대 플레이어 ID'
+          example: 'player123'
+    GameType:
+      type: string
+      enum:
+        - NORMAL
+      description: '게임 타입입니다'
