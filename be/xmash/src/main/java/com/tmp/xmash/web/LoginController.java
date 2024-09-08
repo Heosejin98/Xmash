@@ -24,8 +24,8 @@ public class LoginController {
             @RequestBody LoginRequest loginRequest)
     {
         try {
-            String token = loginService.login(loginRequest.userId(), loginRequest.password());
-            session.setAttribute("userId", token);
+            loginService.login(loginRequest.userId(), loginRequest.password());
+            session.setAttribute("userId", loginRequest.userId());
 
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException ex) {
