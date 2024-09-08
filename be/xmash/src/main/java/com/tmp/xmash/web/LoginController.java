@@ -6,14 +6,13 @@ import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin(origins = "*")  // 모든 도메인에서의 요청 허용
+//@CrossOrigin(origins = "*")  // 모든 도메인에서의 요청 허용
 public class LoginController {
 
     private final LoginService loginService;
@@ -25,8 +24,8 @@ public class LoginController {
             @RequestBody LoginRequest loginRequest)
     {
         try {
-            String token = loginService.login(loginRequest.userId(), loginRequest.password());
-            session.setAttribute("userId", token);
+            loginService.login(loginRequest.userId(), loginRequest.password());
+            session.setAttribute("userId", loginRequest.userId());
 
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException ex) {
