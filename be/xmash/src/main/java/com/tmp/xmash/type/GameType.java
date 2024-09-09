@@ -16,10 +16,10 @@ public enum GameType {
     }
 
     @JsonCreator
-    public static MatchType fromValue(String value) {
-        for (MatchType matchType : MatchType.values()) {
-            if (matchType.toValue().equals(value)) {
-                return matchType;
+    public static GameType fromValue(String value) {
+        for (GameType gameType : GameType.values()) {
+            if (gameType.toValue().equals(value)) {
+                return gameType;
             }
         }
         throw new IllegalArgumentException("Unknown value: " + value);
