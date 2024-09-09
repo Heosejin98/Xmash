@@ -19,7 +19,7 @@ public class GameResultRequest {
 
     /**
      * 내 점수
-     * @return myScore
+     * @return homeScore
      */
     @Schema(name = "homeScore", example = "15", description = "내 점수", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     @JsonProperty("homeScore")

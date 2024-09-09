@@ -28,7 +28,7 @@ jobs:
           mkdir -p ~/.ssh
 
           # Add the private key
-          echo "${{ secrets.GCP_FE_SSH_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.GCP_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
           # Add the known_hosts file to avoid SSH host key verification
@@ -36,4 +36,4 @@ jobs:
 
       - name: Transfer files
         run: |
-          scp -P ${{ secrets.GCP_SSH_PORT }} -r fe/dist/ ${{ secrets.GCP_FE_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/${{secrets.GCP_FE_SSH_USER}}/build/
+          scp -P ${{ secrets.GCP_SSH_PORT }} -r fe/dist/ ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/fe/
