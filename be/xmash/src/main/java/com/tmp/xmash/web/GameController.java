@@ -6,6 +6,7 @@ import com.tmp.xmash.type.GameType;
 import com.tmp.xmash.type.MatchType;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
+@Tag(name = "Game", description = "Game 전적 관련 api")
 public class GameController {
 
     private final SingleNormalGameService gameResultService;
