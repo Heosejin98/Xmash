@@ -17,14 +17,14 @@ public class LoginService {
 
 
     @Transactional
-    public String login(String userId, String password) {
+    public void login(String userId, String password) {
         AppUser appUser = userRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         if (!passwordEncoder.matches(password, appUser.getPassword())) {
             throw new IllegalArgumentException("Password not matched");
         }
 
-        return passwordEncoder.encode(userId);
+        passwordEncoder.encode(userId);
     }
 
     @Transactional
