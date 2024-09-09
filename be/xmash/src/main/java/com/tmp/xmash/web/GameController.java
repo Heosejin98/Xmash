@@ -1,6 +1,7 @@
 package com.tmp.xmash.web;
 
 import com.tmp.xmash.dto.GameResultRequest;
+import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.service.SingleNormalGameService;
 import com.tmp.xmash.type.GameType;
 import com.tmp.xmash.type.MatchType;
@@ -10,12 +11,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -33,7 +32,17 @@ public class GameController {
     ) {
         String homeId = (String) session.getAttribute("userId");
 
-        return ResponseEntity.ok(gameResultService.getMatchResult(gameResultRequest, homeId, matchType));
+        return ResponseEntity.ok(gameResultService.matchDone(gameResultRequest, homeId, matchType));
+    }
+
+
+    @GetMapping("/game/{gameType}/{matchType}")
+    public ResponseEntity<List<GameResultResponse>> getSingleGameResult(
+            @Parameter(name = "matchType", description = "매치 타입을 지정합니다.", required = true, in = ParameterIn.PATH) @PathVariable("matchType") MatchType matchType,
+            @PathVariable String gameType
+    ) {
+        //TODO : matchType gameType에 따라 다르게 동작하도록 구현
+        return ResponseEntity.ok(gameResultService.getMatchHistory());
     }
 
 }

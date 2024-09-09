@@ -18,9 +18,9 @@ public class MatchEvaluator {
 
     public MatchEvaluator(String homeId, MatchType matchType, GameResultRequest gameResultRequest) {
         this.homeId = homeId;
-        this.awayId = gameResultRequest.getAwayPlayerId();
-        this.homeScore = gameResultRequest.getHomeScore();
-        this.awayScore = gameResultRequest.getAwayScore();
+        this.awayId = gameResultRequest.awayPlayerId();
+        this.homeScore = gameResultRequest.homeScore();
+        this.awayScore = gameResultRequest.awayScore();
         this.matchType = matchType;
     }
 

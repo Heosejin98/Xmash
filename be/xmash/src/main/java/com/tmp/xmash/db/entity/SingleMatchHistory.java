@@ -4,6 +4,8 @@ import com.tmp.xmash.type.MatchType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -14,6 +16,8 @@ public class SingleMatchHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "single_match_history_id")
     private Long id;
+
+    private LocalDateTime matchTime;
 
     private String winnerId;
 
@@ -33,5 +37,6 @@ public class SingleMatchHistory {
         this.winnerScore = winnerScore;
         this.loserScore = loserScore;
         this.matchType = matchType;
+        this.matchTime = LocalDateTime.now();
     }
 }
