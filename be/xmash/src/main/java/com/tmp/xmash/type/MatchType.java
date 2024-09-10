@@ -2,7 +2,6 @@ package com.tmp.xmash.type;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -24,7 +23,14 @@ public enum MatchType {
     MALE_DOUBLE,
 
     @Schema(description = "여성 복식", example = "female-double")
-    FEMALE_DOUBLE;
+    FEMALE_DOUBLE,
+
+    @Schema(description = "단식", example = "single")
+    SINGLE,
+
+    @Schema(description = "복식", example = "double")
+    DOUBLE;
+
 
 
     @JsonValue

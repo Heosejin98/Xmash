@@ -18,9 +18,9 @@ public class MatchEvaluator {
 
     public MatchEvaluator(String homeId, MatchType matchType, GameResultRequest gameResultRequest) {
         this.homeId = homeId;
-        this.awayId = gameResultRequest.getAwayPlayerId();
-        this.homeScore = gameResultRequest.getHomeScore();
-        this.awayScore = gameResultRequest.getAwayScore();
+        this.awayId = gameResultRequest.awayPlayerId();
+        this.homeScore = gameResultRequest.homeScore();
+        this.awayScore = gameResultRequest.awayScore();
         this.matchType = matchType;
     }
 
@@ -34,7 +34,7 @@ public class MatchEvaluator {
                     .winnerId(homeId)
                     .winnerScore(homeScore)
                     .loserId(awayId)
-                    .winnerScore(awayScore)
+                    .loserScore(awayScore)
                     .matchType(matchType)
                     .build();
         }
@@ -43,7 +43,7 @@ public class MatchEvaluator {
                 .winnerId(awayId)
                 .winnerScore(awayScore)
                 .loserId(homeId)
-                .winnerScore(homeScore)
+                .loserScore(homeScore)
                 .matchType(matchType)
                 .build();
     }
