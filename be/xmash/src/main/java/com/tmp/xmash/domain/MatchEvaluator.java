@@ -34,7 +34,7 @@ public class MatchEvaluator {
                     .winnerId(homeId)
                     .winnerScore(homeScore)
                     .loserId(awayId)
-                    .winnerScore(awayScore)
+                    .loserScore(awayScore)
                     .matchType(matchType)
                     .build();
         }
@@ -43,7 +43,7 @@ public class MatchEvaluator {
                 .winnerId(awayId)
                 .winnerScore(awayScore)
                 .loserId(homeId)
-                .winnerScore(homeScore)
+                .loserScore(homeScore)
                 .matchType(matchType)
                 .build();
     }

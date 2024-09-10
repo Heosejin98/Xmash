@@ -14,7 +14,7 @@ public class SingleMatchHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "single_match_history_id")
+    @Column(name = "match_history_id")
     private Long id;
 
     private LocalDateTime matchTime;

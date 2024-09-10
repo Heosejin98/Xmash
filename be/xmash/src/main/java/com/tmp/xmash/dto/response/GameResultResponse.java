@@ -14,7 +14,8 @@ public record GameResultResponse(
         int winnerScore,
         int loserScore,
         LocalDateTime matchTime,
-        MatchType matchType
+        MatchType matchType,
+        Integer point
 ) {
 
     public static GameResultResponse createSingleGame(SingleMatchHistory matchResult, Map<String, AppUser> userByUserId) {
@@ -32,7 +33,8 @@ public record GameResultResponse(
             matchResult.getWinnerScore(),
             matchResult.getLoserScore(),
             matchResult.getMatchTime(),
-            matchResult.getMatchType()
+            matchResult.getMatchType(),
+        null
         );
     }
 

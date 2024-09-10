@@ -30,7 +30,7 @@ public class SingleNormalGameService {
 
 
     @Transactional
-    public boolean matchDone(GameResultRequest gameResultRequest, String homeId, MatchType matchType) {
+    public boolean matchDone(GameResultRequest gameResultRequest, String homeId) {
         MatchEvaluator matchEvaluator = new MatchEvaluator(homeId, matchType, gameResultRequest);
 
         SingleMatchHistory singleMatchHistory = matchEvaluator.resolveMatchWinner();

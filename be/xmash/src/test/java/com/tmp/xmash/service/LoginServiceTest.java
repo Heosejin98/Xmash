@@ -13,8 +13,8 @@ class LoginServiceTest {
     @Test
     void signUp() {
         // given
-        String userId = "test";
-        String password = "test";
+        String userId = "test1";
+        String password = "test1";
 
         // when
 //        loginService.signUp(userId, password);
