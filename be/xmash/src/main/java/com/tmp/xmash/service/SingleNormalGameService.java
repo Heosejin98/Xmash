@@ -5,7 +5,7 @@ import com.tmp.xmash.db.entity.SingleMatchHistory;
 import com.tmp.xmash.db.repositroy.SingleMatchHistoryRepo;
 import com.tmp.xmash.db.repositroy.UserRepository;
 import com.tmp.xmash.domain.MatchEvaluator;
-import com.tmp.xmash.dto.GameResultRequest;
+import com.tmp.xmash.dto.request.GameResultRequest;
 import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.type.MatchType;
 import jakarta.transaction.Transactional;

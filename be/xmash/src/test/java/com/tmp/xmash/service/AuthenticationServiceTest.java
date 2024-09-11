@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class LoginServiceTest {
+class AuthenticationServiceTest {
 
     @Autowired
-    private LoginService loginService;
+    private AuthenticationService loginService;
 
     @Test
     void signUp() {
