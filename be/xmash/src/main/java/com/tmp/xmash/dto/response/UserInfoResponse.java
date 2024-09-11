@@ -3,8 +3,8 @@ package com.tmp.xmash.dto.response;
 import com.tmp.xmash.type.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Schema(description = "로그인 요청에 대한 응답 객체")
-public record LoginResponse(
+@Schema(description = "유저 정보에 응답 객체")
+public record UserInfoResponse(
         @Schema(description = "사용자의 고유 식별자", example = "user123")
         String userId,
 
