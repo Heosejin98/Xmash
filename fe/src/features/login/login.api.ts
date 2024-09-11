@@ -1,16 +1,16 @@
 import { FormSchema } from "@/entities/login";
-import { Fetcher } from "@/shared/api/fetcher";
 import { useAuthStore } from "@/entities/user/user.store";
+import { api } from "@/shared/api";
 
 export const useLogin = () => {
   const store = useAuthStore();
 
   const login = async (data: FormSchema) => {
-    const result = await Fetcher.post('login', data);
-    if (result.isSuccess) {
+    const { status } = await api.post('login', { body: data });
+    if (status === 200) {
       store.login(true);
     }
-    return result;
+
   }
 
   return {

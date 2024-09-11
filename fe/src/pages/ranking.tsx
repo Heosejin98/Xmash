@@ -1,4 +1,4 @@
-import { LeaderBoardList } from "@/entities/leaderBoard/leaderBoard.ui";
+import { LeaderBoardList } from "@/entities/ranking/ranking.ui";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
@@ -7,7 +7,7 @@ export const UserSearchSchema = z.object({
 });
 export type UserSearch = z.infer<typeof UserSearchSchema>;
 
-export const Route = createFileRoute("/leader-board")({
+export const Route = createFileRoute("/ranking")({
   component: Index,
   validateSearch: UserSearchSchema,
 });

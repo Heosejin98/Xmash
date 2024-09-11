@@ -1,8 +1,8 @@
-import { RecordList } from "@/entities/record/record.ui";
+import { GameList } from "@/entities/game/game.ui";
 
-export function RecordWidget() {
+export function GameWidget() {
   // TODO - Implement the RecordWidget component
   // TODO - add record creation form
 
-  return <RecordList></RecordList>;
+  return <GameList></GameList>;
 }

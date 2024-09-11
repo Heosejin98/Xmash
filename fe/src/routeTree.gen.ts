@@ -13,9 +13,9 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './pages/__root'
-import { Route as RecordImport } from './pages/record'
+import { Route as RankingImport } from './pages/ranking'
 import { Route as LoginImport } from './pages/login'
-import { Route as LeaderBoardImport } from './pages/leader-board'
+import { Route as GameImport } from './pages/game'
 import { Route as AuthImport } from './pages/_auth'
 
 // Create Virtual Routes
@@ -25,8 +25,8 @@ const AuthAboutLazyImport = createFileRoute('/_auth/about')()
 
 // Create/Update Routes
 
-const RecordRoute = RecordImport.update({
-  path: '/record',
+const RankingRoute = RankingImport.update({
+  path: '/ranking',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -35,8 +35,8 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const LeaderBoardRoute = LeaderBoardImport.update({
-  path: '/leader-board',
+const GameRoute = GameImport.update({
+  path: '/game',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -73,11 +73,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
-    '/leader-board': {
-      id: '/leader-board'
-      path: '/leader-board'
-      fullPath: '/leader-board'
-      preLoaderRoute: typeof LeaderBoardImport
+    '/game': {
+      id: '/game'
+      path: '/game'
+      fullPath: '/game'
+      preLoaderRoute: typeof GameImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -87,11 +87,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/record': {
-      id: '/record'
-      path: '/record'
-      fullPath: '/record'
-      preLoaderRoute: typeof RecordImport
+    '/ranking': {
+      id: '/ranking'
+      path: '/ranking'
+      fullPath: '/ranking'
+      preLoaderRoute: typeof RankingImport
       parentRoute: typeof rootRoute
     }
     '/_auth/about': {
@@ -109,9 +109,9 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   AuthRoute: AuthRoute.addChildren({ AuthAboutLazyRoute }),
-  LeaderBoardRoute,
+  GameRoute,
   LoginRoute,
-  RecordRoute,
+  RankingRoute,
 })
 
 /* prettier-ignore-end */
@@ -124,9 +124,9 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/_auth",
-        "/leader-board",
+        "/game",
         "/login",
-        "/record"
+        "/ranking"
       ]
     },
     "/": {
@@ -138,14 +138,14 @@ export const routeTree = rootRoute.addChildren({
         "/_auth/about"
       ]
     },
-    "/leader-board": {
-      "filePath": "leader-board.tsx"
+    "/game": {
+      "filePath": "game.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
     },
-    "/record": {
-      "filePath": "record.tsx"
+    "/ranking": {
+      "filePath": "ranking.tsx"
     },
     "/_auth/about": {
       "filePath": "_auth/about.lazy.tsx",

@@ -1,5 +1,6 @@
-import { Route } from "@/pages/leader-board";
+import { Route } from "@/pages/ranking";
 import { Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui";
+import { useQuery } from "@tanstack/react-query";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -9,11 +10,11 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChangeEvent, useEffect, useState } from "react";
-import { useLeaderBoard } from "./leaderBoard.api";
-import { LeaderBoardScheme } from "./list.model";
+import { ChangeEvent, useState } from "react";
+import { RankingSchema } from "./ranking.model";
+import { RankingQueries } from "./ranking.queries";
 
-const columns: ColumnDef<LeaderBoardScheme>[] = [
+const columns: ColumnDef<RankingSchema>[] = [
   {
     accessorKey: "rank",
     header: "#",
@@ -57,15 +58,13 @@ const useTableFilter = () => {
 };
 
 export function LeaderBoardList() {
-  const [list, setList] = useState<LeaderBoardScheme[]>([]);
   const { onSearch, columnFilters, setColumnFilters } = useTableFilter();
 
-  const { getLeaderBoard } = useLeaderBoard();
-
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>(() => []);
+  const { data } = useQuery(RankingQueries.rankingQuery());
 
   const table = useReactTable({
-    data: list,
+    data: data ?? [],
     columns,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
@@ -76,12 +75,6 @@ export function LeaderBoardList() {
       columnFilters,
     },
   });
-
-  useEffect(() => {
-    getLeaderBoard().then((data) => {
-      setList(data);
-    });
-  }, []);
 
   return (
     <div className="w-full">
