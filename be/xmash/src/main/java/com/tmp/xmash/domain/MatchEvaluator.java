@@ -1,7 +1,7 @@
 package com.tmp.xmash.domain;
 
 import com.tmp.xmash.db.entity.SingleMatchHistory;
-import com.tmp.xmash.dto.GameResultRequest;
+import com.tmp.xmash.dto.request.GameResultRequest;
 import com.tmp.xmash.type.MatchType;
 
 public class MatchEvaluator {

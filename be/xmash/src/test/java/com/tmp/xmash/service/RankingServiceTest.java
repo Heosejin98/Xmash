@@ -4,7 +4,7 @@ import com.tmp.xmash.db.entity.AppUser;
 import com.tmp.xmash.db.entity.UserRanking;
 import com.tmp.xmash.db.repositroy.UserRankingRepository;
 import com.tmp.xmash.db.repositroy.UserRepository;
-import com.tmp.xmash.dto.RankingResponse;
+import com.tmp.xmash.dto.response.RankingResponse;
 import com.tmp.xmash.type.Tier;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

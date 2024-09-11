@@ -1,4 +1,4 @@
-package com.tmp.xmash.web;
+package com.tmp.xmash.web.editor;
 
 import java.beans.PropertyEditorSupport;
 

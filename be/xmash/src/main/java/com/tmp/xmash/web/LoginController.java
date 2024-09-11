@@ -1,6 +1,6 @@
 package com.tmp.xmash.web;
 
-import com.tmp.xmash.dto.LoginRequest;
+import com.tmp.xmash.dto.request.LoginRequest;
 import com.tmp.xmash.service.LoginService;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;

@@ -3,7 +3,7 @@ package com.tmp.xmash.service;
 import static java.util.stream.Collectors.toList;
 
 import com.tmp.xmash.db.repositroy.UserRankingRepository;
-import com.tmp.xmash.dto.RankingResponse;
+import com.tmp.xmash.dto.response.RankingResponse;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

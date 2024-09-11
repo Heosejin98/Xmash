@@ -1,4 +1,4 @@
-package com.tmp.xmash.dto;
+package com.tmp.xmash.dto.response;
 
 import com.tmp.xmash.db.entity.UserRanking;
 import com.tmp.xmash.type.Tier;

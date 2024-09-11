@@ -1,6 +1,6 @@
 package com.tmp.xmash.web;
 
-import com.tmp.xmash.dto.RankingResponse;
+import com.tmp.xmash.dto.response.RankingResponse;
 import com.tmp.xmash.openapi.rest.RankingApi;
 import com.tmp.xmash.service.RankingService;
 import lombok.AllArgsConstructor;

@@ -1,9 +1,10 @@
 package com.tmp.xmash.web;
 
-import com.tmp.xmash.dto.GameResultRequest;
+import com.tmp.xmash.dto.request.GameResultRequest;
 import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.service.SingleNormalGameService;
 import com.tmp.xmash.type.GameType;
+import com.tmp.xmash.web.editor.GameTypeEditor;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
