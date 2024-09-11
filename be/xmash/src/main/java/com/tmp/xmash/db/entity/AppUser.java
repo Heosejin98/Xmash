@@ -1,5 +1,6 @@
 package com.tmp.xmash.db.entity;
 
+import com.tmp.xmash.type.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,7 +18,9 @@ public class AppUser {
     private String email;
     private String name;
     private String password;
-    private String gender;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_ranking_id", unique = true)

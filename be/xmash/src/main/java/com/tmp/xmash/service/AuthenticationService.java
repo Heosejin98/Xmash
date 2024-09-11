@@ -2,6 +2,7 @@ package com.tmp.xmash.service;
 
 import com.tmp.xmash.db.entity.AppUser;
 import com.tmp.xmash.db.repositroy.UserRepository;
+import com.tmp.xmash.dto.response.LoginResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class AuthenticationService {
 
 
     @Transactional
-    public void login(String userId, String password) {
+    public LoginResponse login(String userId, String password) {
         AppUser appUser = userRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         if (!passwordEncoder.matches(password, appUser.getPassword())) {
@@ -25,6 +26,8 @@ public class AuthenticationService {
         }
 
         passwordEncoder.encode(userId);
+
+        return new LoginResponse(appUser.getUserId(), appUser.getName(), appUser.getGender());
     }
 
     @Transactional

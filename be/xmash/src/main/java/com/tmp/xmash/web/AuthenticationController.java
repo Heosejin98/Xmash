@@ -1,6 +1,7 @@
 package com.tmp.xmash.web;
 
 import com.tmp.xmash.dto.request.LoginRequest;
+import com.tmp.xmash.dto.response.LoginResponse;
 import com.tmp.xmash.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
@@ -19,15 +20,15 @@ public class AuthenticationController {
     private final AuthenticationService loginService;
 
     @PostMapping("/login")
-    public ResponseEntity<Void> loginPost(
+    public ResponseEntity<LoginResponse> loginPost(
             HttpSession session,
             @RequestBody LoginRequest loginRequest)
     {
         try {
-            loginService.login(loginRequest.userId(), loginRequest.password());
+            LoginResponse loginResponse = loginService.login(loginRequest.userId(), loginRequest.password());
             session.setAttribute("userId", loginRequest.userId());
 
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(loginResponse);
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();  // 로그인 실패 메시지;
         }
