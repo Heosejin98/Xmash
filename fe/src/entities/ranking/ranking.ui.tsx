@@ -10,7 +10,7 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { RankingSchema } from "./ranking.model";
 import { RankingQueries } from "./ranking.queries";
 
@@ -75,6 +75,10 @@ export function LeaderBoardList() {
       columnFilters,
     },
   });
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   return (
     <div className="w-full">

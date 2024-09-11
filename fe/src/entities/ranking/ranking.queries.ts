@@ -4,6 +4,7 @@ import {
   queryOptions
 } from '@tanstack/react-query'
 import { RankingSchema } from './ranking.model';
+import { z } from 'zod';
 
 export class RankingQueries {
   static readonly keys = {
@@ -14,8 +15,7 @@ export class RankingQueries {
     return queryOptions({
       queryKey: [...this.keys.root],
       queryFn: async ({ signal }) => {
-        const response = await api.get('/ranking', { signal }).then(AxiosContracts.responseContract(RankingSchema.array()));
-        console.log(response.data)
+        const response = await api.get('/ranking', { signal }).then(AxiosContracts.responseContract(z.array(RankingSchema)));
         return response.data;
       },
     })
