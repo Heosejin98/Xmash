@@ -1,4 +1,3 @@
-import { useAuthStore } from "@/entities/user/user.store";
 import { Outlet, createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_auth")({
@@ -20,10 +19,8 @@ export const Route = createFileRoute("/_auth")({
 });
 
 function AuthLayout() {
-  const { logout } = useAuthStore();
   const router = useRouter();
   const onClickLogout = () => {
-    logout();
     router.navigate({
       to: "/login",
       replace: true,
