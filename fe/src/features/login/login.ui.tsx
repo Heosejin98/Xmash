@@ -1,5 +1,4 @@
-import { FormSchema, useLoginForm } from "@/entities/login";
-import { useLogin } from "@/features/login";
+import { useLoginForm } from "@/entities/login";
 import {
   Button,
   Form,
@@ -11,21 +10,26 @@ import {
   Input,
 } from "@/shared/ui";
 import { useRouter } from "@tanstack/react-router";
+import { useLoginMutation } from "./login.mutation";
+import { LoginUserDto } from "@/shared/api/auth";
 
 export function LoginForm() {
   const form = useLoginForm();
-  const { login } = useLogin();
   const router = useRouter();
-  const onSubmit = async (data: FormSchema) => {
-    const result = await login(data);
-    if (result.isSuccess) {
-      router.navigate({
-        to: "/",
-        replace: true,
-      });
-    } else {
-      alert(result.error?.message);
-    }
+  const { mutate } = useLoginMutation();
+
+  const onSubmit = async (data: LoginUserDto) => {
+    mutate(data, {
+      onError: (error) => {
+        console.log("onError", error);
+      },
+      onSuccess: async () => {
+        await router.navigate({
+          to: "/",
+          replace: true,
+        });
+      },
+    });
   };
 
   return (
