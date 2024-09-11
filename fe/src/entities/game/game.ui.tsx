@@ -23,7 +23,7 @@ export function GameList() {
             <div>
               {record.winTeam.map((player) => (
                 <Avatar className="mr-4">
-                  <AvatarImage src={player.profileUrl} alt={player.userName} />
+                  <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
                   <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
                 </Avatar>
               ))}
@@ -36,7 +36,7 @@ export function GameList() {
             <div>
               {record.loseTeam.map((player) => (
                 <Avatar className="mr-4">
-                  <AvatarImage src={player.profileUrl} alt={player.userName} />
+                  <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
                   <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
                 </Avatar>
               ))}
