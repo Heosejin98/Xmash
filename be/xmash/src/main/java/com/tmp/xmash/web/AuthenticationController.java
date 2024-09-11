@@ -1,7 +1,8 @@
 package com.tmp.xmash.web;
 
 import com.tmp.xmash.dto.request.LoginRequest;
-import com.tmp.xmash.service.LoginService;
+import com.tmp.xmash.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,11 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-//@CrossOrigin(origins = "*")  // 모든 도메인에서의 요청 허용
-public class LoginController {
+@Tag(name = "Authentication", description = "Authentication 전적 관련 api")
+public class AuthenticationController {
 
-    private final LoginService loginService;
-
+    private final AuthenticationService loginService;
 
     @PostMapping("/login")
     public ResponseEntity<Void> loginPost(
