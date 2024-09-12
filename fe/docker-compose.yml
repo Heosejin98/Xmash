@@ -1,0 +1,10 @@
+version: '3.0'
+
+services:
+  frontend:
+    image: nginx:mainline-alpine-slim
+    ports:
+      - "8080:80"
+    volumes:
+      - ./fe:/usr/share/nginx/html
+    restart: always
