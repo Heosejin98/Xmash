@@ -1,11 +1,12 @@
-import { UserDtoSchema } from "@/shared/api/auth";
+
+import { UserDto } from "@/shared/api/auth";
 import { create } from "zustand";
 
 
 interface AuthStore {
-  user: UserDtoSchema | null;
+  user: UserDto | null;
   isAuthenticated: boolean;
-  setUser: (user: UserDtoSchema | null) => void;
+  setUser: (user: UserDto | null) => void;
   setAuthenticated: (isAuthenticated: boolean) => void;
 }
 

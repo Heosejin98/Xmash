@@ -1,10 +1,7 @@
+import { GameService } from '@/shared/api/game';
 import {
   queryOptions
 } from '@tanstack/react-query';
-import { GameSchema } from './game.model';
-import { AxiosContracts } from '@/shared/lib/axios';
-import { api } from '@/shared/api';
-import { z } from 'zod';
 
 export class GameQueries {
   static readonly keys = {
@@ -22,8 +19,7 @@ export class GameQueries {
     return queryOptions({
       queryKey: [...this.keys.root],
       queryFn: async ({ signal }) => {
-        const response = await api.get(`/game/${type}`, { signal }).then(AxiosContracts.responseContract(z.array(GameSchema)));
-        return (response.data)
+        return (await GameService.gameQuery({ params: { type }, signal })).data;
       },
     })
   }

@@ -7,3 +7,6 @@ export * from './table';
 export * from './toaster';
 export * from './use-toast';
 export * from './avatar';
+export * from './drawer';
+export * from './toggle';
+export * from './switch';
