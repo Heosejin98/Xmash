@@ -21,6 +21,7 @@ public class UserRanking {
     @Column(name = "user_ranking_id")
     private Long id;
 
+    //TODO : ranking 저장하지말고 ROW_NUMBER()로 조회할 수 있도록 변경 ?
     private int ranking;
 
     @Enumerated(EnumType.STRING)
@@ -32,4 +33,14 @@ public class UserRanking {
     @JoinColumn(name = "app_user_id", unique = true)
     private AppUser appUser;
 
+    public UserRanking(int ranking, Tier tier, int lp, AppUser appUser) {
+        this.ranking = ranking;
+        this.tier = tier;
+        this.lp = lp;
+        this.appUser = appUser;
+    }
+
+    public static UserRanking createDefault(AppUser appUser) {
+        return new UserRanking(1, Tier.GOLD, 1000, appUser);
+    }
 }

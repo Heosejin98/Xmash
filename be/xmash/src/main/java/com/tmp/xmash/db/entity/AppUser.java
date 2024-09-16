@@ -31,4 +31,8 @@ public class AppUser {
         this.userId = userId;
         this.password = password;
     }
+
+    public void updateUserRanking(UserRanking userRanking) {
+        this.userRanking = userRanking;
+    }
 }
