@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RankingSchema = z.object({
+export const RankingDto = z.object({
   userId: z.string(),
   userName: z.string().nullish(),
   lp: z.number(),
@@ -8,4 +8,4 @@ export const RankingSchema = z.object({
   tier: z.string(),
 })
 
-export type RankingSchema = z.infer<typeof RankingSchema>;
+export type RankingDto = z.infer<typeof RankingDto>;

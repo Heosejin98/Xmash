@@ -1,4 +1,4 @@
-import { Route } from "@/pages/ranking";
+import { RankingDto } from "@/shared/api/ranking";
 import { Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -10,18 +10,17 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChangeEvent, useEffect, useState } from "react";
-import { RankingSchema } from "./ranking.model";
+import { ChangeEvent, useState } from "react";
 import { RankingQueries } from "./ranking.queries";
 
-const columns: ColumnDef<RankingSchema>[] = [
+const columns: ColumnDef<RankingDto>[] = [
   {
     accessorKey: "rank",
     header: "#",
   },
   {
-    accessorKey: "username",
-    header: "Username",
+    accessorKey: "userName",
+    header: "UserName",
   },
   {
     accessorKey: "tier",
@@ -33,38 +32,13 @@ const columns: ColumnDef<RankingSchema>[] = [
   },
 ];
 
-const useTableFilter = () => {
-  const { username } = Route.useSearch();
-  const navigate = Route.useNavigate();
-
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
-    {
-      id: "username",
-      value: username ?? "",
-    },
-  ]);
-
-  const onSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    navigate({
-      search: (prev) => ({ ...prev, username: e.target.value }),
-    });
-    setColumnFilters((prev) => ({
-      ...prev,
-      username: e.target.value,
-    }));
-  };
-
-  return { onSearch, columnFilters, setColumnFilters };
-};
-
 export function LeaderBoardList() {
-  const { onSearch, columnFilters, setColumnFilters } = useTableFilter();
-
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>(() => []);
   const { data } = useQuery(RankingQueries.rankingQuery());
 
   const table = useReactTable({
-    data: data ?? [],
+    data,
     columns,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
@@ -75,17 +49,16 @@ export function LeaderBoardList() {
       columnFilters,
     },
   });
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  const onSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    table.getColumn("userName")?.setFilterValue(e.target.value);
+  };
 
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter names..."
-          value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("userName")?.getFilterValue() as string) ?? ""}
           onChange={onSearch}
           className="max-w-sm"
         />

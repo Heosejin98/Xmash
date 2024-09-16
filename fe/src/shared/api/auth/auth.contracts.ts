@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-export const UserDtoSchema = z.object({
+export const UserDto = z.object({
   userId: z.string(),
   userName: z.string(),
   gender: z.string(),
 })
-export type UserDtoSchema = z.infer<typeof UserDtoSchema>
+export type UserDto = z.infer<typeof UserDto>
 
 export const LoginUserDto = z.object({
   userId: z

@@ -1,5 +1,5 @@
+import NavBar from "@/app/navBar.ui";
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 export interface MyRouterContext {
   // The ReturnType of your useAuth hook or the value of your AuthContext
@@ -11,7 +11,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     return (
       <>
         <Outlet />
-        <TanStackRouterDevtools />
+
+        <NavBar></NavBar>
+
+        {/* <TanStackRouterDevtools /> */}
       </>
     );
   },

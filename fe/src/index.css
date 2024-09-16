@@ -73,5 +73,12 @@
   #root {
     max-width: 600px;
     margin-inline: auto;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+
+    div:first-child {
+      @apply flex-1;
+    }
   }
 }
