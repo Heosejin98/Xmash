@@ -7,35 +7,15 @@ import lombok.Getter;
 
 @Getter
 public enum MatchType {
-    @Schema(description = "혼성 단식", example = "mixed-single")
-    MIXED_SINGLE,
-
-    @Schema(description = "남성 단식", example = "male-single")
-    MALE_SINGLE,
-
-    @Schema(description = "여성 단식", example = "female-single")
-    FEMALE_SINGLE,
-
-    @Schema(description = "혼성 복식", example = "mixed-double")
-    MIXED_DOUBLE,
-
-    @Schema(description = "남성 복식", example = "male-double")
-    MALE_DOUBLE,
-
-    @Schema(description = "여성 복식", example = "female-double")
-    FEMALE_DOUBLE,
-
     @Schema(description = "단식", example = "single")
     SINGLE,
 
     @Schema(description = "복식", example = "double")
     DOUBLE;
 
-
-
     @JsonValue
     public String toValue() {
-        return this.name().toLowerCase().replace('_', '-');
+        return this.name().toLowerCase();
     }
 
     @JsonCreator

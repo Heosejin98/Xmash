@@ -1,6 +1,5 @@
 package com.tmp.xmash.db.entity;
 
-import com.tmp.xmash.type.MatchType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class SingleMatchHistory {
+public class SingleNormalMatchHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,16 +26,12 @@ public class SingleMatchHistory {
 
     private int loserScore;
 
-    @Enumerated(EnumType.STRING)
-    private MatchType matchType;
-
     @Builder
-    public SingleMatchHistory(String winnerId, String loserId, int winnerScore, int loserScore, MatchType matchType) {
+    public SingleNormalMatchHistory(String winnerId, String loserId, int winnerScore, int loserScore) {
         this.winnerId = winnerId;
         this.loserId = loserId;
         this.winnerScore = winnerScore;
         this.loserScore = loserScore;
-        this.matchType = matchType;
         this.matchTime = LocalDateTime.now();
     }
 }
