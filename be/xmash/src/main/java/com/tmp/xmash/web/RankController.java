@@ -8,15 +8,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/game/rank")
+@RequestMapping("/rank")
 @Tag(name = "Rank Game", description = "Rank Game 관련 api")
 public class RankController {
 
@@ -25,7 +22,7 @@ public class RankController {
             @ApiResponse(responseCode = "200", description = "Double Rank 상태를 성공적으로 반환"),
             @ApiResponse(responseCode = "500", description = "서버 내부 오류")
     })
-    @GetMapping("/double/team/status")
+    @GetMapping("/team/status")
     public ResponseEntity<Boolean> getDoubleRank(
             HttpSession session
     ) {
@@ -40,7 +37,7 @@ public class RankController {
             @ApiResponse(responseCode = "200", description = "팀에 속하지 않은 플레이어 목록을 성공적으로 반환"),
             @ApiResponse(responseCode = "500", description = "서버 내부 오류")
     })
-    @GetMapping("/double/player/without-team")
+    @GetMapping("/players/without-team")
     public ResponseEntity<List<PlayerResponse>> getPlayersWithoutTeam() {
         List<PlayerResponse> playerResponses  = List.of(
                 new PlayerResponse("test", "허세진", "test"),
@@ -58,7 +55,7 @@ public class RankController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 데이터"),
             @ApiResponse(responseCode = "500", description = "서버 내부 오류")
     })
-    @GetMapping("/double/team")
+    @PostMapping("/team")
     public ResponseEntity<Boolean> postTeam(
             @RequestBody PostTeamRequest postTeamRequest
     ) {
@@ -71,7 +68,7 @@ public class RankController {
             @ApiResponse(responseCode = "200", description = "나의 팀원 아이디 반환"),
             @ApiResponse(responseCode = "500", description = "서버 내부 오류")
     })
-    @GetMapping("/double/team/me")
+    @GetMapping("/team/my/member")
     public ResponseEntity<PlayerResponse> getMyTeamId() {
 
         return ResponseEntity.ok(new PlayerResponse("test", "허세진", "test"));
