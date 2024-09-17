@@ -13,12 +13,11 @@ class AuthenticationServiceTest {
     @Test
     void signUp() {
         // given
-        String userId = "test1";
-        String password = "test1";
+        String userId = "se1";
+        String password = "qwe123";
 
         // when
 //        loginService.signUp(userId, password);
-
         // then
     }
 }
