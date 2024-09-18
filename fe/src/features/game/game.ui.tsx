@@ -12,8 +12,23 @@ import {
   Label,
 } from "@/shared/ui";
 import { Plus } from "lucide-react";
+import { useFunnel } from "@use-funnel/browser";
+import type { 게임타입입력, 점수입력, 플레이어입력 } from "./game.context";
+import { 게임타입입력 } from "./gameType.ui";
 
 export function AddGameButton() {
+  const funnel = useFunnel<{
+    게임타입입력: 게임타입입력;
+    플레이어입력: 플레이어입력;
+    점수입력: 점수입력;
+  }>({
+    id: "game-funnel",
+    initial: {
+      step: "게임타입입력",
+      context: {},
+    },
+  });
+
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -28,34 +43,21 @@ export function AddGameButton() {
             <DrawerDescription>선수와 점수를 설정하세요.</DrawerDescription>
           </DrawerHeader>
           <div className="p-4 pb-0">
-            <form>
-              <div className="flex items-center space-x-2">
-                <Switch id="airplane-mode" />
-                <Label htmlFor="airplane-mode">Rank Mode</Label>
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">선수</label>
-                <select
-                  id="player"
-                  name="player"
-                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                >
-                  <option>선수1</option>
-                  <option>선수2</option>
-                  <option>선수3</option>
-                </select>
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">점수</label>
-                <input
-                  type="number"
-                  name="score"
-                  id="score"
-                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            <funnel.Render
+              게임타입입력={({ history }) => (
+                <게임타입입력
+                  onNext={(gameType, matchType) =>
+                    history.push("플레이어입력", { gameType, matchType })
+                  }
                 />
-              </div>
-            </form>
+              )}
+              플레이어입력={({ history }) => (
+                <div
+                  onNext={(winTeam, loseTeam) => history.push("점수입력", { winTeam, loseTeam })}
+                />
+              )}
+              점수입력={({ context }) => <div {...context} />}
+            ></funnel.Render>
           </div>
           <DrawerFooter>
             <Button>Submit </Button>

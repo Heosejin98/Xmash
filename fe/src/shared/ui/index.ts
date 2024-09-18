@@ -9,4 +9,4 @@ export * from './use-toast';
 export * from './avatar';
 export * from './drawer';
 export * from './toggle';
-export * from './switch';
+export * from './radio-group';

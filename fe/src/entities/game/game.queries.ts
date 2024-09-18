@@ -1,4 +1,4 @@
-import { GameService } from '@/shared/api/game';
+import { GameParamsQueryDto, GameService } from '@/shared/api/game';
 import {
   queryOptions
 } from '@tanstack/react-query';
@@ -15,11 +15,16 @@ export class GameQueries {
     ] as const,
   }
 
-  static gameQuery(type: 'normal' | 'rank') {
+  static gameQuery({ gameType, matchType }: GameParamsQueryDto) {
     return queryOptions({
       queryKey: [...this.keys.root],
       queryFn: async ({ signal }) => {
-        return (await GameService.gameQuery({ params: { type }, signal })).data;
+        return (await GameService.gameQuery({
+          params: {
+            gameType,
+            matchType,
+          }, signal
+        })).data;
       },
     })
   }

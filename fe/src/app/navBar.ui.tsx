@@ -29,7 +29,7 @@ const HomeLink = () => {
 
 const NavBar = () => {
   return (
-    <nav className="flex justify-between p-2">
+    <nav className="flex justify-between p-4">
       <RankingLink />
       <HomeLink />
       <AddGameButton></AddGameButton>

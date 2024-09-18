@@ -5,10 +5,15 @@ import { GameQueries } from "./game.queries";
 
 export function GameList() {
   const [searchValue, setSearchValue] = useState("");
-  const { data } = useQuery(GameQueries.gameQuery("normal"));
+  const { data } = useQuery(
+    GameQueries.gameQuery({
+      gameType: "normal",
+      matchType: "single",
+    })
+  );
 
   return (
-    <div className="w-full">
+    <div className="w-full p-3">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter names..."
