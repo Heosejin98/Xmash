@@ -10,3 +10,5 @@ export * from './avatar';
 export * from './drawer';
 export * from './toggle';
 export * from './radio-group';
+export * from './switch';
+export * from './select';
