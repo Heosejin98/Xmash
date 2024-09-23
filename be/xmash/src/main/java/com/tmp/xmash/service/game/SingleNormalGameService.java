@@ -34,7 +34,7 @@ public class SingleNormalGameService implements GameService {
     @Transactional
     @Override
     public boolean matchDone(GameResultRequest gameResultRequest) {
-        MatchEvaluator matchEvaluator = new MatchEvaluator(gameResultRequest);
+        MatchEvaluator matchEvaluator = new MatchEvaluator(gameResultRequest, 0);
 
         SingleNormalMatchHistory singleNormalMatchHistory = matchEvaluator.resolveMatchWinner();
         singleMatchHistoryRepo.save(singleNormalMatchHistory);

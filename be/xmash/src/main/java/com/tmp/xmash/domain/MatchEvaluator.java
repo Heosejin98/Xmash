@@ -1,9 +1,14 @@
 package com.tmp.xmash.domain;
 
 import com.tmp.xmash.db.entity.SingleNormalMatchHistory;
+import com.tmp.xmash.db.entity.SingleRankMatchHistory;
 import com.tmp.xmash.dto.request.GameResultRequest;
+import java.util.random.RandomGenerator;
+import java.util.random.RandomGeneratorFactory;
 
 public class MatchEvaluator {
+
+    private static final RandomGenerator random = RandomGeneratorFactory.of("Random").create();
 
     private final String homeId;
 
@@ -13,11 +18,27 @@ public class MatchEvaluator {
 
     private final int awayScore;
 
-    public MatchEvaluator(GameResultRequest gameResultRequest) {
+    private final int lpGap;
+
+    public MatchEvaluator(GameResultRequest gameResultRequest, int lpGap) {
         this.homeId = gameResultRequest.homeTeam().getFirst();
         this.awayId = gameResultRequest.awayTeam().getFirst();
         this.homeScore = gameResultRequest.homeScore();
         this.awayScore = gameResultRequest.awayScore();
+        this.lpGap = lpGap;
+    }
+
+    public int getResultLp() {
+        int randomDigit = random.nextInt(1, 10);  // 1에서 9까지의 숫자 생성
+        if (lpGap > 200) {
+            return 40 + randomDigit;
+        } else if (lpGap > 100) {
+            return 30 + randomDigit;
+        } else if (lpGap > 50) {
+            return  20 + randomDigit;
+        } else {
+            return  10 + randomDigit;
+        }
     }
 
     public SingleNormalMatchHistory resolveMatchWinner()  {
@@ -35,6 +56,33 @@ public class MatchEvaluator {
         }
 
         return SingleNormalMatchHistory.builder()
+                .winnerId(awayId)
+                .winnerScore(awayScore)
+                .loserId(homeId)
+                .loserScore(homeScore)
+                .build();
+    }
+
+    public boolean isHomeWinner() {
+        return homeScore > awayScore;
+    }
+
+
+    public SingleRankMatchHistory resolveMatchWinner2()  {
+        if (homeScore == awayScore) {
+            throw new IllegalArgumentException("무승부 없음");
+        }
+
+        if (isHomeWinner()) {
+            return SingleRankMatchHistory.builder()
+                    .winnerId(homeId)
+                    .winnerScore(homeScore)
+                    .loserId(awayId)
+                    .loserScore(awayScore)
+                    .build();
+        }
+
+        return SingleRankMatchHistory.builder()
                 .winnerId(awayId)
                 .winnerScore(awayScore)
                 .loserId(homeId)
