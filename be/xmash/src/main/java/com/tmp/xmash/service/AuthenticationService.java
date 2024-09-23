@@ -1,6 +1,8 @@
 package com.tmp.xmash.service;
 
 import com.tmp.xmash.db.entity.AppUser;
+import com.tmp.xmash.db.entity.UserRanking;
+import com.tmp.xmash.db.repositroy.UserRankingRepository;
 import com.tmp.xmash.db.repositroy.UserRepository;
 import com.tmp.xmash.dto.response.UserInfoResponse;
 import lombok.AllArgsConstructor;
@@ -13,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthenticationService {
 
     private final UserRepository userRepository;
+
+    private final UserRankingRepository userRankingRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -32,6 +36,10 @@ public class AuthenticationService {
 
     @Transactional
     public void signUp(String userId, String password) {
-        userRepository.save(new AppUser(userId, passwordEncoder.encode(password)));
+        AppUser appUser = new AppUser(userId, passwordEncoder.encode(password));
+        UserRanking userRanking = UserRanking.createDefault(appUser);
+        appUser.updateUserRanking(userRanking);
+        userRepository.save(appUser);
+        userRankingRepository.save(userRanking);
     }
 }

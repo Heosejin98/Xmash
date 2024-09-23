@@ -1,6 +1,6 @@
 import { AxiosContracts } from "@/shared/lib/axios"
 import { api } from ".."
-import { LoginUserDto, UserDtoSchema } from "./auth.contracts"
+import { LoginUserDto, UserDto } from "./auth.contracts"
 
 export class AuthService {
   static loginUserMutation(data: { loginUserDto: LoginUserDto }) {
@@ -8,10 +8,10 @@ export class AuthService {
       LoginUserDto,
       data.loginUserDto,
     )
-    return api.post('/login', { ...loginUserDto }).then(AxiosContracts.responseContract(UserDtoSchema))
+    return api.post('/login', { ...loginUserDto }).then(AxiosContracts.responseContract(UserDto))
   }
 
-  static currentUserQuery() {
-    return api.get('/me').then(AxiosContracts.responseContract(UserDtoSchema))
+  static currentUserQuery(config: { signal?: AbortSignal }) {
+    return api.get('/me', config).then(AxiosContracts.responseContract(UserDto))
   }
 }
