@@ -36,8 +36,19 @@ public class UserRanking {
         this.appUser = appUser;
     }
 
-    public void updateLp(int lp) {
+    public void updateLpAndTier(int lp) {
         this.lp = lp;
+        if (this.lp > 1300) {
+            this.tier = Tier.DIAMOND;
+        }
+
+        if (this.lp > 800 && this.lp <= 1300) {
+            this.tier = Tier.GOLD;
+        }
+
+        if (this.lp <= 700) {
+            this.tier = Tier.SILVER;
+        }
     }
 
     public static UserRanking createDefault(AppUser appUser) {

@@ -11,9 +11,11 @@ public class GameServiceConfig {
     @Bean
     public GameServiceFactory gameServiceFactory(
             @Qualifier("singleNormalGameService") GameService singleGameService,
-            @Qualifier("doubleNormalGameService") GameService teamGameService) {
+            @Qualifier("doubleNormalGameService") GameService doubleGameService,
+            @Qualifier("singleRankGameService") GameService singleRankGameService
+    ) {
 
-        return new GameServiceFactory(singleGameService, teamGameService);
+        return new GameServiceFactory(singleGameService, doubleGameService, singleRankGameService);
     }
 
 }

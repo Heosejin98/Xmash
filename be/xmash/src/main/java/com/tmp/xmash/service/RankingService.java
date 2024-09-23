@@ -30,8 +30,8 @@ public class RankingService {
 
     @Transactional
     public void updateRanking(UserRanking winner, UserRanking loser, int resultLp) {
-        winner.updateLp(winner.getLp() + resultLp);
-        loser.updateLp(loser.getLp() - resultLp);
+        winner.updateLpAndTier(winner.getLp() + resultLp);
+        loser.updateLpAndTier(loser.getLp() - resultLp);
         userRankingRepository.save(winner);
         userRankingRepository.save(loser);
     }

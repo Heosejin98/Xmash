@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SingleRanklGameService implements GameService {
+public class SingleRankGameService implements GameService {
 
     private final SingleRankMatchHistoryRepo singleMatchHistoryRepo;
 

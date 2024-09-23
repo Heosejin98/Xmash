@@ -39,7 +39,7 @@ public class SingleNormalGameService implements GameService {
         SingleNormalMatchHistory singleNormalMatchHistory = matchEvaluator.resolveMatchWinner();
         singleMatchHistoryRepo.save(singleNormalMatchHistory);
 
-        return singleNormalMatchHistory.getWinnerId().equals(gameResultRequest.homeTeam().getFirst());
+        return matchEvaluator.isHomeWinner();
     }
 
 
