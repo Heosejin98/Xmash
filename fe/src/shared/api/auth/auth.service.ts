@@ -1,6 +1,7 @@
 import { AxiosContracts } from "@/shared/lib/axios"
 import { api } from ".."
-import { LoginUserDto, UserDto } from "./auth.contracts"
+import { LoginUserDto } from "./auth.contracts"
+import { UserDto } from "@/shared/api/user"
 
 export class AuthService {
   static loginUserMutation(data: { loginUserDto: LoginUserDto }) {

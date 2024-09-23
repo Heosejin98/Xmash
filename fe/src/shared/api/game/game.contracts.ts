@@ -17,8 +17,8 @@ export const PlayerDto = z.object({
 export type PlayerDto = z.infer<typeof PlayerDto>;
 
 export const CreateGameDto = z.object({
-  winTeam: z.array(z.string()),
-  loseTeam: z.array(z.string()),
+  winTeam: z.array(z.string()).nonempty(),
+  loseTeam: z.array(z.string()).nonempty(),
   homeScore: z.number(),
   awayScore: z.number(),
   matchType: MatchType,
