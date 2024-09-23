@@ -34,4 +34,13 @@ public class AuthenticationController {
         }
     }
 
+
+    @PostMapping("/logout")
+    public ResponseEntity<Boolean> logoutPost(
+            HttpSession session
+    ) {
+
+        return ResponseEntity.ok(Boolean.TRUE);
+    }
+
 }
