@@ -10,6 +10,7 @@ import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.type.MatchType;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,7 @@ import static java.util.function.UnaryOperator.identity;
 import static java.util.stream.Collectors.toMap;
 
 @Service
-@AllArgsConstructor
-@Qualifier("singleGameService")
+@RequiredArgsConstructor
 public class SingleNormalGameService implements GameService {
 
     private final SingleMatchHistoryRepo singleMatchHistoryRepo;

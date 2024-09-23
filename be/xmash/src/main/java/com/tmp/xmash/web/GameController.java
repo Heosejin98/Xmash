@@ -46,8 +46,6 @@ public class GameController {
 
     @GetMapping("/game/{gameType}/{matchType}")
     public ResponseEntity<List<GameResultResponse>> getSingleGameResult(
-            @Parameter(name = "gameType", description = "게임 타입을 지정합니다.", required = true, in = ParameterIn.PATH) @PathVariable GameType gameType,
-            @Parameter(name = "matchType", description = "경기 타입을 지정합니다.", required = true, in = ParameterIn.PATH) @PathVariable MatchType matchType
             @Parameter(name = "matchType", description = "매치타입(단식, 복식)을 지정합니다.", required = true, in = ParameterIn.PATH) @PathVariable MatchType matchType,
             @Parameter(name = "gameType", description = "게임타입(랭크, 노말)을 지정합니다.", required = true, in = ParameterIn.PATH) @PathVariable GameType gameType
     ) {

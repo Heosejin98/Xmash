@@ -13,15 +13,13 @@ import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.type.MatchType;
 import java.util.List;
 import java.util.Map;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@AllArgsConstructor
-@Qualifier("doubleGameService")
-public class DoubleGameService implements GameService {
+@RequiredArgsConstructor
+public class DoubleNormalGameService implements GameService {
 
     private final DoubleNormalMatchRepo doubleNormalMatchRepo;
     private final UserRepository userRepository;
