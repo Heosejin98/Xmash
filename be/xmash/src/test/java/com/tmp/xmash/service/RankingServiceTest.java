@@ -41,10 +41,10 @@ class RankingServiceTest {
         );
         userRepository.saveAll(appUser);
 
-        UserRanking ranking1 = new UserRanking(1L, 3, Tier.SILVER, 10, appUser.get(0));
-        UserRanking ranking2 = new UserRanking(2L, 1, Tier.DIAMOND, 100, appUser.get(1));
-        UserRanking ranking3 = new UserRanking(3L, 2, Tier.GOLD, 50, appUser.get(2));
-        UserRanking ranking4 = new UserRanking(4L, 4, Tier.SILVER, 10, appUser.get(3));
+        UserRanking ranking1 = new UserRanking(Tier.SILVER, 10, appUser.get(0));
+        UserRanking ranking2 = new UserRanking(Tier.DIAMOND, 100, appUser.get(1));
+        UserRanking ranking3 = new UserRanking(Tier.GOLD, 50, appUser.get(2));
+        UserRanking ranking4 = new UserRanking(Tier.SILVER, 10, appUser.get(3));
         userRankingRepository.saveAll(List.of(ranking1, ranking2, ranking3, ranking4));
 
         // when
