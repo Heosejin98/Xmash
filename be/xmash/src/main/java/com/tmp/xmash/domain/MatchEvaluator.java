@@ -1,8 +1,7 @@
 package com.tmp.xmash.domain;
 
-import com.tmp.xmash.db.entity.SingleMatchHistory;
+import com.tmp.xmash.db.entity.SingleNormalMatchHistory;
 import com.tmp.xmash.dto.request.GameResultRequest;
-import com.tmp.xmash.type.MatchType;
 
 public class MatchEvaluator {
 
@@ -14,37 +13,32 @@ public class MatchEvaluator {
 
     private final int awayScore;
 
-    private final MatchType matchType;
-
-    public MatchEvaluator(String homeId, MatchType matchType, GameResultRequest gameResultRequest) {
-        this.homeId = homeId;
-        this.awayId = gameResultRequest.awayPlayerId();
+    public MatchEvaluator(GameResultRequest gameResultRequest) {
+        this.homeId = gameResultRequest.homeTeam().getFirst();
+        this.awayId = gameResultRequest.awayTeam().getFirst();
         this.homeScore = gameResultRequest.homeScore();
         this.awayScore = gameResultRequest.awayScore();
-        this.matchType = matchType;
     }
 
-    public SingleMatchHistory resolveMatchWinner()  {
+    public SingleNormalMatchHistory resolveMatchWinner()  {
         if (homeScore == awayScore) {
             throw new IllegalArgumentException("무승부 없음");
         }
 
         if (homeScore > awayScore) {
-            return SingleMatchHistory.builder()
+            return SingleNormalMatchHistory.builder()
                     .winnerId(homeId)
                     .winnerScore(homeScore)
                     .loserId(awayId)
                     .loserScore(awayScore)
-                    .matchType(matchType)
                     .build();
         }
 
-        return SingleMatchHistory.builder()
+        return SingleNormalMatchHistory.builder()
                 .winnerId(awayId)
                 .winnerScore(awayScore)
                 .loserId(homeId)
                 .loserScore(homeScore)
-                .matchType(matchType)
                 .build();
     }
 

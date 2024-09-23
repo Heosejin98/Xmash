@@ -1,7 +1,7 @@
-package com.tmp.xmash.service;
+package com.tmp.xmash.service.game;
 
 import com.tmp.xmash.db.entity.AppUser;
-import com.tmp.xmash.db.entity.SingleMatchHistory;
+import com.tmp.xmash.db.entity.SingleNormalMatchHistory;
 import com.tmp.xmash.db.repositroy.SingleMatchHistoryRepo;
 import com.tmp.xmash.db.repositroy.UserRepository;
 import com.tmp.xmash.domain.MatchEvaluator;
@@ -10,6 +10,8 @@ import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.type.MatchType;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +21,8 @@ import static java.util.function.UnaryOperator.identity;
 import static java.util.stream.Collectors.toMap;
 
 @Service
-@AllArgsConstructor
-public class SingleNormalGameService {
+@RequiredArgsConstructor
+public class SingleNormalGameService implements GameService {
 
     private final SingleMatchHistoryRepo singleMatchHistoryRepo;
 
@@ -30,24 +32,26 @@ public class SingleNormalGameService {
 
 
     @Transactional
-    public boolean matchDone(GameResultRequest gameResultRequest, String homeId) {
-        MatchEvaluator matchEvaluator = new MatchEvaluator(homeId, matchType, gameResultRequest);
+    @Override
+    public boolean matchDone(GameResultRequest gameResultRequest) {
+        MatchEvaluator matchEvaluator = new MatchEvaluator(gameResultRequest);
 
-        SingleMatchHistory singleMatchHistory = matchEvaluator.resolveMatchWinner();
-        singleMatchHistoryRepo.save(singleMatchHistory);
+        SingleNormalMatchHistory singleNormalMatchHistory = matchEvaluator.resolveMatchWinner();
+        singleMatchHistoryRepo.save(singleNormalMatchHistory);
 
-        return singleMatchHistory.getWinnerId().equals(homeId);
+        return singleNormalMatchHistory.getWinnerId().equals(gameResultRequest.homeTeam().getFirst());
     }
 
 
     @Transactional
+    @Override
     public List<GameResultResponse> getMatchHistory() {
         Map<String, AppUser> usersByUserId = userRepository.findAll().stream()
                 .collect(toMap(AppUser::getUserId, identity()));
-        List<SingleMatchHistory> singleMatchHistories = singleMatchHistoryRepo.findTop1000ByMatchTypeOrderByMatchTimeDesc(matchType);
+        List<SingleNormalMatchHistory> singleMatchHistories = singleMatchHistoryRepo.findTop1000ByOrderByMatchTimeDesc();
 
         return singleMatchHistories.stream()
-                .map(a -> GameResultResponse.createSingleGame(a, usersByUserId))
+                .map(a -> GameResultResponse.createSingleGame(a, usersByUserId, matchType))
                 .toList();
     }
 

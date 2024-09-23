@@ -1,41 +1,19 @@
 package com.tmp.xmash.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public record PlayerResponse(String userId, String userName, String profileUrl) {
+/**
+ * 플레이어 정보를 반환하는 DTO.
+ */
+@Schema(name = "PlayerResponse", description = "플레이어 정보 응답 모델")
+public record PlayerResponse(
+        @Schema(name = "userId", example = "test", description = "사용자 ID")
+        String userId,
 
-    /**
-     * user Id
-     * @return userId
-     */
-    @Override
-    @Schema(name = "userId", example = "test", description = "userId")
-    @JsonProperty("userId")
-    public String userId() {
-        return userId;
-    }
+        @Schema(name = "userName", example = "허세진", description = "사용자 이름")
+        String userName,
 
-    /**
-     * userName
-     * @return userName
-     */
-    @Override
-    @Schema(name = "userName", example = "허세진", description = "user name")
-    @JsonProperty("userName")
-    public String userName() {
-        return userName;
-    }
-
-
-    /**
-     * 프로필 사진 경로
-     * @return profileUrl
-     */
-    @Override
-    @Schema(name = "profileUrl", example = "player123", description = "/images/profiles/test.jpg - [아직 미구현 항상 null]")
-    @JsonProperty("profileUrl")
-    public String profileUrl() {
-        return profileUrl;
-    }
+        @Schema(name = "profileUrl", example = "/images/profiles/test.jpg", description = "프로필 사진 경로 (아직 미구현, 항상 null)")
+        String profileUrl
+) {
 }
