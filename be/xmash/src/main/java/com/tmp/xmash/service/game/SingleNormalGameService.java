@@ -9,9 +9,7 @@ import com.tmp.xmash.dto.request.GameResultRequest;
 import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.type.MatchType;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,7 +37,7 @@ public class SingleNormalGameService implements GameService {
         SingleNormalMatchHistory singleNormalMatchHistory = matchEvaluator.resolveMatchWinner();
         singleMatchHistoryRepo.save(singleNormalMatchHistory);
 
-        return singleNormalMatchHistory.getWinnerId().equals(gameResultRequest.homeTeam().getFirst());
+        return matchEvaluator.isHomeWinner();
     }
 
 
