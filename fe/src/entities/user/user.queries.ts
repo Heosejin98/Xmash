@@ -14,7 +14,7 @@ export class UserQueries {
       queryFn: async ({ signal }) => {
         return (await UserService.usersQuery({ signal })).data;
       },
-      initialData: [],
+      staleTime: 1000 * 60 * 5,
     })
   }
 }

@@ -11,10 +11,13 @@ import {
 } from "@/shared/ui";
 import { Plus } from "lucide-react";
 import { GameInfoForm } from "./form.ui";
+import { useState } from "react";
 
 export function AddGameButton() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Drawer>
+    <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button className="rounded-full w-10 h-10" size="icon">
           <Plus></Plus>
@@ -27,7 +30,7 @@ export function AddGameButton() {
             <DrawerDescription></DrawerDescription>
           </DrawerHeader>
           <div className="p-4 pb-0">
-            <GameInfoForm></GameInfoForm>
+            <GameInfoForm onSuccess={() => setOpen(false)}></GameInfoForm>
           </div>
         </div>
         <DrawerFooter>
