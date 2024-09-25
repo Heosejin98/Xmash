@@ -1,5 +1,5 @@
 
-import { UserDto } from "@/shared/api/auth";
+import { UserDto } from "@/shared/api/user";
 import { create } from "zustand";
 
 
