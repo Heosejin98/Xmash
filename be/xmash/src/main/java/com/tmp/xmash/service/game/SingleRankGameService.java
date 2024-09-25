@@ -47,9 +47,7 @@ public class SingleRankGameService implements GameService {
                 .findFirst()
                 .orElseThrow();
 
-        int lpGap = Math.abs(homeUser.getUserRanking().getLp() - awayUser.getUserRanking().getLp());
-        MatchEvaluator matchEvaluator = new MatchEvaluator(gameResultRequest, lpGap);
-
+        MatchEvaluator matchEvaluator = new MatchEvaluator(gameResultRequest);
         singleMatchHistoryRepo.save(matchEvaluator.resolveMatchWinner2());
 
         if (matchEvaluator.isHomeWinner()) {

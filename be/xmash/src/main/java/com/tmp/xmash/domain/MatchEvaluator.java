@@ -18,27 +18,17 @@ public class MatchEvaluator {
 
     private final int awayScore;
 
-    private final int lpGap;
-
-    public MatchEvaluator(GameResultRequest gameResultRequest, int lpGap) {
+    public MatchEvaluator(GameResultRequest gameResultRequest) {
         this.homeId = gameResultRequest.homeTeam().getFirst();
         this.awayId = gameResultRequest.awayTeam().getFirst();
         this.homeScore = gameResultRequest.homeScore();
         this.awayScore = gameResultRequest.awayScore();
-        this.lpGap = lpGap;
     }
 
     public int getResultLp() {
         int randomDigit = random.nextInt(1, 10);  // 1에서 9까지의 숫자 생성
-        if (lpGap > 200) {
-            return 40 + randomDigit;
-        } else if (lpGap > 100) {
-            return 30 + randomDigit;
-        } else if (lpGap > 50) {
-            return  20 + randomDigit;
-        } else {
-            return  10 + randomDigit;
-        }
+
+        return  10 + randomDigit;
     }
 
     public SingleNormalMatchHistory resolveMatchWinner()  {
