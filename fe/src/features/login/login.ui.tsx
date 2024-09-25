@@ -1,4 +1,3 @@
-import { useLoginForm } from "@/entities/login";
 import {
   Button,
   Form,
@@ -12,6 +11,17 @@ import {
 import { useRouter } from "@tanstack/react-router";
 import { useLoginMutation } from "./login.mutation";
 import { LoginUserDto } from "@/shared/api/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
+const useLoginForm = () =>
+  useForm<LoginUserDto>({
+    resolver: zodResolver(LoginUserDto),
+    defaultValues: {
+      userId: "",
+      password: "",
+    },
+  });
 
 export function LoginForm() {
   const form = useLoginForm();

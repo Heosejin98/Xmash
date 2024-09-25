@@ -1,12 +1,5 @@
 import { z } from "zod";
 
-export const UserDto = z.object({
-  userId: z.string(),
-  userName: z.string(),
-  gender: z.string(),
-})
-export type UserDto = z.infer<typeof UserDto>
-
 export const LoginUserDto = z.object({
   userId: z
     .string()
