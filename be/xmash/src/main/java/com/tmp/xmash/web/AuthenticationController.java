@@ -22,8 +22,8 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<UserInfoResponse> loginPost(
             HttpSession session,
-            @RequestBody LoginRequest loginRequest)
-    {
+            @RequestBody LoginRequest loginRequest
+    ) {
         try {
             UserInfoResponse userInfoResponse = loginService.login(loginRequest.userId(), loginRequest.password());
             session.setAttribute("userId", loginRequest.userId());

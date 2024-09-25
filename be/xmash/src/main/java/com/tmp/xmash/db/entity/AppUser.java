@@ -15,7 +15,9 @@ public class AppUser {
     @Column(name = "app_user_id")
     private Long id;
     private String userId;
+    @Setter
     private String email;
+    @Setter
     private String name;
     private String password;
 
@@ -31,6 +33,8 @@ public class AppUser {
         this.userId = userId;
         this.password = password;
     }
+
+
 
     public void updateUserRanking(UserRanking userRanking) {
         this.userRanking = userRanking;
