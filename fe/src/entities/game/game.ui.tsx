@@ -13,7 +13,7 @@ export function GameList() {
 
   const { data } = useQuery(
     GameQueries.gameQuery({
-      gameType: "normal",
+      gameType: gameType,
       matchType: "single",
     })
   );

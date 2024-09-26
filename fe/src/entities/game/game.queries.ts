@@ -17,7 +17,7 @@ export class GameQueries {
 
   static gameQuery({ gameType, matchType }: GameParamsQueryDto) {
     return queryOptions({
-      queryKey: [...this.keys.root],
+      queryKey: [...this.keys.root, gameType, matchType],
       queryFn: async ({ signal }) => {
         return (await GameService.gameQuery({
           params: {
