@@ -3,7 +3,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/shared/ui";
 import { useState } from "react";
 
 export const GameTypeTabs = () => {
-  const [gameType, setGameType] = useState<GameType>("normal");
+  const [_, setGameType] = useState<GameType>("normal");
 
   return (
     <Tabs

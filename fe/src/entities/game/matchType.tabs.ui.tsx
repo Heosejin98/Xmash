@@ -1,9 +1,9 @@
 import { MatchType } from "@/shared/api/game";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui";
+import { Tabs, TabsList, TabsTrigger } from "@/shared/ui";
 import { useState } from "react";
 
 export const MatchTypeTabs = () => {
-  const [matchType, setMatchType] = useState<MatchType>("single");
+  const [_, setMatchType] = useState<MatchType>("single");
 
   return (
     <Tabs
