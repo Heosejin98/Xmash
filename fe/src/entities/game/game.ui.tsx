@@ -33,7 +33,7 @@ export function GameList() {
         <MatchTypeTabs onChange={setMatchType} type={matchType} />
 
         {data
-          ?.filter((d) => d.matchType)
+          ?.filter((d) => matchType === "all" || d.matchType === matchType)
           ?.map((record) => (
             <div
               key={`${record.matchTime}: ${record.winTeam.toString()}`}
