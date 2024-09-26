@@ -9,7 +9,7 @@ import { GameType, MatchType } from "@/shared/api/game";
 export function GameList() {
   const [searchValue, setSearchValue] = useState("");
   const [gameType, setGameType] = useState<GameType>("normal");
-  const [matchType, setMatchType] = useState<MatchType | "all">("all");
+  const [matchType, setMatchType] = useState<MatchType>("all");
 
   const { data } = useQuery(
     GameQueries.gameQuery({

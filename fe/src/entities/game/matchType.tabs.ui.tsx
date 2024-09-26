@@ -3,7 +3,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/shared/ui";
 
 interface MatchTypeTabsProps {
   onChange: (type: MatchType) => void;
-  type: MatchType | "all";
+  type: MatchType;
 }
 
 export const MatchTypeTabs = ({ type, onChange }: MatchTypeTabsProps) => {
