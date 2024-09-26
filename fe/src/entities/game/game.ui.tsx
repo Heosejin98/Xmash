@@ -2,6 +2,8 @@ import { Avatar, AvatarFallback, AvatarImage, Input } from "@/shared/ui";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { GameQueries } from "./game.queries";
+import { MatchTypeTabs } from "./matchType.tabs.ui";
+import { GameTypeTabs } from "./gameType.tabs.ui";
 
 export function GameList() {
   const [searchValue, setSearchValue] = useState("");
@@ -23,6 +25,9 @@ export function GameList() {
         />
       </div>
       <div className="rounded-md border">
+        <GameTypeTabs />
+        <MatchTypeTabs />
+
         {data?.map((record, idx) => (
           <div key={idx} className="flex items-center border-b p-4 justify-between">
             <div>
