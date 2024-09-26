@@ -1,15 +1,17 @@
 import { GameType } from "@/shared/api/game";
 import { Tabs, TabsList, TabsTrigger } from "@/shared/ui";
-import { useState } from "react";
 
-export const GameTypeTabs = () => {
-  const [_, setGameType] = useState<GameType>("normal");
+interface GameTypeTabsProps {
+  onChange: (type: GameType) => void;
+  type: GameType;
+}
 
+export const GameTypeTabs = ({ type, onChange }: GameTypeTabsProps) => {
   return (
     <Tabs
-      defaultValue="normal"
+      defaultValue={type}
       className="w-full"
-      onValueChange={(type) => setGameType(type as GameType)}
+      onValueChange={(type) => onChange(type as GameType)}
     >
       <TabsList className="grid grid-cols-2">
         <TabsTrigger value="normal">Normal</TabsTrigger>

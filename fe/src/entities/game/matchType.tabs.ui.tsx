@@ -1,15 +1,17 @@
 import { MatchType } from "@/shared/api/game";
 import { Tabs, TabsList, TabsTrigger } from "@/shared/ui";
-import { useState } from "react";
 
-export const MatchTypeTabs = () => {
-  const [_, setMatchType] = useState<MatchType>("single");
+interface MatchTypeTabsProps {
+  onChange: (type: MatchType) => void;
+  type: MatchType | "all";
+}
 
+export const MatchTypeTabs = ({ type, onChange }: MatchTypeTabsProps) => {
   return (
     <Tabs
-      defaultValue="normal"
+      defaultValue={type}
       className="w-full"
-      onValueChange={(type) => setMatchType(type as MatchType)}
+      onValueChange={(type) => onChange(type as MatchType)}
     >
       <TabsList className="grid grid-cols-3">
         <TabsTrigger value="all">ALL</TabsTrigger>

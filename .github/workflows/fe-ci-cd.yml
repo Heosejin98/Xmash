@@ -36,4 +36,4 @@ jobs:
 
       - name: Transfer files
         run: |
-          scp -P ${{ secrets.GCP_SSH_PORT }} -r 'fe/dist/*' ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/fe/
+          scp -P ${{ secrets.GCP_SSH_PORT }} -r fe/dist/\* ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/fe
