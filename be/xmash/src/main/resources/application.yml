@@ -18,5 +18,3 @@ spring:
   h2:
     console:
       enabled: false  # H2 콘솔 비활성화
-cors:
-  allowed-origins: ${ALLOWED_ORIGINS}  # 환경 변수로부터 허용할 출처 읽기
