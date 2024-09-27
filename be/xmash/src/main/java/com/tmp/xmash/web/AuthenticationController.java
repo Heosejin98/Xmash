@@ -1,7 +1,7 @@
 package com.tmp.xmash.web;
 
 import com.tmp.xmash.dto.request.LoginRequest;
-import com.tmp.xmash.dto.response.UserInfoResponse;
+import com.tmp.xmash.dto.response.UserProfileResponse;
 import com.tmp.xmash.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
@@ -20,12 +20,12 @@ public class AuthenticationController {
     private final AuthenticationService loginService;
 
     @PostMapping("/login")
-    public ResponseEntity<UserInfoResponse> loginPost(
+    public ResponseEntity<UserProfileResponse> loginPost(
             HttpSession session,
             @RequestBody LoginRequest loginRequest
     ) {
         try {
-            UserInfoResponse userInfoResponse = loginService.login(loginRequest.userId(), loginRequest.password());
+            UserProfileResponse userInfoResponse = loginService.login(loginRequest.userId(), loginRequest.password());
             session.setAttribute("userId", loginRequest.userId());
 
             return ResponseEntity.ok(userInfoResponse);

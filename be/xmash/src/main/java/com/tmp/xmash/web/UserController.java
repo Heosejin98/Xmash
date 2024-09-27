@@ -3,7 +3,6 @@ package com.tmp.xmash.web;
 
 import com.tmp.xmash.dto.request.UserProfileRequest;
 import com.tmp.xmash.dto.response.PlayerResponse;
-import com.tmp.xmash.dto.response.UserInfoResponse;
 import com.tmp.xmash.dto.response.UserProfileResponse;
 import com.tmp.xmash.service.UserConfigService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,14 +10,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -28,7 +26,7 @@ public class UserController {
     private final UserConfigService userConfigService;
 
     @GetMapping("/me")
-    public ResponseEntity<UserInfoResponse> getMe(
+    public ResponseEntity<UserProfileResponse> getMe(
             HttpSession session
     ) {
         String myId = (String) session.getAttribute("userId");
