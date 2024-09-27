@@ -3,6 +3,10 @@ package com.tmp.xmash.type;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Getter;
 
 @Getter
@@ -29,6 +33,12 @@ public enum MatchType {
             }
         }
         throw new IllegalArgumentException("Unknown value: " + value);
+    }
+
+    public static List<String> getMatchTypes() {
+        return Arrays.stream(MatchType.values())
+                .map(MatchType::name)
+                .toList();
     }
 
 }

@@ -8,16 +8,21 @@ import com.tmp.xmash.type.GameType;
 import com.tmp.xmash.type.MatchType;
 import com.tmp.xmash.web.editor.GameTypeEditor;
 import com.tmp.xmash.web.editor.MatchTypeEditor;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
@@ -57,5 +62,14 @@ public class GameController {
 
         return ResponseEntity.ok(gameService.getMatchHistory());
     }
+
+
+    @GetMapping("/match-type")
+    @Operation(summary = "모든 경기 타입 조회", description = "모든 경기 타입을 조회 (ALL, SINGLE, DOUBLE)")
+    public ResponseEntity<List<String>> getGameResult() {
+        return ResponseEntity.ok(MatchType.getMatchTypes());
+    }
+
+
 
 }
