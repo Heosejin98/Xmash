@@ -1,5 +1,5 @@
 server:
-  port: 81
+  port: 4242
 
 springdoc:
   api-docs:
