@@ -1,5 +1,7 @@
 package com.tmp.xmash.web;
 
+import static org.springframework.http.HttpHeaders.SET_COOKIE;
+
 import com.tmp.xmash.dto.request.LoginRequest;
 import com.tmp.xmash.dto.response.UserProfileResponse;
 import com.tmp.xmash.service.AuthenticationService;
@@ -28,7 +30,10 @@ public class AuthenticationController {
             UserProfileResponse userInfoResponse = loginService.login(loginRequest.userId(), loginRequest.password());
             session.setAttribute("userId", loginRequest.userId());
 
-            return ResponseEntity.ok(userInfoResponse);
+            return ResponseEntity.ok()
+                    .header(SET_COOKIE, session.getId())
+                    .body(userInfoResponse);
+
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();  // 로그인 실패 메시지;
         }
