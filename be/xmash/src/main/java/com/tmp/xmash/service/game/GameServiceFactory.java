@@ -8,16 +8,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GameServiceFactory {
 
-    private final GameService singleGameService;
+    private final GameService normalGameService;
+    private final GameService singleNormalGameService;
     private final GameService doubleNormalGameService;
     private final GameService singleRanklGameService;
 
     public GameServiceFactory(
-            @Qualifier("singleNormalGameService") GameService singleGameService,
+            @Qualifier("normalGameService") GameService normalGameService,
+            @Qualifier("singleNormalGameService") GameService singleNormalGameService,
             @Qualifier("doubleNormalGameService") GameService doubleNormalGameService,
             @Qualifier("singleRankGameService") GameService singleRanklGameService
     ) {
-        this.singleGameService = singleGameService;
+        this.normalGameService = normalGameService;
+        this.singleNormalGameService = singleNormalGameService;
         this.doubleNormalGameService = doubleNormalGameService;
         this.singleRanklGameService = singleRanklGameService;
     }
@@ -32,7 +35,7 @@ public class GameServiceFactory {
         }
 
         if (MatchType.SINGLE == matchType && GameType.NORMAL == gameType) {
-            return singleGameService;
+            return singleNormalGameService;
         }
 
         throw new IllegalArgumentException("Unknown matchType: " + matchType + " or gameType: " + gameType);

@@ -17,7 +17,13 @@ public record GameResultResponse(
         LocalDateTime matchTime,
         MatchType matchType,
         Integer point
-) {
+) implements Comparable<GameResultResponse> {
+
+    @Override
+    public int compareTo(GameResultResponse other) {
+        return this.matchTime.compareTo(other.matchTime);
+    }
+
 
     public static GameResultResponse createSingleGame(SingleNormalMatchHistory matchResult, Map<String, AppUser> userByUserId, MatchType matchType) {
         String winnerId = matchResult.getWinnerId();
