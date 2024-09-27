@@ -20,6 +20,9 @@ module.exports = {
       height: {
         "nav": "var(--nav-height)",
       },
+      margin: {
+        "nav": "var(--nav-height)",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

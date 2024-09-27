@@ -6,7 +6,7 @@ export const Route = createFileRoute("/_layout")({
   component: () => (
     <>
       <Header></Header>
-      <main className="p-2 h-full">
+      <main className="p-2 flex-1">
         <Outlet />
       </main>
       <NavBar></NavBar>
