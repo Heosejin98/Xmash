@@ -1,3 +1,4 @@
+import { LoginUserDto } from "@/shared/api/auth";
 import {
   Button,
   Form,
@@ -8,11 +9,10 @@ import {
   FormMessage,
   Input,
 } from "@/shared/ui";
-import { useNavigate, useRouter } from "@tanstack/react-router";
-import { useLoginMutation } from "./login.mutation";
-import { LoginUserDto } from "@/shared/api/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
+import { useLoginMutation } from "./login.mutation";
 
 const useLoginForm = () =>
   useForm<LoginUserDto>({
