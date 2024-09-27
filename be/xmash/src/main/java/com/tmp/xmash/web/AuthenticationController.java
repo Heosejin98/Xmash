@@ -4,7 +4,6 @@ import com.tmp.xmash.dto.request.LoginRequest;
 import com.tmp.xmash.dto.response.UserProfileResponse;
 import com.tmp.xmash.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
@@ -24,19 +23,11 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<UserProfileResponse> loginPost(
             HttpSession session,
-            HttpServletResponse response,
             @RequestBody LoginRequest loginRequest
     ) {
         try {
             UserProfileResponse userInfoResponse = loginService.login(loginRequest.userId(), loginRequest.password());
             session.setAttribute("userId", loginRequest.userId());
-
-            Cookie cookie = new Cookie("userId", loginRequest.userId());
-            cookie.setPath("/");  // 쿠키가 유효한 경로 설정
-            cookie.setHttpOnly(true);  // 보안 상 HttpOnly 옵션 설정
-            cookie.setMaxAge(7 * 24 * 60 * 60);  // 쿠키 만료 시간 설정 (7일)
-            response.addCookie(cookie);  // 쿠키 추가
-
 
             return ResponseEntity.ok(userInfoResponse);
         } catch (IllegalArgumentException ex) {
