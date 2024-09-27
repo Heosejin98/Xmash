@@ -4,7 +4,7 @@ import { z } from 'zod'
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   proxy: false,
-  // withCredentials: true,
+  withCredentials: true,
 })
 
 export function handleGenericError(error: AxiosError) {
