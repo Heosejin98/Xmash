@@ -17,6 +17,9 @@ module.exports = {
       },
     },
     extend: {
+      height: {
+        "nav": "var(--nav-height)",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

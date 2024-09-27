@@ -26,18 +26,18 @@ export function useLoginMutation(
     onError,
     onSettled,
   } = options || {}
+  const { setAuthenticated, setUser } = useAuthStore();
+
 
   return useMutation({
     mutationKey: ['session', 'login-user', ...mutationKey],
 
-    mutationFn: async (loginUserDto: LoginUserDto) => AuthService.loginUserMutation({ loginUserDto }),
+    mutationFn: async (loginUserDto: LoginUserDto) => await AuthService.loginUserMutation({ loginUserDto }),
 
     onMutate,
 
     onSuccess: async (response, variables, context) => {
-      const store = useAuthStore();
       const user = response.data
-      const { setAuthenticated, setUser } = store
 
       setAuthenticated(true)
       setUser(user)

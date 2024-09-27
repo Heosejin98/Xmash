@@ -23,7 +23,7 @@ interface Props {
 
 export function UserSelect({ values, setValue }: Props) {
   const [open, setOpen] = useState(false);
-  const { data = [] } = useQuery(UserQueries.userQuery());
+  const { data = [] } = useQuery(UserQueries.userAllQuery());
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

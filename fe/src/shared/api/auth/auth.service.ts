@@ -1,4 +1,4 @@
-import { AxiosContracts } from "@/shared/lib/axios"
+  import { AxiosContracts } from "@/shared/lib/axios"
 import { api } from ".."
 import { LoginUserDto } from "./auth.contracts"
 import { UserDto } from "@/shared/api/user"

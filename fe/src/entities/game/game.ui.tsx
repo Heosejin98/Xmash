@@ -19,7 +19,7 @@ export function GameList() {
   );
 
   return (
-    <div className="w-full p-3">
+    <div className="w-full p-3 flex flex-col ">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter names..."
@@ -32,36 +32,38 @@ export function GameList() {
         <GameTypeTabs onChange={setGameType} type={gameType} />
         <MatchTypeTabs onChange={setMatchType} type={matchType} />
 
-        {data
-          ?.filter((d) => matchType === "all" || d.matchType === matchType)
-          ?.map((record) => (
-            <div
-              key={`${record.matchTime}: ${record.winTeam.toString()}`}
-              className="flex items-center border-b p-4 justify-between"
-            >
-              <div>
-                {record.winTeam.map((player) => (
-                  <Avatar key={`${record.matchTime}: ${player.userName}`} className="mr-4">
-                    <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
-                    <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
-                  </Avatar>
-                ))}
-              </div>
+        <article className="">
+          {data
+            ?.filter((d) => matchType === "all" || d.matchType === matchType)
+            ?.map((record) => (
+              <div
+                key={`${record.matchTime}: ${record.winTeam.toString()}`}
+                className="flex items-center border-b p-4 justify-between"
+              >
+                <div>
+                  {record.winTeam.map((player) => (
+                    <Avatar key={`${record.matchTime}: ${player.userName}`} className="mr-4">
+                      <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
+                      <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
+                    </Avatar>
+                  ))}
+                </div>
 
-              <div className="flex gap-2">
-                <div>{record.winnerScore}</div>:<div>{record.loserScore}</div>
-              </div>
+                <div className="flex gap-2">
+                  <div>{record.winnerScore}</div>:<div>{record.loserScore}</div>
+                </div>
 
-              <div>
-                {record.loseTeam.map((player) => (
-                  <Avatar key={`${record.matchTime}: ${player.userName}`} className="mr-4">
-                    <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
-                    <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
-                  </Avatar>
-                ))}
+                <div>
+                  {record.loseTeam.map((player) => (
+                    <Avatar key={`${record.matchTime}: ${player.userName}`} className="mr-4">
+                      <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
+                      <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
+                    </Avatar>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+        </article>
       </div>
     </div>
   );

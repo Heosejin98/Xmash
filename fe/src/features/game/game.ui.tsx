@@ -19,7 +19,7 @@ export function AddGameButton() {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button className="rounded-full w-10 h-10" size="icon">
+        <Button className="rounded-full w-8 h-8" size="icon">
           <Plus></Plus>
         </Button>
       </DrawerTrigger>
