@@ -19,13 +19,13 @@ const GameLink = () => {
   );
 };
 
-const HomeLink = () => {
-  return (
-    <Link to="/" className="nav-link" activeProps={activeProps}>
-      Home
-    </Link>
-  );
-};
+// const HomeLink = () => {
+//   return (
+//     <Link to="/" className="nav-link" activeProps={activeProps}>
+//       Home
+//     </Link>
+//   );
+// };
 
 const NavBar = () => {
   return (

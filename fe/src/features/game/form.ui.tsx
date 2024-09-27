@@ -69,7 +69,7 @@ const UserListInput = forwardRef(
     },
     _
   ) => {
-    const { data = [] } = useQuery(UserQueries.userQuery());
+    const { data = [] } = useQuery(UserQueries.userAllQuery());
 
     return (
       <div className="flex">
