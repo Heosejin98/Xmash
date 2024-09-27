@@ -2,12 +2,18 @@ import { Avatar, AvatarFallback, AvatarImage, Input } from "@/shared/ui";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { GameQueries } from "./game.queries";
+import { MatchTypeTabs } from "./matchType.tabs.ui";
+import { GameTypeTabs } from "./gameType.tabs.ui";
+import { GameType, MatchType } from "@/shared/api/game";
 
 export function GameList() {
   const [searchValue, setSearchValue] = useState("");
+  const [gameType, setGameType] = useState<GameType>("normal");
+  const [matchType, setMatchType] = useState<MatchType>("all");
+
   const { data } = useQuery(
     GameQueries.gameQuery({
-      gameType: "normal",
+      gameType: gameType,
       matchType: "single",
     })
   );
@@ -23,31 +29,39 @@ export function GameList() {
         />
       </div>
       <div className="rounded-md border">
-        {data?.map((record, idx) => (
-          <div key={idx} className="flex items-center border-b p-4 justify-between">
-            <div>
-              {record.winTeam.map((player) => (
-                <Avatar className="mr-4">
-                  <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
-                  <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
-                </Avatar>
-              ))}
-            </div>
+        <GameTypeTabs onChange={setGameType} type={gameType} />
+        <MatchTypeTabs onChange={setMatchType} type={matchType} />
 
-            <div className="flex gap-2">
-              <div>{record.winnerScore}</div>:<div>{record.loserScore}</div>
-            </div>
+        {data
+          ?.filter((d) => matchType === "all" || d.matchType === matchType)
+          ?.map((record) => (
+            <div
+              key={`${record.matchTime}: ${record.winTeam.toString()}`}
+              className="flex items-center border-b p-4 justify-between"
+            >
+              <div>
+                {record.winTeam.map((player) => (
+                  <Avatar key={`${record.matchTime}: ${player.userName}`} className="mr-4">
+                    <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
+                    <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
+                  </Avatar>
+                ))}
+              </div>
 
-            <div>
-              {record.loseTeam.map((player) => (
-                <Avatar className="mr-4">
-                  <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
-                  <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
-                </Avatar>
-              ))}
+              <div className="flex gap-2">
+                <div>{record.winnerScore}</div>:<div>{record.loserScore}</div>
+              </div>
+
+              <div>
+                {record.loseTeam.map((player) => (
+                  <Avatar key={`${record.matchTime}: ${player.userName}`} className="mr-4">
+                    <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
+                    <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
+                  </Avatar>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );
