@@ -7,7 +7,7 @@ export const UserSearchSchema = z.object({
 });
 export type UserSearch = z.infer<typeof UserSearchSchema>;
 
-export const Route = createFileRoute("/ranking")({
+export const Route = createFileRoute("/_layout/ranking")({
   component: Index,
   validateSearch: UserSearchSchema,
 });

@@ -11,4 +11,8 @@ export class UserService {
   // static usersQueryById({userId, ...config}: { signal?: AbortSignal, userId: string }) {
   //   return api.get(`/user/${userId}`, config).then(AxiosContracts.responseContract(z.array(UserDto)))
   // }
+
+  static meQuery(config: { signal?: AbortSignal }) {
+    return api.get('/me', config).then(AxiosContracts.responseContract(UserDto))
+  }
 }

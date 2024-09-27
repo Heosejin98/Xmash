@@ -34,6 +34,10 @@ jobs:
           # Add the known_hosts file to avoid SSH host key verification
           ssh-keyscan -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_PUBLIC_IP }} >> ~/.ssh/known_hosts
 
+      - name: Remove prev files
+        run: |
+          ssh -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} "rm -rf /home/sejin/fe"
+
       - name: Transfer files
         run: |
           scp -P ${{ secrets.GCP_SSH_PORT }} -r fe/dist ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/fe
