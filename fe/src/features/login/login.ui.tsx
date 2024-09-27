@@ -8,7 +8,7 @@ import {
   FormMessage,
   Input,
 } from "@/shared/ui";
-import { useRouter } from "@tanstack/react-router";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 import { useLoginMutation } from "./login.mutation";
 import { LoginUserDto } from "@/shared/api/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,8 +25,8 @@ const useLoginForm = () =>
 
 export function LoginForm() {
   const form = useLoginForm();
-  const router = useRouter();
   const { mutate } = useLoginMutation();
+  const navigate = useNavigate();
 
   const onSubmit = async (data: LoginUserDto) => {
     mutate(data, {
@@ -34,7 +34,7 @@ export function LoginForm() {
         console.log("onError", error);
       },
       onSuccess: async () => {
-        await router.navigate({
+        await navigate({
           to: "/",
           replace: true,
         });

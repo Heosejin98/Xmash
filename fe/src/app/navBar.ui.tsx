@@ -29,7 +29,7 @@ const GameLink = () => {
 
 const NavBar = () => {
   return (
-    <nav className="flex justify-between p-4 fixed bottom-0 w-full h-nav">
+    <nav className="flex justify-between p-4 fixed left-0 bottom-0 w-full h-nav z-10 bg-muted">
       <RankingLink />
       {/* <HomeLink /> */}
       <AddGameButton></AddGameButton>
