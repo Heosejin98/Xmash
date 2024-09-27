@@ -17,8 +17,9 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                System.out.println("allowedOrigins = " + allowedOrigins[0]);
-                System.out.println("allowedOrigins = " + allowedOrigins[1]);
+                for (String allowedOrigin : allowedOrigins) {
+                    System.out.println("allowedOrigins = " + allowedOrigins[0]);
+                }
 
                 registry.addMapping("/**")
                         .allowedOrigins(allowedOrigins)
