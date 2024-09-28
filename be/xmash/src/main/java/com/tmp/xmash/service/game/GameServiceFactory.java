@@ -8,33 +8,60 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GameServiceFactory {
 
-    private final GameService singleGameService;
+    private final GameService normalGameService;
+    private final GameService singleNormalGameService;
     private final GameService doubleNormalGameService;
     private final GameService singleRanklGameService;
 
     public GameServiceFactory(
-            @Qualifier("singleNormalGameService") GameService singleGameService,
+            @Qualifier("normalGameService") GameService normalGameService,
+            @Qualifier("singleNormalGameService") GameService singleNormalGameService,
             @Qualifier("doubleNormalGameService") GameService doubleNormalGameService,
             @Qualifier("singleRankGameService") GameService singleRanklGameService
     ) {
-        this.singleGameService = singleGameService;
+        this.normalGameService = normalGameService;
+        this.singleNormalGameService = singleNormalGameService;
         this.doubleNormalGameService = doubleNormalGameService;
         this.singleRanklGameService = singleRanklGameService;
     }
 
     public GameService getGameService(MatchType matchType, GameType gameType) {
-        if (MatchType.SINGLE == matchType && GameType.RANK == gameType) {
-            return singleRanklGameService;
+        return switch (gameType) {
+            case NORMAL -> getNormalGameService(matchType);
+            case RANK -> getRankGameService(matchType);
+        };
+    }
+
+
+    private GameService getNormalGameService(MatchType matchType) {
+        if (MatchType.SINGLE == matchType) {
+            return singleNormalGameService;
         }
 
-        if (MatchType.DOUBLE == matchType && GameType.NORMAL == gameType) {
+        if (MatchType.DOUBLE == matchType) {
             return doubleNormalGameService;
         }
 
-        if (MatchType.SINGLE == matchType && GameType.NORMAL == gameType) {
-            return singleGameService;
+        if (MatchType.ALL == matchType) {
+            return normalGameService;
         }
 
-        throw new IllegalArgumentException("Unknown matchType: " + matchType + " or gameType: " + gameType);
+        throw new IllegalArgumentException("Unknown matchType: " + matchType + " or gameType: " + matchType);
+    }
+
+    private GameService getRankGameService(MatchType matchType) {
+        if (MatchType.SINGLE == matchType) {
+            return singleRanklGameService;
+        }
+
+        if (MatchType.DOUBLE == matchType) {
+            throw new IllegalArgumentException("미구현");
+        }
+
+        if (MatchType.ALL == matchType) {
+            throw new IllegalArgumentException("미구현");
+        }
+
+        throw new IllegalArgumentException("Unknown matchType: " + matchType + " or gameType: " + matchType);
     }
 }

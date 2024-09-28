@@ -30,6 +30,7 @@ public class UserController {
             HttpSession session
     ) {
         String myId = (String) session.getAttribute("userId");
+        System.out.println("myId = " + myId);
 
         return ResponseEntity.ok(userConfigService.getUserInfo(myId));
     }

@@ -4,6 +4,7 @@ import com.tmp.xmash.dto.request.LoginRequest;
 import com.tmp.xmash.dto.response.UserProfileResponse;
 import com.tmp.xmash.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
