@@ -1,3 +1,4 @@
+import DepthHeader from "@/app/depthHeader.ui";
 import { LoginForm } from "@/features/login/login.ui";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { z } from "zod";
@@ -13,5 +14,14 @@ export const Route = createFileRoute("/login")({
       throw redirect({ to: search.redirect || fallback });
     }
   },
-  component: () => <LoginForm />,
+  component: () => {
+    return (
+      <>
+        <DepthHeader>
+          <h2 className="font-semibold text-lg">Login</h2>
+        </DepthHeader>
+        <LoginForm />
+      </>
+    );
+  },
 });
