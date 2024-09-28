@@ -5,7 +5,7 @@ import { UserDto } from "./user.contracts";
 
 export class UserService {
   static usersQuery(config: { signal?: AbortSignal }) {
-    return api.get('/user/all', config).then(AxiosContracts.responseContract(z.array(UserDto)))
+    return api.get('/users', config).then(AxiosContracts.responseContract(z.array(UserDto)))
   }
 
   // static usersQueryById({userId, ...config}: { signal?: AbortSignal, userId: string }) {
