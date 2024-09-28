@@ -26,18 +26,42 @@ public class GameServiceFactory {
     }
 
     public GameService getGameService(MatchType matchType, GameType gameType) {
-        if (MatchType.SINGLE == matchType && GameType.RANK == gameType) {
-            return singleRanklGameService;
-        }
+        return switch (gameType) {
+            case NORMAL -> getNormalGameService(matchType);
+            case RANK -> getRankGameService(matchType);
+        };
+    }
 
-        if (MatchType.DOUBLE == matchType && GameType.NORMAL == gameType) {
-            return doubleNormalGameService;
-        }
 
-        if (MatchType.SINGLE == matchType && GameType.NORMAL == gameType) {
+    private GameService getNormalGameService(MatchType matchType) {
+        if (MatchType.SINGLE == matchType) {
             return singleNormalGameService;
         }
 
-        throw new IllegalArgumentException("Unknown matchType: " + matchType + " or gameType: " + gameType);
+        if (MatchType.DOUBLE == matchType) {
+            return doubleNormalGameService;
+        }
+
+        if (MatchType.ALL == matchType) {
+            return normalGameService;
+        }
+
+        throw new IllegalArgumentException("Unknown matchType: " + matchType + " or gameType: " + matchType);
+    }
+
+    private GameService getRankGameService(MatchType matchType) {
+        if (MatchType.SINGLE == matchType) {
+            return singleRanklGameService;
+        }
+
+        if (MatchType.DOUBLE == matchType) {
+            throw new IllegalArgumentException("미구현");
+        }
+
+        if (MatchType.ALL == matchType) {
+            throw new IllegalArgumentException("미구현");
+        }
+
+        throw new IllegalArgumentException("Unknown matchType: " + matchType + " or gameType: " + matchType);
     }
 }

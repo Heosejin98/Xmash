@@ -2,16 +2,19 @@ package com.tmp.xmash.service.game;
 
 import com.tmp.xmash.dto.request.GameResultRequest;
 import com.tmp.xmash.dto.response.GameResultResponse;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
+@AllArgsConstructor
 public class NormalGameService implements GameService {
 
-    private SingleNormalGameService singleNormalGameService;
-    private DoubleNormalGameService doubleNormalGameService;
+    private final GameService singleNormalGameService;
+    private final GameService doubleNormalGameService;
 
     @Override
     public boolean matchDone(GameResultRequest gameResultRequest) {

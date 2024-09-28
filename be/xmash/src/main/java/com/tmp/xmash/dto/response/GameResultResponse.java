@@ -21,7 +21,7 @@ public record GameResultResponse(
 
     @Override
     public int compareTo(GameResultResponse other) {
-        return this.matchTime.compareTo(other.matchTime);
+        return other.matchTime.compareTo(this.matchTime);
     }
 
 
