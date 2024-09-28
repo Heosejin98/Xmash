@@ -15,3 +15,4 @@ export * from './select';
 export * from './tabs';
 export * from './popover';
 export * from './command';
+export * from './scroll-area';
