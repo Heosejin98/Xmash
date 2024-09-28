@@ -4,11 +4,14 @@ import com.tmp.xmash.type.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
+import static com.tmp.xmash.common.AppConstants.CURRENT_SEASON;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@ToString
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,19 +27,33 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_ranking_id", unique = true)
-    private UserRanking userRanking;
 
+    @OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY)
+    private List<UserRanking> userRankings;
+
+    @OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY)
+    private List<UserTeamRanking> userTeamRankings;
 
     public AppUser(String userId, String password) {
         this.userId = userId;
         this.password = password;
     }
 
+    public void updateUserRanking(List<UserRanking> userRanking) {
+        this.userRankings = userRanking;
+    }
 
+    public UserTeamRanking getCurrentUserTeamRanking() {
+        return userTeamRankings.stream()
+                .filter(userTeamRanking -> userTeamRanking.getSeason() == CURRENT_SEASON)
+                .findFirst()
+                .orElse(null);
+    }
 
-    public void updateUserRanking(UserRanking userRanking) {
-        this.userRanking = userRanking;
+    public UserRanking getCurrentUserRanking() {
+        return userRankings.stream()
+                .filter(userRanking -> userRanking.matchSeason(CURRENT_SEASON))
+                .findFirst()
+                .orElseThrow();
     }
 }
