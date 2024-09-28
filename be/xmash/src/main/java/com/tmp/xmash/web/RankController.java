@@ -23,18 +23,18 @@ public class RankController {
 
     private final TeamRankingService teamRankingService;
 
-    @Operation(summary = "Double Rank Status 조회", description = "(Mock) 복식 게임 rank 게임 등록 해당 api 조회 하고 팀 없으면 팀등록 화면으로")
+    @Operation(summary = "Double Rank Status 조회", description = "true = 팀 있음, false = 팀 없음")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Double Rank 상태를 성공적으로 반환"),
             @ApiResponse(responseCode = "500", description = "서버 내부 오류")
     })
     @GetMapping("/team/status")
-    public ResponseEntity<Boolean> getDoubleRank(
+    public ResponseEntity<Boolean> getDoubleRankTeamStatus(
             HttpSession session
     ) {
         String homeId = (String) session.getAttribute("userId");
 
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok(teamRankingService.hasTeam(homeId));
     }
 
 

@@ -21,6 +21,20 @@ public class TeamRankingService {
     private final UserRepository userRepository;
 
 
+    /**
+     * 이번 시즌 팀이 없으면 false 있으면 true 리턴
+     * @param userId user
+     * @return user의 이번 시즌 팀이 없으면 false 있으면 true
+     */
+    @Transactional
+    public boolean hasTeam(String userId) {
+        AppUser appUser = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("세션 만료 or 존재하지 않는 사용자"));
+
+        return appUser.getCurrentUserTeamRanking().getTeamUserId() != null;
+    }
+
+
     @Transactional
     public UserProfileResponse postTeam(PostTeamRequest teamRequest) {
         Set<String> userIds = Set.of(teamRequest.myId(), teamRequest.teamId());
