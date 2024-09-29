@@ -35,6 +35,12 @@ export function GameList() {
         <article className="">
           {data
             ?.filter((d) => matchType === "all" || d.matchType === matchType)
+            ?.filter(
+              (d) =>
+                searchValue === "" ||
+                d.winTeam.some((p) => p.userName.includes(searchValue)) ||
+                d.loseTeam.some((p) => p.userName.includes(searchValue))
+            )
             ?.map((record) => (
               <div
                 key={`${record.matchTime}: ${record.winTeam.toString()}`}
