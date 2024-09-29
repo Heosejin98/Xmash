@@ -1,5 +1,5 @@
 server:
-  port: 443
+  port: 4242
   ssl:
     enabled: true
     key-store: classpath:xmash.p12
