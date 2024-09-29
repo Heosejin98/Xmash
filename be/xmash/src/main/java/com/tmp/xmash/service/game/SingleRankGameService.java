@@ -1,10 +1,8 @@
 package com.tmp.xmash.service.game;
 
-import static java.util.function.UnaryOperator.identity;
-import static java.util.stream.Collectors.toMap;
-
 import com.tmp.xmash.db.entity.AppUser;
 import com.tmp.xmash.db.entity.SingleRankMatchHistory;
+import com.tmp.xmash.db.entity.UserRanking;
 import com.tmp.xmash.db.repositroy.SingleRankMatchHistoryRepo;
 import com.tmp.xmash.db.repositroy.UserRepository;
 import com.tmp.xmash.domain.MatchEvaluator;
@@ -13,11 +11,15 @@ import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.service.RankingService;
 import com.tmp.xmash.type.MatchType;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+
+import static java.util.function.UnaryOperator.identity;
+import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +32,6 @@ public class SingleRankGameService implements GameService {
     private final RankingService rankingService;
 
     private static final MatchType matchType = MatchType.SINGLE;
-
 
     @Transactional
     @Override
@@ -50,13 +51,16 @@ public class SingleRankGameService implements GameService {
         MatchEvaluator matchEvaluator = new MatchEvaluator(gameResultRequest);
         singleMatchHistoryRepo.save(matchEvaluator.resolveMatchWinner2());
 
+        UserRanking homeSeasonRanking =  homeUser.getCurrentUserRanking();
+        UserRanking awaySeasonRanking =  awayUser.getCurrentUserRanking();
+
         if (matchEvaluator.isHomeWinner()) {
-            rankingService.updateRanking(homeUser.getUserRanking(), awayUser.getUserRanking(), matchEvaluator.getResultLp());
+            rankingService.updateRanking(homeSeasonRanking, awaySeasonRanking, matchEvaluator.getResultLp());
 
             return true;
         }
 
-        rankingService.updateRanking(awayUser.getUserRanking(), homeUser.getUserRanking(), matchEvaluator.getResultLp());
+        rankingService.updateRanking(homeSeasonRanking, awaySeasonRanking, matchEvaluator.getResultLp());
         return false;
     }
 

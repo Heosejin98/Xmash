@@ -1,7 +1,14 @@
 import { AddGameButton } from "@/features/game/game.ui";
 import { Link } from "@tanstack/react-router";
+import { CSSProperties } from "react";
 
-const activeProps = { style: { fontWeight: "bold" } };
+const activeProps: {
+  style: CSSProperties;
+} = {
+  style: {
+    color: "var(--accent)",
+  },
+};
 
 const RankingLink = () => {
   return (
@@ -19,23 +26,14 @@ const GameLink = () => {
   );
 };
 
-// const HomeLink = () => {
-//   return (
-//     <Link to="/" className="nav-link" activeProps={activeProps}>
-//       Home
-//     </Link>
-//   );
-// };
-
-const NavBar = () => {
+const BottomNavBar = () => {
   return (
     <nav className="flex justify-between p-4 fixed left-0 bottom-0 w-full h-nav z-10 bg-muted">
       <RankingLink />
-      {/* <HomeLink /> */}
       <AddGameButton></AddGameButton>
       <GameLink />
     </nav>
   );
 };
 
-export default NavBar;
+export default BottomNavBar;

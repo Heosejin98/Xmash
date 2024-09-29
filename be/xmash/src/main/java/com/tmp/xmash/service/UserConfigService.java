@@ -18,6 +18,10 @@ public class UserConfigService {
 
     @Transactional
     public UserProfileResponse getUserInfo(String userId) {
+        if (userId == null) {
+            return null;
+        }
+
         AppUser appUser = userRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         return new UserProfileResponse(appUser.getUserId(),

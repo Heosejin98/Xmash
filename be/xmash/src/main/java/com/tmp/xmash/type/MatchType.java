@@ -7,6 +7,9 @@ import lombok.Getter;
 
 @Getter
 public enum MatchType {
+    @Schema(description = "전체 조회 용", example = "ALL")
+    ALL,
+
     @Schema(description = "단식", example = "single")
     SINGLE,
 

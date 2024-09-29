@@ -8,6 +8,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
+  ScrollArea,
 } from "@/shared/ui";
 import { Plus } from "lucide-react";
 import { GameInfoForm } from "./form.ui";
@@ -24,14 +25,17 @@ export function AddGameButton() {
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
+        <div className="mx-auto w-full max-w-sm max-h-[95%]">
           <DrawerHeader>
             <DrawerTitle>경기 등록</DrawerTitle>
             <DrawerDescription></DrawerDescription>
           </DrawerHeader>
-          <div className="p-4 pb-0">
-            <GameInfoForm onSuccess={() => setOpen(false)}></GameInfoForm>
-          </div>
+
+          <ScrollArea className="overflow-y-auto">
+            <div className="p-4">
+              <GameInfoForm onSuccess={() => setOpen(false)}></GameInfoForm>
+            </div>
+          </ScrollArea>
         </div>
         <DrawerFooter>
           <Button type="submit" form="game-info">

@@ -23,16 +23,16 @@ public class DoubleNormalMatchHistory {
     @Column(name = "double_normal_match_history_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "winner1_id", nullable = false)
     private String winner1Id;
 
-    @Column(nullable = false)
+    @Column(name = "winner2_id", nullable = false)
     private String winner2Id;
 
-    @Column(nullable = false)
+    @Column(name = "loser1_id", nullable = false)
     private String loser1Id;
 
-    @Column(nullable = false)
+    @Column(name = "loser2_id", nullable = false)
     private String loser2Id;
 
     @Column(nullable = false)
@@ -46,14 +46,14 @@ public class DoubleNormalMatchHistory {
 
     @Builder
     public DoubleNormalMatchHistory(String winner1Id, String winner2Id, String loser1Id,
-            String loser2Id, int winnerScore, int loserScore, LocalDateTime matchTime) {
+            String loser2Id, int winnerScore, int loserScore) {
         this.winner1Id = winner1Id;
         this.winner2Id = winner2Id;
         this.loser1Id = loser1Id;
         this.loser2Id = loser2Id;
         this.winnerScore = winnerScore;
         this.loserScore = loserScore;
-        this.matchTime = matchTime;
+        this.matchTime = LocalDateTime.now();
     }
 
 }

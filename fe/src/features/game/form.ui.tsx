@@ -103,13 +103,12 @@ const useGameInfoForm = () =>
   useForm<CreateGameDto>({
     resolver: zodResolver(CreateGameDto),
     defaultValues: {
-      winTeam: [],
-      loseTeam: [],
+      homeTeam: [],
+      awayTeam: [],
       homeScore: 0,
       awayScore: 0,
       matchType: "single",
       gameType: "normal",
-      point: null,
     },
   });
 
@@ -167,10 +166,10 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
             <div className="flex justify-between">
               <FormField
                 control={form.control}
-                name="winTeam"
+                name="homeTeam"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Win Users</FormLabel>
+                    <FormLabel>Home Users</FormLabel>
                     <FormControl>
                       <UserListInput {...field}></UserListInput>
                     </FormControl>
@@ -204,10 +203,10 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
             <div className="flex justify-between">
               <FormField
                 control={form.control}
-                name="loseTeam"
+                name="awayTeam"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Lose Users</FormLabel>
+                    <FormLabel>Away Users</FormLabel>
                     <FormControl>
                       <UserListInput {...field}></UserListInput>
                     </FormControl>
@@ -266,10 +265,10 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
             <div className="flex justify-between">
               <FormField
                 control={form.control}
-                name="winTeam"
+                name="homeTeam"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Win Users</FormLabel>
+                    <FormLabel>Home Users</FormLabel>
                     <FormControl>
                       <UserListInput {...field}></UserListInput>
                     </FormControl>
@@ -303,10 +302,10 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
             <div className="flex justify-between">
               <FormField
                 control={form.control}
-                name="loseTeam"
+                name="awayTeam"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Lose Users</FormLabel>
+                    <FormLabel>Away Users</FormLabel>
                     <FormControl>
                       <UserListInput {...field}></UserListInput>
                     </FormControl>

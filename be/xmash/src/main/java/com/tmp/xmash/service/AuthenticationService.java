@@ -2,21 +2,25 @@ package com.tmp.xmash.service;
 
 import com.tmp.xmash.db.entity.AppUser;
 import com.tmp.xmash.db.entity.UserRanking;
+import com.tmp.xmash.db.entity.UserTeamRanking;
 import com.tmp.xmash.db.repositroy.UserRankingRepository;
 import com.tmp.xmash.db.repositroy.UserRepository;
+import com.tmp.xmash.db.repositroy.UserTeamRankingRepo;
 import com.tmp.xmash.dto.response.UserProfileResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+
 @Service
 @AllArgsConstructor
 public class AuthenticationService {
 
     private final UserRepository userRepository;
-
     private final UserRankingRepository userRankingRepository;
+    private final UserTeamRankingRepo userTeamRankingRepo;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -42,8 +46,10 @@ public class AuthenticationService {
     public void signUp(String userId, String password) {
         AppUser appUser = new AppUser(userId, passwordEncoder.encode(password));
         UserRanking userRanking = UserRanking.createDefault(appUser);
-        appUser.updateUserRanking(userRanking);
+        UserTeamRanking userTeamRanking = UserTeamRanking.createDefault(appUser);
+        appUser.updateUserRanking(Collections.singletonList(userRanking));
         userRepository.save(appUser);
         userRankingRepository.save(userRanking);
+        userTeamRankingRepo.save(userTeamRanking);
     }
 }

@@ -32,7 +32,7 @@ public class DoubleMatchEvaluator {
                     .winner2Id(homeTeamIds.get(1))
                     .winnerScore(homeScore)
                     .loser1Id(awayTeamIds.get(0))
-                    .loser1Id(awayTeamIds.get(1))
+                    .loser2Id(awayTeamIds.get(1))
                     .loserScore(awayScore)
                     .build();
         }
@@ -42,7 +42,7 @@ public class DoubleMatchEvaluator {
                 .winner2Id(awayTeamIds.get(1))
                 .winnerScore(awayScore)
                 .loser1Id(homeTeamIds.get(0))
-                .loser1Id(homeTeamIds.get(1))
+                .loser2Id(homeTeamIds.get(1))
                 .loserScore(homeScore)
                 .build();
     }

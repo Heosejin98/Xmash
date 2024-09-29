@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import static com.tmp.xmash.common.AppConstants.CURRENT_SEASON;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,19 +23,26 @@ public class UserRanking {
     @Column(name = "user_ranking_id")
     private Long id;
 
+    private int season;
+
     @Enumerated(EnumType.STRING)
     private Tier tier;
 
     private int lp;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "app_user_id", unique = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
     public UserRanking(Tier tier, int lp, AppUser appUser) {
         this.tier = tier;
         this.lp = lp;
         this.appUser = appUser;
+        this.season = CURRENT_SEASON;
+    }
+
+    public boolean matchSeason(int season) {
+        return this.season == season;
     }
 
     public void updateLpAndTier(int lp) {
