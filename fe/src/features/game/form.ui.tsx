@@ -30,6 +30,7 @@ import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import { forwardRef } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { useGameMutation } from "./game.mutation";
 
 interface Props {
@@ -63,9 +64,11 @@ const UserListInput = forwardRef(
     {
       value,
       onChange,
+      matchType,
     }: {
       value: string[];
       onChange: (v: string[]) => void;
+      matchType: MatchType;
     },
     _
   ) => {
@@ -93,7 +96,10 @@ const UserListInput = forwardRef(
             </div>
           ))}
 
-        {value.length < 2 && <UserSelect values={value} setValue={onChange}></UserSelect>}
+        {((matchType === "double" && value.length < 2) ||
+          (matchType === "single" && value.length < 1)) && (
+          <UserSelect values={value} setValue={onChange}></UserSelect>
+        )}
       </div>
     );
   }
@@ -120,11 +126,25 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
     mutate(data, {
       onError: (error) => {
         console.log("onError", error);
-        onError && onError(error);
+        onError?.(error);
+
+        toast.error(`Fail: ${error.message}`, {
+          style: {
+            backgroundColor: "#f44336",
+            color: "#fff",
+          },
+        });
       },
       onSuccess: async () => {
         form.reset();
-        onSuccess && onSuccess();
+        onSuccess?.();
+
+        toast.success("Game has been created successfully", {
+          style: {
+            backgroundColor: "#4caf50",
+            color: "#fff",
+          },
+        });
       },
     });
   };
@@ -171,7 +191,10 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
                   <FormItem>
                     <FormLabel>Home Users</FormLabel>
                     <FormControl>
-                      <UserListInput {...field}></UserListInput>
+                      <UserListInput
+                        {...field}
+                        matchType={form.getValues("matchType")}
+                      ></UserListInput>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -208,7 +231,10 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
                   <FormItem>
                     <FormLabel>Away Users</FormLabel>
                     <FormControl>
-                      <UserListInput {...field}></UserListInput>
+                      <UserListInput
+                        {...field}
+                        matchType={form.getValues("matchType")}
+                      ></UserListInput>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -270,7 +296,10 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
                   <FormItem>
                     <FormLabel>Home Users</FormLabel>
                     <FormControl>
-                      <UserListInput {...field}></UserListInput>
+                      <UserListInput
+                        {...field}
+                        matchType={form.getValues("matchType")}
+                      ></UserListInput>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -307,7 +336,10 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
                   <FormItem>
                     <FormLabel>Away Users</FormLabel>
                     <FormControl>
-                      <UserListInput {...field}></UserListInput>
+                      <UserListInput
+                        {...field}
+                        matchType={form.getValues("matchType")}
+                      ></UserListInput>
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>

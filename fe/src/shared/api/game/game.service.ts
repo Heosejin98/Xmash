@@ -10,7 +10,7 @@ export class GameService {
       CreateGameDto,
       data.createGameDto,
     )
-    return api.post(`/game/${data.createGameDto.gameType}/${data.createGameDto.matchType}`, { ...createGameDto }).then(AxiosContracts.responseContract(GameDto))
+    return api.post(`/game/${data.createGameDto.gameType}/${data.createGameDto.matchType}`, { ...createGameDto })
   }
 
   static gameQuery(config: { params: GameParamsQueryDto, signal?: AbortSignal }) {

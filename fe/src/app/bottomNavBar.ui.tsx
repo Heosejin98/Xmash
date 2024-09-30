@@ -7,12 +7,13 @@ const activeProps: {
 } = {
   style: {
     color: "var(--accent)",
+    fontWeight: "bold",
   },
 };
 
 const RankingLink = () => {
   return (
-    <Link to="/ranking" className="nav-link" activeProps={activeProps}>
+    <Link to="/ranking" className="nav-link w-14" activeProps={activeProps}>
       Ranking
     </Link>
   );
@@ -22,7 +23,7 @@ const GameLink = () => {
   return (
     <Link
       to="/game"
-      className="nav-link"
+      className="nav-link w-14"
       activeProps={activeProps}
       search={{
         gameType: "normal",
