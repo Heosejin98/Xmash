@@ -1,5 +1,6 @@
 package com.tmp.xmash.domain;
 
+import static com.tmp.xmash.common.AppConstants.DEFAULT_WINNER_LP;
 import static com.tmp.xmash.common.AppConstants.RANDOM_GENERATOR;
 
 import com.tmp.xmash.db.entity.DoubleNormalMatchHistory;
@@ -8,7 +9,6 @@ import com.tmp.xmash.dto.request.GameResultRequest;
 import java.util.List;
 
 public class DoubleMatchEvaluator {
-
 
     private final List<String> homeTeamIds;
 
@@ -30,16 +30,20 @@ public class DoubleMatchEvaluator {
     }
 
     public int getResultLp() {
-        int randomDigit = RANDOM_GENERATOR.nextInt(1, 10);  // 1에서 9까지의 숫자 생성
+        int winnerScore = isHomeWinner() ? homeScore : awayScore;
 
-        return  10 + randomDigit;
+        if (winnerScore <= 11) {
+            return DEFAULT_WINNER_LP;
+        }
+
+        if (winnerScore <= 20) {
+            return DEFAULT_WINNER_LP + RANDOM_GENERATOR.nextInt(5);
+        }
+
+        return DEFAULT_WINNER_LP + (RANDOM_GENERATOR.nextInt(5) * 2);
     }
 
     public DoubleNormalMatchHistory resolveMatchWinner() {
-        if (homeScore == awayScore) {
-            throw new IllegalArgumentException("무승부 없음");
-        }
-
         if (homeScore > awayScore) {
             return DoubleNormalMatchHistory.builder()
                     .winner1Id(homeTeamIds.get(0))
@@ -61,11 +65,7 @@ public class DoubleMatchEvaluator {
                 .build();
     }
 
-    public DoubleRankMatchHistory resolveMatchWinner2() {
-        if (homeScore == awayScore) {
-            throw new IllegalArgumentException("무승부 없음");
-        }
-
+    public DoubleRankMatchHistory resolveRankMatchWinner()  {
         if (homeScore > awayScore) {
             return DoubleRankMatchHistory.builder()
                     .winner1Id(homeTeamIds.get(0))

@@ -3,6 +3,7 @@ package com.tmp.xmash.web;
 import com.tmp.xmash.dto.request.PostTeamRequest;
 import com.tmp.xmash.dto.response.UserProfileResponse;
 import com.tmp.xmash.service.TeamRankingService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Hidden    // Swagger에서 제외 안쓸듯.... 나중에 바뀔 수도 있음
 @RestController
 @RequestMapping("/rank")
 @Tag(name = "Rank Game", description = "Rank Game 관련 api")

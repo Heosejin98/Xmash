@@ -13,10 +13,10 @@ public record GameResultRequest(
         List<String> awayTeam,
 
         @Schema(description = "홈팀 점수", example = "15")
-        Integer homeScore,
+        int homeScore,
 
         @Schema(description = "원정팀 점수", example = "10")
-        Integer awayScore
+        int awayScore
 ) {
 
 }
