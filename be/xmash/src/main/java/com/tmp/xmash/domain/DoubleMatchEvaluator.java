@@ -1,11 +1,14 @@
 package com.tmp.xmash.domain;
 
+import static com.tmp.xmash.common.AppConstants.RANDOM_GENERATOR;
+
 import com.tmp.xmash.db.entity.DoubleNormalMatchHistory;
 import com.tmp.xmash.db.entity.DoubleRankMatchHistory;
 import com.tmp.xmash.dto.request.GameResultRequest;
 import java.util.List;
 
 public class DoubleMatchEvaluator {
+
 
     private final List<String> homeTeamIds;
 
@@ -20,6 +23,16 @@ public class DoubleMatchEvaluator {
         this.awayTeamIds = gameResultRequest.awayTeam();
         this.homeScore = gameResultRequest.homeScore();
         this.awayScore = gameResultRequest.awayScore();
+    }
+
+    public boolean isHomeWinner() {
+        return homeScore > awayScore;
+    }
+
+    public int getResultLp() {
+        int randomDigit = RANDOM_GENERATOR.nextInt(1, 10);  // 1에서 9까지의 숫자 생성
+
+        return  10 + randomDigit;
     }
 
     public DoubleNormalMatchHistory resolveMatchWinner() {

@@ -33,8 +33,7 @@ public class DoubleNormalGameService implements GameService {
         DoubleNormalMatchHistory singleMatchHistory = matchEvaluator.resolveMatchWinner();
         doubleNormalMatchRepo.save(singleMatchHistory);
 
-        return singleMatchHistory.getWinner1Id().equals(gameResultRequest.homeTeam().getFirst())
-                && singleMatchHistory.getWinner2Id().equals(gameResultRequest.homeTeam().get(1));
+        return matchEvaluator.isHomeWinner();
     }
 
     @Override

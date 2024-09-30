@@ -1,14 +1,13 @@
 package com.tmp.xmash.domain;
 
+import static com.tmp.xmash.common.AppConstants.RANDOM_GENERATOR;
+
 import com.tmp.xmash.db.entity.SingleNormalMatchHistory;
 import com.tmp.xmash.db.entity.SingleRankMatchHistory;
 import com.tmp.xmash.dto.request.GameResultRequest;
-import java.util.random.RandomGenerator;
-import java.util.random.RandomGeneratorFactory;
 
 public class MatchEvaluator {
 
-    private static final RandomGenerator random = RandomGeneratorFactory.of("Random").create();
 
     private final String homeId;
 
@@ -26,7 +25,7 @@ public class MatchEvaluator {
     }
 
     public int getResultLp() {
-        int randomDigit = random.nextInt(1, 10);  // 1에서 9까지의 숫자 생성
+        int randomDigit = RANDOM_GENERATOR.nextInt(1, 10);  // 1에서 9까지의 숫자 생성
 
         return  10 + randomDigit;
     }
