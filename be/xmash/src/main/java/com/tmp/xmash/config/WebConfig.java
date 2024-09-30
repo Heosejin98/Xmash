@@ -16,7 +16,7 @@ public class WebConfig {
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         String[] tmp = Arrays.copyOf(allowedOrigins, allowedOrigins.length + 1);
-        tmp[allowedOrigins.length] = "https://localhost.com";
+        tmp[allowedOrigins.length] = "http://localhost:8080";
 
         for (String s : tmp) {
             System.out.println(s);
