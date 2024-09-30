@@ -4,12 +4,12 @@ import { useState } from "react";
 import { GameQueries } from "./game.queries";
 import { MatchTypeTabs } from "./matchType.tabs.ui";
 import { GameTypeTabs } from "./gameType.tabs.ui";
-import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { Route } from "@/pages/_layout.game";
 import { GameType, MatchType } from "@/shared/api/game";
 
 export function GameList() {
-  const { gameType, matchType } = getRouteApi("/_layout/game").useSearch();
+  const { gameType, matchType } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
 
   const setGameType = (gameType: GameType) => {
@@ -57,9 +57,9 @@ export function GameList() {
                 key={`${record.matchTime}: ${record.winTeam.toString()}`}
                 className="flex items-center border-b p-4 justify-between"
               >
-                <div>
-                  {record.winTeam.map((player) => (
-                    <Avatar key={`${record.matchTime}: ${player.userName}`} className="mr-4">
+                <div className="flex gap-2">
+                  {record.winTeam.map((player, idx) => (
+                    <Avatar key={`${record.matchTime}: ${player.userName}${idx}`}>
                       <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
                       <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
                     </Avatar>
@@ -70,9 +70,9 @@ export function GameList() {
                   <div>{record.winnerScore}</div>:<div>{record.loserScore}</div>
                 </div>
 
-                <div>
-                  {record.loseTeam.map((player) => (
-                    <Avatar key={`${record.matchTime}: ${player.userName}`} className="mr-4">
+                <div className="flex gap-2">
+                  {record.loseTeam.map((player, idx) => (
+                    <Avatar key={`${record.matchTime}: ${player.userName}${idx}`}>
                       <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
                       <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
                     </Avatar>

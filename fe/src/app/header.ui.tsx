@@ -1,6 +1,6 @@
 import { useAuthStore } from "@/entities/user/user.store";
 import { Avatar, AvatarFallback, AvatarImage, Button } from "@/shared/ui";
-import { useRouter } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { UserRound } from "lucide-react";
 
 const Header = () => {
@@ -15,10 +15,11 @@ const Header = () => {
       },
     });
   };
-
   return (
     <header className="flex justify-between items-center px-4 pt-4">
-      <h1 className="font-bold text-xl">Xmash</h1>
+      <h1 className="font-bold text-xl">
+        <Link to="/">Xmash</Link>
+      </h1>
 
       {isAuthenticated && user ? (
         <Button size="icon" variant="outline" className="rounded-full">

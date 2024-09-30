@@ -39,7 +39,7 @@ export function LeaderBoardList() {
   const navigate = useNavigate({ from: Route.fullPath });
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
-    { id: "userName", value: username },
+    { id: "userName", value: username ?? "" },
   ]);
   const [sorting, setSorting] = useState<SortingState>(() => []);
   const { data } = useQuery(RankingQueries.rankingQuery());

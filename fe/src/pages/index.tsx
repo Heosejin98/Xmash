@@ -6,7 +6,7 @@ export const Route = createFileRoute("/")({
       to: "/game",
       search: {
         gameType: "normal",
-        matchType: "single",
+        matchType: "all",
       },
     });
   },
