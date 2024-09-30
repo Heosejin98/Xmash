@@ -20,7 +20,15 @@ const RankingLink = () => {
 
 const GameLink = () => {
   return (
-    <Link to="/game" className="nav-link" activeProps={activeProps}>
+    <Link
+      to="/game"
+      className="nav-link"
+      activeProps={activeProps}
+      search={{
+        gameType: "normal",
+        matchType: "all",
+      }}
+    >
       Game
     </Link>
   );
