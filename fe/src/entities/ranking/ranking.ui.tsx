@@ -10,8 +10,10 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { RankingQueries } from "./ranking.queries";
+import { Route } from "@/pages/_layout.ranking";
+import { useNavigate } from "@tanstack/react-router";
 
 const columns: ColumnDef<RankingDto>[] = [
   {
@@ -33,6 +35,9 @@ const columns: ColumnDef<RankingDto>[] = [
 ];
 
 export function LeaderBoardList() {
+  const { username } = Route.useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
+
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>(() => []);
   const { data } = useQuery(RankingQueries.rankingQuery());
@@ -50,8 +55,12 @@ export function LeaderBoardList() {
     },
   });
   const onSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    table.getColumn("userName")?.setFilterValue(e.target.value);
+    navigate({ search: { username: e.target.value } });
   };
+
+  useEffect(() => {
+    table.getColumn("userName")?.setFilterValue(username);
+  }, [username]);
 
   return (
     <div className="w-full p-3 mb-nav">
