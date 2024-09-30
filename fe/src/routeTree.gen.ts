@@ -16,12 +16,12 @@ import { Route as rootRoute } from './pages/__root'
 import { Route as LoginImport } from './pages/login'
 import { Route as LayoutImport } from './pages/_layout'
 import { Route as AuthImport } from './pages/_auth'
+import { Route as IndexImport } from './pages/index'
 import { Route as LayoutRankingImport } from './pages/_layout.ranking'
 import { Route as LayoutGameImport } from './pages/_layout.game'
 
 // Create Virtual Routes
 
-const IndexLazyImport = createFileRoute('/')()
 const AuthAboutLazyImport = createFileRoute('/_auth/about')()
 
 // Create/Update Routes
@@ -41,10 +41,10 @@ const AuthRoute = AuthImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexLazyRoute = IndexLazyImport.update({
+const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./pages/index.lazy').then((d) => d.Route))
+} as any)
 
 const AuthAboutLazyRoute = AuthAboutLazyImport.update({
   path: '/about',
@@ -69,7 +69,7 @@ declare module '@tanstack/react-router' {
       id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexLazyImport
+      preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
     '/_auth': {
@@ -120,7 +120,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren({
-  IndexLazyRoute,
+  IndexRoute,
   AuthRoute: AuthRoute.addChildren({ AuthAboutLazyRoute }),
   LayoutRoute: LayoutRoute.addChildren({ LayoutGameRoute, LayoutRankingRoute }),
   LoginRoute,
@@ -141,7 +141,7 @@ export const routeTree = rootRoute.addChildren({
       ]
     },
     "/": {
-      "filePath": "index.lazy.tsx"
+      "filePath": "index.tsx"
     },
     "/_auth": {
       "filePath": "_auth.tsx",
