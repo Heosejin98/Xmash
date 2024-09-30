@@ -13,9 +13,16 @@ public class GameServiceConfig {
             @Qualifier("normalGameService") GameService normalGameService,
             @Qualifier("singleNormalGameService") GameService singleGameService,
             @Qualifier("doubleNormalGameService") GameService doubleGameService,
-            @Qualifier("singleRankGameService") GameService singleRankGameService
+            @Qualifier("singleRankGameService") GameService singleRankGameService,
+            @Qualifier("doubleRankGameService") GameService doubleRankGameService,
+            @Qualifier("rankGameService") GameService rankGameService
     ) {
-        return new GameServiceFactory(normalGameService, singleGameService, doubleGameService, singleRankGameService);
+        return new GameServiceFactory(normalGameService,
+                singleGameService,
+                doubleGameService,
+                singleRankGameService,
+                doubleRankGameService,
+                rankGameService);
     }
 
 }

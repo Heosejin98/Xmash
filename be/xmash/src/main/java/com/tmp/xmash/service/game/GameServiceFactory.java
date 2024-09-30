@@ -12,17 +12,23 @@ public class GameServiceFactory {
     private final GameService singleNormalGameService;
     private final GameService doubleNormalGameService;
     private final GameService singleRanklGameService;
+    private final GameService doubleRankGameService;
+    private final GameService rankGameService;
 
     public GameServiceFactory(
             @Qualifier("normalGameService") GameService normalGameService,
             @Qualifier("singleNormalGameService") GameService singleNormalGameService,
             @Qualifier("doubleNormalGameService") GameService doubleNormalGameService,
-            @Qualifier("singleRankGameService") GameService singleRanklGameService
+            @Qualifier("singleRankGameService") GameService singleRanklGameService,
+            @Qualifier("doubleRankGameService") GameService doubleRankGameService,
+            @Qualifier("rankGameService") GameService rankGameService
     ) {
         this.normalGameService = normalGameService;
         this.singleNormalGameService = singleNormalGameService;
         this.doubleNormalGameService = doubleNormalGameService;
         this.singleRanklGameService = singleRanklGameService;
+        this.doubleRankGameService = doubleRankGameService;
+        this.rankGameService = rankGameService;
     }
 
     public GameService getGameService(MatchType matchType, GameType gameType) {
@@ -55,11 +61,11 @@ public class GameServiceFactory {
         }
 
         if (MatchType.DOUBLE == matchType) {
-            throw new IllegalArgumentException("미구현");
+            return doubleRankGameService;
         }
 
         if (MatchType.ALL == matchType) {
-            throw new IllegalArgumentException("미구현");
+            return rankGameService;
         }
 
         throw new IllegalArgumentException("Unknown matchType: " + matchType + " or gameType: " + matchType);
