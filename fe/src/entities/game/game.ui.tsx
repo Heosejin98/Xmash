@@ -1,12 +1,21 @@
-import { Avatar, AvatarFallback, AvatarImage, Input } from "@/shared/ui";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { GameQueries } from "./game.queries";
-import { MatchTypeTabs } from "./matchType.tabs.ui";
-import { GameTypeTabs } from "./gameType.tabs.ui";
-import { useNavigate } from "@tanstack/react-router";
 import { Route } from "@/pages/_layout.game";
 import { GameType, MatchType } from "@/shared/api/game";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Input,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from "@/shared/ui";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import { GameQueries } from "./game.queries";
+import { GameTypeTabs } from "./gameType.tabs.ui";
+import { MatchTypeTabs } from "./matchType.tabs.ui";
 
 export function GameList() {
   const { gameType, matchType } = Route.useSearch();
@@ -29,6 +38,17 @@ export function GameList() {
     })
   );
 
+  const tableRows = useMemo(() => {
+    return data
+      ?.filter((d) => matchType === "all" || d.matchType === matchType)
+      ?.filter(
+        (d) =>
+          searchValue === "" ||
+          d.winTeam.some((p) => p.userName.includes(searchValue)) ||
+          d.loseTeam.some((p) => p.userName.includes(searchValue))
+      );
+  }, [data, matchType, searchValue]);
+
   return (
     <div className="w-full p-3 flex flex-col mb-nav">
       <div className="flex items-center py-4">
@@ -43,44 +63,44 @@ export function GameList() {
         <GameTypeTabs onChange={setGameType} type={gameType} />
         <MatchTypeTabs onChange={setMatchType} type={matchType} />
 
-        <article className="">
-          {data
-            ?.filter((d) => matchType === "all" || d.matchType === matchType)
-            ?.filter(
-              (d) =>
-                searchValue === "" ||
-                d.winTeam.some((p) => p.userName.includes(searchValue)) ||
-                d.loseTeam.some((p) => p.userName.includes(searchValue))
-            )
-            ?.map((record) => (
-              <div
-                key={`${record.matchTime}: ${record.winTeam.toString()}`}
-                className="flex items-center border-b p-4 justify-between"
-              >
-                <div className="flex gap-2">
-                  {record.winTeam.map((player, idx) => (
-                    <Avatar key={`${record.matchTime}: ${player.userName}${idx}`}>
-                      <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
-                      <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
-                    </Avatar>
-                  ))}
-                </div>
+        <Table>
+          <TableBody>
+            {tableRows?.length ? (
+              tableRows?.map((record) => (
+                <TableRow
+                  key={`${record.matchTime}: ${record.winTeam.toString()}`}
+                  className="flex gap-2 items-center justify-between"
+                >
+                  <TableCell className="flex gap-1">
+                    {record.winTeam.map((player, idx) => (
+                      <Avatar key={`${record.matchTime}: ${player.userName}${idx}`}>
+                        <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
+                        <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
+                      </Avatar>
+                    ))}
+                  </TableCell>
 
-                <div className="flex gap-2">
-                  <div>{record.winnerScore}</div>:<div>{record.loserScore}</div>
-                </div>
+                  <TableCell className="flex gap-2">
+                    <div>{record.winnerScore}</div>:<div>{record.loserScore}</div>
+                  </TableCell>
 
-                <div className="flex gap-2">
-                  {record.loseTeam.map((player, idx) => (
-                    <Avatar key={`${record.matchTime}: ${player.userName}${idx}`}>
-                      <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
-                      <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
-                    </Avatar>
-                  ))}
-                </div>
-              </div>
-            ))}
-        </article>
+                  <TableCell className="flex gap-1">
+                    {record.loseTeam.map((player, idx) => (
+                      <Avatar key={`${record.matchTime}: ${player.userName}${idx}`}>
+                        <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
+                        <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
+                      </Avatar>
+                    ))}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell className="h-24 text-center">No results.</TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

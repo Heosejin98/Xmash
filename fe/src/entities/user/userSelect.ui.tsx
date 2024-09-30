@@ -24,6 +24,7 @@ interface Props {
 export function UserSelect({ values, setValue }: Props) {
   const [open, setOpen] = useState(false);
   const { data = [] } = useQuery(UserQueries.userAllQuery());
+  const [search, setSearch] = useState("");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -37,22 +38,23 @@ export function UserSelect({ values, setValue }: Props) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0" side="left">
-        <Command>
+        <Command value={search} onValueChange={setSearch}>
           <CommandInput placeholder="Search Users..." />
           <CommandList>
-            <CommandEmpty>No User found.</CommandEmpty>
+            <CommandEmpty>No User found for {search}</CommandEmpty>
             <CommandGroup>
               {data.map((user) => (
                 <CommandItem
                   key={user.userId}
-                  value={user.userId}
-                  onSelect={(currentValue) => {
+                  value={user.userName + user.userId}
+                  onSelect={() => {
                     setValue(
-                      values.includes(currentValue)
-                        ? values.filter((v) => v !== currentValue)
-                        : [...values, currentValue]
+                      values.includes(user.userId)
+                        ? values.filter((v) => v !== user.userId)
+                        : [...values, user.userId]
                     );
                     setOpen(false);
+                    setSearch("");
                   }}
                 >
                   <Check

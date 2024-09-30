@@ -17,7 +17,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
   Tabs,
@@ -46,12 +45,13 @@ const MatchTypeInput = forwardRef(
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>MatchType</SelectLabel>
-          {Object.values(MatchType.Values).map((value) => (
-            <SelectItem key={value} value={value}>
-              {value}
-            </SelectItem>
-          ))}
+          {Object.values(MatchType.Values)
+            .filter((v) => v !== "all")
+            .map((value) => (
+              <SelectItem key={value} value={value}>
+                {value}
+              </SelectItem>
+            ))}
         </SelectGroup>
       </SelectContent>
     </Select>
