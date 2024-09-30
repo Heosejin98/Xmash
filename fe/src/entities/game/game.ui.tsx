@@ -4,12 +4,23 @@ import { useState } from "react";
 import { GameQueries } from "./game.queries";
 import { MatchTypeTabs } from "./matchType.tabs.ui";
 import { GameTypeTabs } from "./gameType.tabs.ui";
+import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { Route } from "@/pages/_layout.game";
 import { GameType, MatchType } from "@/shared/api/game";
 
 export function GameList() {
+  const { gameType, matchType } = getRouteApi("/_layout/game").useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
+
+  const setGameType = (gameType: GameType) => {
+    navigate({ search: { gameType, matchType } });
+  };
+
+  const setMatchType = (matchType: MatchType) => {
+    navigate({ search: { matchType, gameType } });
+  };
+
   const [searchValue, setSearchValue] = useState("");
-  const [gameType, setGameType] = useState<GameType>("normal");
-  const [matchType, setMatchType] = useState<MatchType>("all");
 
   const { data } = useQuery(
     GameQueries.gameQuery({
