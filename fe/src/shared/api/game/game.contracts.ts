@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-export const MatchType = z.enum(["mixed-single", "male-single", "female-single", "mixed-double", "male-double", "female-double", "single", "double", "all"]).default('single');
+export const MatchType = z.enum(["single", "double", "all"]);
 export type MatchType = z.infer<typeof MatchType>;
 
-export const GameType = z.enum(["normal", "rank"]).default("normal");
+export const GameType = z.enum(["normal", "rank"]);
 export type GameType = z.infer<typeof GameType>;
 
 export const PlayerDto = z.object({

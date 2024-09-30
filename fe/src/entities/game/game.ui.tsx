@@ -25,7 +25,7 @@ export function GameList() {
   const { data } = useQuery(
     GameQueries.gameQuery({
       gameType: gameType,
-      matchType: "single",
+      matchType: matchType,
     })
   );
 

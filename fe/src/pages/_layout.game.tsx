@@ -4,8 +4,8 @@ import { z } from "zod";
 import { GameType, MatchType } from "@/shared/api/game";
 
 const searchSchema = z.object({
-  gameType: GameType,
-  matchType: MatchType,
+  gameType: GameType.default("normal"),
+  matchType: MatchType.default("all"),
 });
 
 export const Route = createFileRoute("/_layout/game")({
