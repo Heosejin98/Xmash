@@ -18,6 +18,9 @@ public class WebConfig {
         String[] tmp = Arrays.copyOf(allowedOrigins, allowedOrigins.length + 1);
         tmp[allowedOrigins.length] = "http://localhost.com";
 
+        for (String s : tmp) {
+            System.out.println(s);
+        }
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
