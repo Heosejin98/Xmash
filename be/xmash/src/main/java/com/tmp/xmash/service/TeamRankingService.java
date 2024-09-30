@@ -1,11 +1,15 @@
 package com.tmp.xmash.service;
 
+import static java.util.stream.Collectors.toSet;
+
 import com.tmp.xmash.db.entity.AppUser;
 import com.tmp.xmash.db.entity.UserTeamRanking;
 import com.tmp.xmash.db.repositroy.UserRepository;
 import com.tmp.xmash.db.repositroy.UserTeamRankingRepo;
 import com.tmp.xmash.dto.request.PostTeamRequest;
 import com.tmp.xmash.dto.response.UserProfileResponse;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,6 +74,45 @@ public class TeamRankingService {
                 teamUser.getGender(),
                 ""
         );
+    }
+
+    @Transactional
+    public List<UserProfileResponse> getUsersWithoutTeam() {
+        Set<UserTeamRanking> withOutTeams = userTeamRankingRepo.findByTeamUserId(null);
+        Set<AppUser> withOutTeamUsers = withOutTeams.stream()
+                .map(UserTeamRanking::getAppUser)
+                .collect(toSet());
+
+
+        return withOutTeamUsers.stream()
+                .map(user -> new UserProfileResponse(
+                        user.getUserId(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getGender(),
+                        ""
+                ))
+                .sorted(Comparator.comparing(UserProfileResponse::userName))
+                .collect(Collectors.toList());
+    }
+
+
+    @Transactional
+    public UserProfileResponse getMyTeamUser(String userId) {
+        AppUser appUser = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
+        long teamUserId = appUser.getCurrentUserTeamRanking().getTeamUserId();
+
+        AppUser teamUser = userRepository.findById(teamUserId)
+                .orElseThrow(() -> new IllegalArgumentException("팀 사용자 없음"));
+
+        return new UserProfileResponse(
+                    teamUser.getUserId(),
+                    teamUser.getName(),
+                    teamUser.getEmail(),
+                    teamUser.getGender(),
+            ""
+            );
     }
 
 }
