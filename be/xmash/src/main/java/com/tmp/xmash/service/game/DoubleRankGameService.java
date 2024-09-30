@@ -35,7 +35,8 @@ public class DoubleRankGameService implements GameService {
 
     @Transactional
     @Override
-    public boolean matchDone(GameResultRequest gameResultRequest) {
+    public boolean matchDone(GameResultRequest gameResultRequest)  {
+
         List<String> homeTeam = gameResultRequest.homeTeam();
         List<String> awayTeam = gameResultRequest.awayTeam();
         Set<String> userIds = Stream.concat(homeTeam.stream(), awayTeam.stream())
@@ -55,8 +56,7 @@ public class DoubleRankGameService implements GameService {
                 .collect(Collectors.toSet());
 
         DoubleMatchEvaluator matchEvaluator = new DoubleMatchEvaluator(gameResultRequest);
-
-        DoubleRankMatchHistory singleMatchHistory = matchEvaluator.resolveMatchWinner2();
+        DoubleRankMatchHistory singleMatchHistory = matchEvaluator.resolveRankMatchWinner();
         doubleRankMatchRepo.save(singleMatchHistory);
 
         if (matchEvaluator.isHomeWinner()) {

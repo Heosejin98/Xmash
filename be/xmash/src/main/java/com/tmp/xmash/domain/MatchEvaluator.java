@@ -1,5 +1,6 @@
 package com.tmp.xmash.domain;
 
+import static com.tmp.xmash.common.AppConstants.DEFAULT_WINNER_LP;
 import static com.tmp.xmash.common.AppConstants.RANDOM_GENERATOR;
 
 import com.tmp.xmash.db.entity.SingleNormalMatchHistory;
@@ -25,16 +26,20 @@ public class MatchEvaluator {
     }
 
     public int getResultLp() {
-        int randomDigit = RANDOM_GENERATOR.nextInt(1, 10);  // 1에서 9까지의 숫자 생성
+        int winnerScore = isHomeWinner() ? homeScore : awayScore;
 
-        return  10 + randomDigit;
+        if (winnerScore <= 11) {
+            return DEFAULT_WINNER_LP;
+        }
+
+        if (winnerScore <= 20) {
+            return DEFAULT_WINNER_LP + RANDOM_GENERATOR.nextInt(5);
+        }
+
+        return DEFAULT_WINNER_LP + (RANDOM_GENERATOR.nextInt(5) * 2);
     }
 
     public SingleNormalMatchHistory resolveMatchWinner()  {
-        if (homeScore == awayScore) {
-            throw new IllegalArgumentException("무승부 없음");
-        }
-
         if (homeScore > awayScore) {
             return SingleNormalMatchHistory.builder()
                     .winnerId(homeId)
@@ -58,10 +63,6 @@ public class MatchEvaluator {
 
 
     public SingleRankMatchHistory resolveMatchWinner2()  {
-        if (homeScore == awayScore) {
-            throw new IllegalArgumentException("무승부 없음");
-        }
-
         if (isHomeWinner()) {
             return SingleRankMatchHistory.builder()
                     .winnerId(homeId)
