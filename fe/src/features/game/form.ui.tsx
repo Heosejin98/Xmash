@@ -26,12 +26,13 @@ import {
 } from "@/shared/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Separator } from "@radix-ui/react-select";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import { forwardRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useGameMutation } from "./game.mutation";
+import { GameQueries } from "@/entities/game/game.queries";
 
 interface Props {
   onSuccess?: () => void;
@@ -65,10 +66,12 @@ const UserListInput = forwardRef(
       value,
       onChange,
       matchType,
+      exclude,
     }: {
       value: string[];
       onChange: (v: string[]) => void;
       matchType: MatchType;
+      exclude?: string[];
     },
     _
   ) => {
@@ -98,7 +101,7 @@ const UserListInput = forwardRef(
 
         {((matchType === "double" && value.length < 2) ||
           (matchType === "single" && value.length < 1)) && (
-          <UserSelect values={value} setValue={onChange}></UserSelect>
+          <UserSelect values={value} setValue={onChange} exclude={exclude}></UserSelect>
         )}
       </div>
     );
@@ -107,7 +110,64 @@ const UserListInput = forwardRef(
 
 const useGameInfoForm = () =>
   useForm<CreateGameDto>({
-    resolver: zodResolver(CreateGameDto),
+    resolver: async (values, context, options) => {
+      const zodValidation = await zodResolver(CreateGameDto)(values, context, options);
+      if (Object.keys(zodValidation.errors).length) {
+        return zodValidation;
+      }
+      if (values.homeTeam.length !== values.awayTeam.length) {
+        return {
+          values: {},
+          errors: {
+            homeTeam: {
+              type: "",
+              message: "Home and Away team must have the same number of players",
+            },
+            awayTeam: {
+              type: "",
+              message: "Home and Away team must have the same number of players",
+            },
+          },
+        };
+      }
+
+      if (values.awayScore < 11 && values.homeScore < 11) {
+        return {
+          values: {},
+          errors: {
+            homeScore: {
+              type: "",
+              message: "One of the scores must be over 11",
+            },
+            awayScore: {
+              type: "",
+              message: "One of the scores must be over 11",
+            },
+          },
+        };
+      }
+
+      if (values.homeScore === values.awayScore) {
+        return {
+          values: {},
+          errors: {
+            homeScore: {
+              type: "",
+              message: "Home and Away score must be different",
+            },
+            awayScore: {
+              type: "",
+              message: "Home and Away score must be different",
+            },
+          },
+        };
+      }
+
+      return {
+        values,
+        errors: {},
+      };
+    },
     defaultValues: {
       homeTeam: [],
       awayTeam: [],
@@ -121,6 +181,7 @@ const useGameInfoForm = () =>
 export const GameInfoForm = ({ onError, onSuccess }: Props) => {
   const form = useGameInfoForm();
   const { mutate } = useGameMutation();
+  const client = useQueryClient();
 
   const onSubmit = async (data: CreateGameDto) => {
     mutate(data, {
@@ -138,6 +199,7 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
       onSuccess: async () => {
         form.reset();
         onSuccess?.();
+        client.invalidateQueries({ queryKey: GameQueries.keys[data.gameType] });
 
         toast.success("Game has been created successfully", {
           style: {
@@ -194,6 +256,7 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
                       <UserListInput
                         {...field}
                         matchType={form.getValues("matchType")}
+                        exclude={form.getValues("awayTeam")}
                       ></UserListInput>
                     </FormControl>
                     <FormMessage></FormMessage>
@@ -215,6 +278,9 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
                         max={50}
                         step={1}
                         autoComplete="off"
+                        onChange={(e) => {
+                          field.onChange(e.target.value.replace(/^0+/, ""));
+                        }}
                       ></Input>
                     </FormControl>
                     <FormMessage></FormMessage>
@@ -234,6 +300,7 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
                       <UserListInput
                         {...field}
                         matchType={form.getValues("matchType")}
+                        exclude={form.getValues("homeTeam")}
                       ></UserListInput>
                     </FormControl>
                     <FormMessage></FormMessage>
@@ -255,7 +322,9 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
                         max={50}
                         step={1}
                         autoComplete="off"
-                        value={field.value}
+                        onChange={(e) => {
+                          field.onChange(e.target.value.replace(/^0+/, ""));
+                        }}
                       ></Input>
                     </FormControl>
                     <FormMessage></FormMessage>
@@ -299,6 +368,7 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
                       <UserListInput
                         {...field}
                         matchType={form.getValues("matchType")}
+                        exclude={form.getValues("awayTeam")}
                       ></UserListInput>
                     </FormControl>
                     <FormMessage></FormMessage>
@@ -320,6 +390,9 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
                         max={50}
                         step={1}
                         autoComplete="off"
+                        onChange={(e) => {
+                          field.onChange(e.target.value.replace(/^0+/, ""));
+                        }}
                       ></Input>
                     </FormControl>
                     <FormMessage></FormMessage>
@@ -339,6 +412,7 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
                       <UserListInput
                         {...field}
                         matchType={form.getValues("matchType")}
+                        exclude={form.getValues("homeTeam")}
                       ></UserListInput>
                     </FormControl>
                     <FormMessage></FormMessage>
@@ -360,7 +434,9 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
                         max={50}
                         step={1}
                         autoComplete="off"
-                        value={field.value}
+                        onChange={(e) => {
+                          field.onChange(e.target.value.replace(/^0+/, ""));
+                        }}
                       ></Input>
                     </FormControl>
                     <FormMessage></FormMessage>

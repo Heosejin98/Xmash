@@ -19,9 +19,10 @@ import { cn } from "@/shared/lib/utils";
 interface Props {
   values: string[];
   setValue: (value: string[]) => void;
+  exclude?: string[];
 }
 
-export function UserSelect({ values, setValue }: Props) {
+export function UserSelect({ values, setValue, exclude = [] }: Props) {
   const [open, setOpen] = useState(false);
   const { data = [] } = useQuery(UserQueries.userAllQuery());
   const [search, setSearch] = useState("");
@@ -43,29 +44,31 @@ export function UserSelect({ values, setValue }: Props) {
           <CommandList>
             <CommandEmpty>No User found for {search}</CommandEmpty>
             <CommandGroup>
-              {data.map((user) => (
-                <CommandItem
-                  key={user.userId}
-                  value={user.userName + user.userId}
-                  onSelect={() => {
-                    setValue(
-                      values.includes(user.userId)
-                        ? values.filter((v) => v !== user.userId)
-                        : [...values, user.userId]
-                    );
-                    setOpen(false);
-                    setSearch("");
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      values.includes(user.userId) ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {user.userName}
-                </CommandItem>
-              ))}
+              {data
+                .filter((user) => !exclude.includes(user.userId))
+                .map((user) => (
+                  <CommandItem
+                    key={user.userId}
+                    value={user.userName + user.userId}
+                    onSelect={() => {
+                      setValue(
+                        values.includes(user.userId)
+                          ? values.filter((v) => v !== user.userId)
+                          : [...values, user.userId]
+                      );
+                      setOpen(false);
+                      setSearch("");
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        values.includes(user.userId) ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {user.userName}
+                  </CommandItem>
+                ))}
             </CommandGroup>
           </CommandList>
         </Command>

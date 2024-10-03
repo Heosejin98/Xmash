@@ -6,13 +6,8 @@ import {
 export class GameQueries {
   static readonly keys = {
     root: ['game'] as const,
-    rootBySlug: ['game', 'by-slug'] as const,
-    rootInfinity: ['game', 'infinite-games'] as const,
-    generalInfinity: [
-      'game',
-      'infinite-games',
-      'general-games',
-    ] as const,
+    normal: ['game','normal'] as const,
+    rank: ['game', 'rank'] as const,
   }
 
   static gameQuery({ gameType, matchType }: GameParamsQueryDto) {
