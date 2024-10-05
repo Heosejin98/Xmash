@@ -1,14 +1,9 @@
-name: CI/CD Pipeline
+name: BE PROD CI/CD Pipeline
 
 on:
   push:
     branches:
-      - main
-    paths:
-      - 'be/**'
-  pull_request:
-    branches:
-      - main
+      - be/prod
     paths:
       - 'be/**'
 
@@ -63,7 +58,7 @@ jobs:
 
       - name: Transfer files
         run: |
-          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/build/libs/xmash-0.0.1-SNAPSHOT.jar ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/xmash
+          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/build/libs/xmash-0.0.1-SNAPSHOT.jar ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/prod/be
 
       - name: Deploy to server
         run: |
@@ -72,7 +67,7 @@ jobs:
           # Stop the running application if any
           pkill -f 'java -jar /home/sejin/xmash/xmash-0.0.1-SNAPSHOT.jar'
           
-          nohup java -jar /home/sejin/xmash/xmash-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 & disown
+          nohup java -jar /home/sejin/prod/be/xmash-0.0.1-SNAPSHOT.jar > /home/sejin/prod/be/logs/xmash.log 2>&1 & disown
           
           # Remove the old jar file 
           echo "Deployment completed successfully"

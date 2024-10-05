@@ -2,17 +2,14 @@ package com.tmp.xmash.service;
 
 import com.tmp.xmash.db.entity.AppUser;
 import com.tmp.xmash.db.entity.UserRanking;
-import com.tmp.xmash.db.entity.UserTeamRanking;
 import com.tmp.xmash.db.repositroy.UserRankingRepository;
 import com.tmp.xmash.db.repositroy.UserRepository;
-import com.tmp.xmash.db.repositroy.UserTeamRankingRepo;
 import com.tmp.xmash.dto.response.UserProfileResponse;
+import com.tmp.xmash.type.Gender;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collections;
 
 @Service
 @AllArgsConstructor
@@ -20,7 +17,6 @@ public class AuthenticationService {
 
     private final UserRepository userRepository;
     private final UserRankingRepository userRankingRepository;
-    private final UserTeamRankingRepo userTeamRankingRepo;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -43,13 +39,22 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public void signUp(String userId, String password) {
-        AppUser appUser = new AppUser(userId, passwordEncoder.encode(password));
+    public void signUp(String userId, String password, String email, String name, Gender gender) {
+        // AppUser 생성
+        AppUser appUser = new AppUser(
+                userId,
+                passwordEncoder.encode(password),
+                email,
+                gender,
+                name
+        );
+
+        // UserRanking 생성 (AppUser와 연관 관계 설정)
         UserRanking userRanking = UserRanking.createDefault(appUser);
-        UserTeamRanking userTeamRanking = UserTeamRanking.createDefault(appUser);
-        appUser.updateUserRanking(Collections.singletonList(userRanking));
+
+        userRepository.save(appUser);  // AppUser 먼저 저장 (ID가 필요할 수 있으므로)
+        userRanking = userRankingRepository.save(userRanking);  // UserRanking 저장
+        appUser.addUserRanking(userRanking);  // AppUser에 UserRanking 추가
         userRepository.save(appUser);
-        userRankingRepository.save(userRanking);
-        userTeamRankingRepo.save(userTeamRanking);
     }
 }
