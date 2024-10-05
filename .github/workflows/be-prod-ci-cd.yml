@@ -1,7 +1,7 @@
 name: BE PROD CI/CD Pipeline
 
 on:
-  pull_request:
+  push:
     branches:
       - be/prod
     paths:
