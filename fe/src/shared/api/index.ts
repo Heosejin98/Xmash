@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios'
 import { z } from 'zod'
 
 export const api = axios.create({
-  baseURL: import.meta.env.MODE === 'development' ? '/api' : '',
+  baseURL: import.meta.env.MODE === 'development' ? '/api' : import.meta.env.VITE_API_URL,
   withCredentials: true,
 })
 
