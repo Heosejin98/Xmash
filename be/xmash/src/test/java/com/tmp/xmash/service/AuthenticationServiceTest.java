@@ -12,7 +12,7 @@ class AuthenticationServiceTest {
 
     @Test
     void signUp() {
-        // given
+        // given.
         String userId = "se1";
         String password = "qwe123";
 
