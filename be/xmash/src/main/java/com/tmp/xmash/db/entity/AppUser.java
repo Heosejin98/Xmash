@@ -4,6 +4,7 @@ import com.tmp.xmash.type.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.tmp.xmash.common.AppConstants.CURRENT_SEASON;
@@ -28,19 +29,31 @@ public class AppUser {
     private Gender gender;
 
 
-    @OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY)
-    private List<UserRanking> userRankings;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "app_user_user_ranking_map",  // 연관관계 테이블 이름 명시
+            joinColumns = @JoinColumn(name = "app_user_id"),  // AppUser 외래 키
+            inverseJoinColumns = @JoinColumn(name = "user_ranking_id")  // UserRanking 외래 키
+    )
+    private List<UserRanking> userRankings = new ArrayList<>();
 
     @OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY)
-    private List<UserTeamRanking> userTeamRankings;
+    private List<UserTeamRanking> userTeamRankings = new ArrayList<>();
 
-    public AppUser(String userId, String password) {
+    public AppUser(String userId,
+                   String password,
+                   String email,
+                   Gender gender,
+                   String name) {
         this.userId = userId;
         this.password = password;
+        this.email = email;
+        this.gender = gender;
+        this.name = name;
     }
 
-    public void updateUserRanking(List<UserRanking> userRanking) {
-        this.userRankings = userRanking;
+    public void addUserRanking(UserRanking userRanking) {
+        this.userRankings.add(userRanking);
     }
 
     public UserTeamRanking getCurrentUserTeamRanking() {
