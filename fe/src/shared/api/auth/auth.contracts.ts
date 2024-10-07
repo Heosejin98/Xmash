@@ -11,3 +11,7 @@ export const LoginUserDto = z.object({
   }),
 })
 export type LoginUserDto = z.infer<typeof LoginUserDto>
+
+
+export const LogoutDto = z.boolean();
+export type LogoutDto = z.infer<typeof LogoutDto>

@@ -19,6 +19,7 @@ import { Route as AuthImport } from './pages/_auth'
 import { Route as IndexImport } from './pages/index'
 import { Route as LayoutRankingImport } from './pages/_layout.ranking'
 import { Route as LayoutGameImport } from './pages/_layout.game'
+import { Route as AuthProfileImport } from './pages/_auth/profile'
 
 // Create Virtual Routes
 
@@ -61,6 +62,11 @@ const LayoutGameRoute = LayoutGameImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
+const AuthProfileRoute = AuthProfileImport.update({
+  path: '/profile',
+  getParentRoute: () => AuthRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -93,6 +99,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/_auth/profile': {
+      id: '/_auth/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthProfileImport
+      parentRoute: typeof AuthImport
+    }
     '/_layout/game': {
       id: '/_layout/game'
       path: '/game'
@@ -121,7 +134,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
-  AuthRoute: AuthRoute.addChildren({ AuthAboutLazyRoute }),
+  AuthRoute: AuthRoute.addChildren({ AuthProfileRoute, AuthAboutLazyRoute }),
   LayoutRoute: LayoutRoute.addChildren({ LayoutGameRoute, LayoutRankingRoute }),
   LoginRoute,
 })
@@ -146,6 +159,7 @@ export const routeTree = rootRoute.addChildren({
     "/_auth": {
       "filePath": "_auth.tsx",
       "children": [
+        "/_auth/profile",
         "/_auth/about"
       ]
     },
@@ -158,6 +172,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/_auth/profile": {
+      "filePath": "_auth/profile.tsx",
+      "parent": "/_auth"
     },
     "/_layout/game": {
       "filePath": "_layout.game.tsx",

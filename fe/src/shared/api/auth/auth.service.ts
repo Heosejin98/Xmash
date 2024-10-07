@@ -1,6 +1,6 @@
   import { AxiosContracts } from "@/shared/lib/axios"
 import { api } from ".."
-import { LoginUserDto } from "./auth.contracts"
+import { LoginUserDto, LogoutDto } from "./auth.contracts"
 import { UserDto } from "@/shared/api/user"
 
 export class AuthService {
@@ -14,5 +14,9 @@ export class AuthService {
 
   static currentUserQuery(config: { signal?: AbortSignal }) {
     return api.get('/me', config).then(AxiosContracts.responseContract(UserDto))
+  }
+
+  static logoutMutation() {
+    return api.post('/logout').then(AxiosContracts.responseContract(LogoutDto))
   }
 }
