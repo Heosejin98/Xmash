@@ -1,6 +1,7 @@
 package com.tmp.xmash.web;
 
 
+import com.tmp.xmash.dto.request.PasswordUpdateRequest;
 import com.tmp.xmash.dto.request.UserProfileRequest;
 import com.tmp.xmash.dto.response.PlayerResponse;
 import com.tmp.xmash.dto.response.UserProfileResponse;
@@ -12,11 +13,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -32,7 +31,7 @@ public class UserController {
         String myId = (String) session.getAttribute("userId");
         System.out.println("myId = " + myId);
 
-        return ResponseEntity.ok(userConfigService.getUserInfo(myId));
+        return ResponseEntity.ok(userConfigService.getUserProfile(myId));
     }
 
     @Operation(summary = "모든 유저 조회", description = "초기화면에서 호출하여 검색 화면에서 자동완성되면서 보여줌")
@@ -46,19 +45,24 @@ public class UserController {
         return ResponseEntity.ok(userConfigService.getUserInfos());
     }
 
-    @GetMapping("/users/me")
-    public ResponseEntity<UserProfileResponse> getUserInfo(
-            HttpSession session
-    ) {
+    @Operation(summary = "비밀번호 변경", description = "비밀번호 변경")
+    @PatchMapping("/me/password")
+    public ResponseEntity<UserProfileResponse> updateUserPassword(
+            HttpSession session,
+            @RequestBody PasswordUpdateRequest passwordUpdateRequest
+    ) throws AuthenticationException {
         String myId = (String) session.getAttribute("userId");
 
-        return ResponseEntity.ok(userConfigService.getUserProfile(myId));
+        if (myId == null) {
+            throw new AuthenticationException("로그인 필요");
+        }
+
+        return ResponseEntity.ok(userConfigService.updateUserPassword(passwordUpdateRequest, myId));
     }
 
-
     @Operation(summary = "user 프로필 정보 변경", description = "내 정보 변경")
-    @PostMapping("/users/me")
-    public ResponseEntity<UserProfileResponse> getUserInfo(
+    @PatchMapping("/users/me")
+    public ResponseEntity<UserProfileResponse> updateUserInfo(
             @RequestBody UserProfileRequest userProfileRequest
     ) {
         return ResponseEntity.ok(userConfigService.updateUserInfo(userProfileRequest));
