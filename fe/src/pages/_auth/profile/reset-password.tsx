@@ -15,8 +15,10 @@ import {
   Input,
 } from "@/shared/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+
 export const Route = createFileRoute("/_auth/profile/reset-password")({
   component: ResetPassword,
 });
@@ -50,18 +52,28 @@ const useResetForm = () =>
 function ResetPassword() {
   const form = useResetForm();
   const { mutate } = useResetPasswordMutation();
-  const navigate = useNavigate();
+  const router = useRouter();
+  const goBack = () => router.history.back();
 
   const onSubmit = async (data: PasswordResetDto) => {
     mutate(data, {
       onError: (error) => {
         console.log("onError", error);
+        toast.error("Failed to update password", {
+          style: {
+            backgroundColor: "#f44336",
+            color: "#fff",
+          },
+        });
       },
       onSuccess: async () => {
-        await navigate({
-          to: "/",
-          replace: true,
+        toast.success("Password updated", {
+          style: {
+            backgroundColor: "#4caf50",
+            color: "#fff",
+          },
         });
+        goBack();
       },
     });
   };
