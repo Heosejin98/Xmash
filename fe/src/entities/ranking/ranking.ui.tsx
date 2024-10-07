@@ -12,7 +12,7 @@ import {
 } from "@tanstack/react-table";
 import { ChangeEvent, useState } from "react";
 import { RankingQueries } from "./ranking.queries";
-import { Route } from "@/pages/_layout.ranking";
+import { Route } from "@/pages/_layout/ranking";
 import { useNavigate } from "@tanstack/react-router";
 
 const columns: ColumnDef<RankingDto>[] = [

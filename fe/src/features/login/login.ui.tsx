@@ -55,7 +55,7 @@ export function LoginForm() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" id="loginForm">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" id="loginForm">
             <FormField
               control={form.control}
               name="userId"

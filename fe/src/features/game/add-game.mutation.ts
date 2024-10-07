@@ -5,8 +5,6 @@ import {
   useMutation,
 } from '@tanstack/react-query';
 
-
-
 export function useGameMutation(
   options?: Pick<
     UseMutationOptions<

@@ -1,4 +1,4 @@
-import { Route } from "@/pages/_layout.game";
+import { Route } from "@/pages/_layout/game";
 import { GameType, MatchType } from "@/shared/api/game";
 import {
   Avatar,
