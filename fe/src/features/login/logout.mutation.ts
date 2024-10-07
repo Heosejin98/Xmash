@@ -1,17 +1,17 @@
 import { useAuthStore } from '@/entities/user/user.store';
-import { AuthService, LoginUserDto } from '@/shared/api/auth';
+import { AuthService } from '@/shared/api/auth';
 import {
   DefaultError,
   UseMutationOptions,
   useMutation,
 } from '@tanstack/react-query';
 
-export function useLoginMutation(
+export function useLogoutMutation(
   options?: Pick<
     UseMutationOptions<
-      Awaited<ReturnType<typeof AuthService.loginUserMutation>>,
+      Awaited<ReturnType<typeof AuthService.logoutMutation>>,
       DefaultError,
-      LoginUserDto,
+      void,
       unknown
     >,
     'mutationKey' | 'onMutate' | 'onSuccess' | 'onError' | 'onSettled'
@@ -28,18 +28,15 @@ export function useLoginMutation(
 
 
   return useMutation({
-    mutationKey: ['session', 'login-user', ...mutationKey],
+    mutationKey: ['session', 'logout', ...mutationKey],
 
-    mutationFn: async (loginUserDto: LoginUserDto) => await AuthService.loginUserMutation({ loginUserDto }),
+    mutationFn: async () => await AuthService.logoutMutation(),
 
     onMutate,
 
     onSuccess: async (response, variables, context) => {
-      const user = response.data
-
-      setAuthenticated(true)
-      setUser(user)
-
+      setAuthenticated(false)
+      setUser(null)
       await onSuccess?.(response, variables, context)
     },
 

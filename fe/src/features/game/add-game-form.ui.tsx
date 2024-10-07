@@ -31,7 +31,7 @@ import { X } from "lucide-react";
 import { forwardRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useGameMutation } from "./game.mutation";
+import { useGameMutation } from "./add-game.mutation";
 import { GameQueries } from "@/entities/game/game.queries";
 
 interface Props {

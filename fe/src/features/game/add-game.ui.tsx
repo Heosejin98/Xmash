@@ -11,7 +11,7 @@ import {
   ScrollArea,
 } from "@/shared/ui";
 import { Plus } from "lucide-react";
-import { GameInfoForm } from "./form.ui";
+import { GameInfoForm } from "./add-game-form.ui";
 import { useState } from "react";
 
 export function AddGameButton() {

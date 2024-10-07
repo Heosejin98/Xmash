@@ -17,8 +17,10 @@ import { Route as LoginImport } from './pages/login'
 import { Route as LayoutImport } from './pages/_layout'
 import { Route as AuthImport } from './pages/_auth'
 import { Route as IndexImport } from './pages/index'
-import { Route as LayoutRankingImport } from './pages/_layout.ranking'
-import { Route as LayoutGameImport } from './pages/_layout.game'
+import { Route as LayoutRankingImport } from './pages/_layout/ranking'
+import { Route as LayoutGameImport } from './pages/_layout/game'
+import { Route as AuthProfileIndexImport } from './pages/_auth/profile/index'
+import { Route as AuthProfileResetPasswordImport } from './pages/_auth/profile/reset-password'
 
 // Create Virtual Routes
 
@@ -59,6 +61,16 @@ const LayoutRankingRoute = LayoutRankingImport.update({
 const LayoutGameRoute = LayoutGameImport.update({
   path: '/game',
   getParentRoute: () => LayoutRoute,
+} as any)
+
+const AuthProfileIndexRoute = AuthProfileIndexImport.update({
+  path: '/profile/',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthProfileResetPasswordRoute = AuthProfileResetPasswordImport.update({
+  path: '/profile/reset-password',
+  getParentRoute: () => AuthRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -114,6 +126,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAboutLazyImport
       parentRoute: typeof AuthImport
     }
+    '/_auth/profile/reset-password': {
+      id: '/_auth/profile/reset-password'
+      path: '/profile/reset-password'
+      fullPath: '/profile/reset-password'
+      preLoaderRoute: typeof AuthProfileResetPasswordImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/profile/': {
+      id: '/_auth/profile/'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthProfileIndexImport
+      parentRoute: typeof AuthImport
+    }
   }
 }
 
@@ -121,7 +147,11 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
-  AuthRoute: AuthRoute.addChildren({ AuthAboutLazyRoute }),
+  AuthRoute: AuthRoute.addChildren({
+    AuthAboutLazyRoute,
+    AuthProfileResetPasswordRoute,
+    AuthProfileIndexRoute,
+  }),
   LayoutRoute: LayoutRoute.addChildren({ LayoutGameRoute, LayoutRankingRoute }),
   LoginRoute,
 })
@@ -146,7 +176,9 @@ export const routeTree = rootRoute.addChildren({
     "/_auth": {
       "filePath": "_auth.tsx",
       "children": [
-        "/_auth/about"
+        "/_auth/about",
+        "/_auth/profile/reset-password",
+        "/_auth/profile/"
       ]
     },
     "/_layout": {
@@ -160,15 +192,23 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "login.tsx"
     },
     "/_layout/game": {
-      "filePath": "_layout.game.tsx",
+      "filePath": "_layout/game.tsx",
       "parent": "/_layout"
     },
     "/_layout/ranking": {
-      "filePath": "_layout.ranking.tsx",
+      "filePath": "_layout/ranking.tsx",
       "parent": "/_layout"
     },
     "/_auth/about": {
       "filePath": "_auth/about.lazy.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/profile/reset-password": {
+      "filePath": "_auth/profile/reset-password.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/profile/": {
+      "filePath": "_auth/profile/index.tsx",
       "parent": "/_auth"
     }
   }

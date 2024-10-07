@@ -1,4 +1,4 @@
-import { AddGameButton } from "@/features/game/game.ui";
+import { AddGameButton } from "@/features/game/add-game.ui";
 import { Link } from "@tanstack/react-router";
 import { CSSProperties } from "react";
 
