@@ -2,6 +2,7 @@ package com.tmp.xmash.service;
 
 import com.tmp.xmash.db.entity.AppUser;
 import com.tmp.xmash.db.repositroy.UserRepository;
+import com.tmp.xmash.dto.request.PasswordUpdateRequest;
 import com.tmp.xmash.dto.request.UserProfileRequest;
 import com.tmp.xmash.dto.response.PlayerResponse;
 import com.tmp.xmash.dto.response.UserProfileResponse;
@@ -18,22 +19,6 @@ public class UserConfigService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
-
-
-    @Transactional
-    public UserProfileResponse getUserInfo(String userId) {
-        if (userId == null) {
-            return null;
-        }
-
-        AppUser appUser = userRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        return new UserProfileResponse(appUser.getUserId(),
-                appUser.getName(),
-                appUser.getEmail(),
-                appUser.getGender(),
-                "");
-    }
 
 
     @Transactional
@@ -70,10 +55,14 @@ public class UserConfigService {
 
 
     @Transactional
-    public UserProfileResponse updateUserPassword(UserProfileRequest userReq, String userId) {
+    public UserProfileResponse updateUserPassword(PasswordUpdateRequest passwordUpdateReq, String userId) {
         AppUser appUser = userRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        appUser.setPassword(passwordEncoder.encode(userReq.password()));
+        if (!passwordEncoder.matches(passwordUpdateReq.prevPassword(), appUser.getPassword())) {
+            throw new IllegalArgumentException("Password not matched");
+        }
+
+        appUser.setPassword(passwordEncoder.encode(passwordUpdateReq.newPassword()));
         userRepository.save(appUser);
 
         return new UserProfileResponse(appUser.getUserId(),
