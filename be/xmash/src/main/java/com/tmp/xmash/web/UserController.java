@@ -12,11 +12,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -55,10 +53,27 @@ public class UserController {
         return ResponseEntity.ok(userConfigService.getUserProfile(myId));
     }
 
+    @Operation(summary = "비밀번호 변경", description = "비밀번호 변경")
+    @PatchMapping("/me/password")
+    public ResponseEntity<UserProfileResponse> updateUserPassword(
+            HttpSession session,
+            @RequestBody UserProfileRequest userProfileRequest
+    ) throws AuthenticationException {
+        String myId = (String) session.getAttribute("userId");
+
+        String userId = (String) session.getAttribute("userId");
+        if (userId == null) {
+            throw new AuthenticationException("로그인 필요");
+        }
+
+        return ResponseEntity.ok(userConfigService.updateUserPassword(userProfileRequest, myId));
+    }
+
+
 
     @Operation(summary = "user 프로필 정보 변경", description = "내 정보 변경")
-    @PostMapping("/users/me")
-    public ResponseEntity<UserProfileResponse> getUserInfo(
+    @PatchMapping("/users/me")
+    public ResponseEntity<UserProfileResponse> updateUserInfo(
             @RequestBody UserProfileRequest userProfileRequest
     ) {
         return ResponseEntity.ok(userConfigService.updateUserInfo(userProfileRequest));

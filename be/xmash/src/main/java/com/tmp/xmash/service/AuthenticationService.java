@@ -29,8 +29,6 @@ public class AuthenticationService {
             throw new IllegalArgumentException("Password not matched");
         }
 
-        passwordEncoder.encode(userId);
-
         return new UserProfileResponse(appUser.getUserId(),
                 appUser.getName(),
                 appUser.getEmail(),
