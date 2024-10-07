@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +51,7 @@ public class UserController {
     public ResponseEntity<UserProfileResponse> updateUserPassword(
             HttpSession session,
             @RequestBody PasswordUpdateRequest passwordUpdateRequest
-    ) throws AuthenticationException {
+    ) throws AuthenticationException, BadRequestException {
         String myId = (String) session.getAttribute("userId");
 
         if (myId == null) {
