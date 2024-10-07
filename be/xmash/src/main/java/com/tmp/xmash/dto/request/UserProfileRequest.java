@@ -11,6 +11,9 @@ public record UserProfileRequest(
         @Schema(description = "유저 명", example = "허세진")
         String userName,
 
+        @Schema(description = "패스워드", example = "qwe123")
+        String password,
+
         @Schema(description = "유저 Email", example = "seheo@ex-em.com")
         String userEmail,
 

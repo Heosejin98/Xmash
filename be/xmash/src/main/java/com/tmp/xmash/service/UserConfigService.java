@@ -7,6 +7,7 @@ import com.tmp.xmash.dto.response.PlayerResponse;
 import com.tmp.xmash.dto.response.UserProfileResponse;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserConfigService {
 
     private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
 
     @Transactional
     public UserProfileResponse getUserInfo(String userId) {
@@ -56,6 +60,21 @@ public class UserConfigService {
 
         appUser.setName(userReq.userName());
         appUser.setEmail(userReq.userEmail());
+
+        return new UserProfileResponse(appUser.getUserId(),
+                appUser.getName(),
+                appUser.getEmail(),
+                appUser.getGender(),
+                "");
+    }
+
+
+    @Transactional
+    public UserProfileResponse updateUserPassword(UserProfileRequest userReq, String userId) {
+        AppUser appUser = userRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        appUser.setPassword(passwordEncoder.encode(userReq.password()));
+        userRepository.save(appUser);
 
         return new UserProfileResponse(appUser.getUserId(),
                 appUser.getName(),

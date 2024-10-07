@@ -23,6 +23,7 @@ public class AppUser {
     private String email;
     @Setter
     private String name;
+    @Setter
     private String password;
 
     @Enumerated(EnumType.STRING)
