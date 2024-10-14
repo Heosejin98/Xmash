@@ -76,7 +76,7 @@ public record GameResultResponse(
         String loserId1 = matchResult.getLoser1Id();
         String loserId2 = matchResult.getLoser2Id();
         String loserName1 = userByUserId.get(loserId1).getName();
-        String loserName2 = userByUserId.get(loserId1).getName();
+        String loserName2 = userByUserId.get(loserId2).getName();
 
         List<PlayerResponse> winTeam = List.of(
                 new PlayerResponse(winnerId1, winnerName1, null),
@@ -107,7 +107,7 @@ public record GameResultResponse(
         String loserId1 = matchResult.getLoser1Id();
         String loserId2 = matchResult.getLoser2Id();
         String loserName1 = userByUserId.get(loserId1).getName();
-        String loserName2 = userByUserId.get(loserId1).getName();
+        String loserName2 = userByUserId.get(loserId2).getName();
 
         List<PlayerResponse> winTeam = List.of(
                 new PlayerResponse(winnerId1, winnerName1, null),
