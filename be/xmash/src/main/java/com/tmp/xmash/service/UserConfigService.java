@@ -8,6 +8,7 @@ import com.tmp.xmash.dto.response.PlayerResponse;
 import com.tmp.xmash.dto.response.UserProfileResponse;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,11 +56,11 @@ public class UserConfigService {
 
 
     @Transactional
-    public UserProfileResponse updateUserPassword(PasswordUpdateRequest passwordUpdateReq, String userId) {
+    public UserProfileResponse updateUserPassword(PasswordUpdateRequest passwordUpdateReq, String userId) throws BadRequestException {
         AppUser appUser = userRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         if (!passwordEncoder.matches(passwordUpdateReq.prevPassword(), appUser.getPassword())) {
-            throw new IllegalArgumentException("Password not matched");
+            throw new BadRequestException("Password not matched");
         }
 
         appUser.setPassword(passwordEncoder.encode(passwordUpdateReq.newPassword()));
