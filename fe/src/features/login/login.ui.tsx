@@ -102,6 +102,7 @@ export function LoginForm() {
                         <Button
                           variant="ghost"
                           className="absolute right-2 p-0 top-0"
+                          type="button"
                           onClick={toggleShowPassword}
                         >
                           {showPassword === "password" ? <Eye></Eye> : <EyeOff></EyeOff>}
