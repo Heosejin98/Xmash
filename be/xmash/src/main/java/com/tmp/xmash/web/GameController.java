@@ -58,10 +58,6 @@ public class GameController {
             throw new BadRequestException("ALL 타입 등록 불가능");
         }
 
-        if (!gameResultRequest.homeTeam().contains(userId)) { //home팀에 로그인한 계정이 없는 경우
-            throw new BadRequestException("home User에 내 계정을 넣으세요");
-        }
-
         if (Objects.equals(gameResultRequest.homeScore(), gameResultRequest.awayScore())) {
             throw new BadRequestException("무승부는 등록 불가능합니다.");
         }
