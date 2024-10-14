@@ -18,6 +18,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { useLoginMutation } from "./login.mutation";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 const useLoginForm = () =>
   useForm<LoginUserDto>({
@@ -28,10 +30,21 @@ const useLoginForm = () =>
     },
   });
 
+const useShowPassword = () => {
+  const [showPassword, setShowPassword] = useState<"text" | "password">("password");
+
+  const toggleShowPassword = () => {
+    setShowPassword((prev) => (prev === "password" ? "text" : "password"));
+  };
+
+  return { showPassword, toggleShowPassword };
+};
+
 export function LoginForm() {
   const form = useLoginForm();
   const { mutate } = useLoginMutation();
   const navigate = useNavigate();
+  const { showPassword, toggleShowPassword } = useShowPassword();
 
   const onSubmit = async (data: LoginUserDto) => {
     mutate(data, {
@@ -76,12 +89,25 @@ export function LoginForm() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="password"
-                      autoComplete="current-password"
-                      {...field}
-                    />
+                    <div className="relative">
+                      <Input
+                        type={showPassword}
+                        placeholder="password"
+                        autoComplete="current-password"
+                        className="pr-10"
+                        maxLength={25}
+                        {...field}
+                      />
+                      {field.value && (
+                        <Button
+                          variant="ghost"
+                          className="absolute right-2 p-0 top-0"
+                          onClick={toggleShowPassword}
+                        >
+                          {showPassword === "password" ? <Eye></Eye> : <EyeOff></EyeOff>}
+                        </Button>
+                      )}
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
