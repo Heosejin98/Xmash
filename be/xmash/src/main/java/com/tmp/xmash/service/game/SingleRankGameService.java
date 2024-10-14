@@ -60,7 +60,7 @@ public class SingleRankGameService implements GameService {
             return true;
         }
 
-        rankingService.updateRanking(homeSeasonRanking, awaySeasonRanking, matchEvaluator.getResultLp());
+        rankingService.updateRanking(awaySeasonRanking, homeSeasonRanking, matchEvaluator.getResultLp());
         return false;
     }
 
