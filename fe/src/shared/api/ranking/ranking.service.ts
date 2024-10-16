@@ -6,6 +6,6 @@ import { MatchType } from "../game";
 
 export class RankingService {
   static rankingQuery(config: { matchType: MatchType; signal?: AbortSignal }) {
-    return api.get(`/ranking/${config.matchType}`, config).then(AxiosContracts.responseContract(z.array(RankingDto)))
+    return api.get(`/ranking`, {...config, params: {matchType: config.matchType}}).then(AxiosContracts.responseContract(z.array(RankingDto)))
   }
 }

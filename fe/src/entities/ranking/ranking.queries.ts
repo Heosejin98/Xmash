@@ -11,7 +11,7 @@ export class RankingQueries {
 
   static rankingQuery(matchType: MatchType) {
     return queryOptions({
-      queryKey: [...this.keys.root],
+      queryKey: [...this.keys.root, matchType],
       queryFn: async ({ signal }) => {
         return (await RankingService.rankingQuery({ signal, matchType })).data;
       },
