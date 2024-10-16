@@ -5,11 +5,13 @@ import static java.util.stream.Collectors.toList;
 import com.tmp.xmash.db.entity.UserRanking;
 import com.tmp.xmash.db.repositroy.UserRankingRepository;
 import com.tmp.xmash.dto.response.RankingResponse;
+import com.tmp.xmash.type.MatchType;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +23,22 @@ public class RankingService {
 
 
     @Transactional(readOnly = true)
-    public List<RankingResponse> getRanking() {
+    public List<RankingResponse> getRanking(MatchType matchType) throws BadRequestException {
         AtomicInteger index = new AtomicInteger(1);
 
-        return userRankingRepository.findAllByOrderByLpDesc().stream()
-                .map(ranking -> RankingResponse.from(ranking, index.getAndIncrement()))
-                .collect(toList());
+        if (matchType == MatchType.SINGLE) {
+            return userRankingRepository.findAllByOrderByLpDesc().stream()
+                    .map(ranking -> RankingResponse.createSingleRanking(ranking, index.getAndIncrement()))
+                    .collect(toList());
+        }
+
+        if (matchType == MatchType.DOUBLE) {
+            return userRankingRepository.findAllByOrderByTeamLpDesc().stream()
+                    .map(ranking -> RankingResponse.createDoubleRanking(ranking, index.getAndIncrement()))
+                    .collect(toList());
+        }
+
+        throw new BadRequestException("단식 또는 복식을 입력하세요 match type: " + matchType);
     }
 
 
