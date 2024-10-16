@@ -14,7 +14,14 @@ const activeProps: {
 
 const RankingLink = () => {
   return (
-    <Link to="/ranking" className="nav-link w-14" activeProps={activeProps}>
+    <Link
+      to="/ranking"
+      className="nav-link w-14"
+      search={{
+        matchType: "single",
+      }}
+      activeProps={activeProps}
+    >
       Ranking
     </Link>
   );
