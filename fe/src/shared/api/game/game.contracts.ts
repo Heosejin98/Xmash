@@ -28,7 +28,15 @@ export const GameDto = z.object({
   loseTeam: z.array(PlayerDto),
   winnerScore: z.number(),
   loserScore: z.number(),
-  matchTime: z.string(),
+  matchTime: z.coerce.date().transform((dateString, ctx) => {
+    const date = new Date(dateString + 'utc');
+    if (!z.date().safeParse(date).success) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.invalid_date,
+        })
+    }
+    return date;
+}),
   matchType: z.string(),
   point: z.number().nullable(),
 });

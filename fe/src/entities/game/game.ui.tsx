@@ -50,7 +50,7 @@ export function GameList() {
   }, [data, matchType, searchValue]);
 
   return (
-    <div className="w-full p-3 flex flex-col mb-nav">
+    <div className="w-full p-3 flex flex-col">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter names..."
@@ -69,19 +69,43 @@ export function GameList() {
               tableRows?.map((record) => (
                 <TableRow
                   key={`${record.matchTime}: ${record.winTeam.toString()}`}
-                  className="flex gap-2 items-center justify-between"
+                  className="flex items-center justify-between w-full"
                 >
                   <TableCell className="flex gap-1">
                     {record.winTeam.map((player, idx) => (
-                      <Avatar key={`${record.matchTime}: ${player.userName}${idx}`}>
-                        <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
-                        <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
-                      </Avatar>
+                      <div className="flex flex-col items-center justify-center">
+                        <Avatar key={`${record.matchTime}: ${player.userName}${idx}`}>
+                          <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
+                          <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
+                        </Avatar>
+                        {/* <span className="text-xs">{player.userName.slice(1, 3)}</span> */}
+                      </div>
                     ))}
                   </TableCell>
 
                   <TableCell className="flex gap-2">
-                    <div>{record.winnerScore}</div>:<div>{record.loserScore}</div>
+                    <div className="flex flex-col items-center gap-1">
+                      <div>
+                        <span className="bold text-lg">{record.winnerScore}</span> vs{" "}
+                        <span className="bold text-lg">{record.loserScore}</span>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <span className="w-fit text-center text-[10px]/[1] text-gray-500">
+                          {record.matchTime.toLocaleDateString(undefined, {
+                            weekday: "narrow",
+                            month: "numeric",
+                            day: "numeric",
+                          })}
+                        </span>
+                        <span className="w-fit text-center text-sm">
+                          {record.matchTime.toLocaleTimeString(undefined, {
+                            hour12: false,
+                            hour: "numeric",
+                            minute: "2-digit",
+                          })}
+                        </span>
+                      </div>
+                    </div>
                   </TableCell>
 
                   <TableCell className="flex gap-1">
