@@ -11,4 +11,5 @@ import java.util.List;
 public interface UserRankingRepository extends JpaRepository<UserRanking, Long> {
 
     List<UserRanking> findAllByOrderByLpDesc();
+    List<UserRanking> findAllByOrderByTeamLpDesc();
 }
