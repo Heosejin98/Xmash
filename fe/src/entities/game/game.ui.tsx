@@ -50,7 +50,7 @@ export function GameList() {
   }, [data, matchType, searchValue]);
 
   return (
-    <div className="w-full p-3 flex flex-col mb-nav">
+    <div className="w-full p-3 flex flex-col">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter names..."
