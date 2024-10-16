@@ -1,3 +1,4 @@
+import { MatchType } from '@/shared/api/game';
 import { RankingService } from '@/shared/api/ranking';
 import {
   queryOptions
@@ -8,11 +9,11 @@ export class RankingQueries {
     root: ['ranking'] as const,
   }
 
-  static rankingQuery() {
+  static rankingQuery(matchType: MatchType) {
     return queryOptions({
       queryKey: [...this.keys.root],
       queryFn: async ({ signal }) => {
-        return (await RankingService.rankingQuery({ signal })).data;
+        return (await RankingService.rankingQuery({ signal, matchType })).data;
       },
       initialData: [],
     })
