@@ -73,8 +73,11 @@ export function GameList() {
                 >
                   <TableCell className="flex gap-1">
                     {record.winTeam.map((player, idx) => (
-                      <div className="flex flex-col items-center justify-center">
-                        <Avatar key={`${record.matchTime}: ${player.userName}${idx}`}>
+                      <div
+                        key={`${record.matchTime}: ${player.userName}${idx}`}
+                        className="flex flex-col items-center justify-center"
+                      >
+                        <Avatar>
                           <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
                           <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
                         </Avatar>

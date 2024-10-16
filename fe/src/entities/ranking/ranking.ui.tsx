@@ -14,6 +14,8 @@ import { ChangeEvent, useState } from "react";
 import { RankingQueries } from "./ranking.queries";
 import { Route } from "@/pages/_layout/ranking";
 import { useNavigate } from "@tanstack/react-router";
+import { RankingTypeTabs } from "./rankingType.tabs.ui";
+import { MatchType } from "@/shared/api/game";
 
 const columns: ColumnDef<RankingDto>[] = [
   {
@@ -35,14 +37,19 @@ const columns: ColumnDef<RankingDto>[] = [
 ];
 
 export function LeaderBoardList() {
-  const { username } = Route.useSearch();
+  const { username, matchType } = Route.useSearch();
+
   const navigate = useNavigate({ from: Route.fullPath });
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
     { id: "userName", value: username ?? "" },
   ]);
   const [sorting, setSorting] = useState<SortingState>(() => []);
-  const { data } = useQuery(RankingQueries.rankingQuery());
+  const { data } = useQuery(RankingQueries.rankingQuery(matchType));
+
+  const setMatchType = (matchType: MatchType) => {
+    navigate({ search: { matchType, username } });
+  };
 
   const table = useReactTable({
     data,
@@ -59,18 +66,19 @@ export function LeaderBoardList() {
 
   const onSearch = (e: ChangeEvent<HTMLInputElement>) => {
     table.getColumn("userName")?.setFilterValue(e.target.value);
-    navigate({ search: { username: e.target.value } });
+    navigate({ search: (prev) => ({ ...prev, username: e.target.value }) });
   };
 
   return (
     <div className="w-full p-3">
-      <div className="flex items-center py-4">
+      <div className="flex flex-col items-center py-4 gap-2 sm:flex-row">
         <Input
           placeholder="Filter names..."
           value={(table.getColumn("userName")?.getFilterValue() as string) ?? ""}
           onChange={onSearch}
           className="max-w-sm"
         />
+        <RankingTypeTabs onChange={setMatchType} type={matchType} />
       </div>
       <div className="rounded-md border">
         <Table>
