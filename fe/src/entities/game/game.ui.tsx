@@ -53,7 +53,7 @@ export function GameList() {
     <div className="w-full p-3 flex flex-col">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter names..."
+          placeholder="검색할 이름..."
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           className="max-w-sm"

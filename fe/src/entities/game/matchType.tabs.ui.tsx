@@ -10,9 +10,9 @@ export const MatchTypeTabs = ({ type, onChange }: MatchTypeTabsProps) => {
   return (
     <Tabs value={type} className="w-full" onValueChange={(type) => onChange(type as MatchType)}>
       <TabsList className="grid grid-cols-3">
-        <TabsTrigger value="all">ALL</TabsTrigger>
-        <TabsTrigger value="single">싱글</TabsTrigger>
-        <TabsTrigger value="double">더블</TabsTrigger>
+        <TabsTrigger value="all">전부 보여줘</TabsTrigger>
+        <TabsTrigger value="single">단식</TabsTrigger>
+        <TabsTrigger value="double">복식</TabsTrigger>
       </TabsList>
     </Tabs>
   );

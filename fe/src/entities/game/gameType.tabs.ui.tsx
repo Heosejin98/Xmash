@@ -10,8 +10,8 @@ export const GameTypeTabs = ({ type, onChange }: GameTypeTabsProps) => {
   return (
     <Tabs value={type} className="w-full" onValueChange={(type) => onChange(type as GameType)}>
       <TabsList className="grid grid-cols-2">
-        <TabsTrigger value="normal">Normal</TabsTrigger>
-        <TabsTrigger value="rank">Rank</TabsTrigger>
+        <TabsTrigger value="normal">노말</TabsTrigger>
+        <TabsTrigger value="rank">랭크</TabsTrigger>
       </TabsList>
     </Tabs>
   );
