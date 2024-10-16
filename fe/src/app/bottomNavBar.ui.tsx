@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/entities/user/user.store";
 import { AddGameButton } from "@/features/game/add-game.ui";
 import { Link } from "@tanstack/react-router";
 import { CSSProperties } from "react";
@@ -36,10 +37,11 @@ const GameLink = () => {
 };
 
 const BottomNavBar = () => {
+  const store = useAuthStore();
   return (
     <nav className="flex justify-between p-4 sticky left-0 bottom-0 w-full h-nav z-10 bg-muted">
       <RankingLink />
-      <AddGameButton></AddGameButton>
+      {store.isAuthenticated && <AddGameButton></AddGameButton>}
       <GameLink />
     </nav>
   );

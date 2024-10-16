@@ -14,19 +14,20 @@ import { ChangeEvent, useState } from "react";
 import { RankingQueries } from "./ranking.queries";
 import { Route } from "@/pages/_layout/ranking";
 import { useNavigate } from "@tanstack/react-router";
+import { Gem } from "lucide-react";
 
 const columns: ColumnDef<RankingDto>[] = [
   {
     accessorKey: "rank",
-    header: "#",
+    header: "순위",
   },
   {
     accessorKey: "userName",
-    header: "UserName",
+    header: "이름",
   },
   {
     accessorKey: "tier",
-    header: "Tier",
+    header: "티어",
   },
   {
     accessorKey: "lp",
@@ -66,7 +67,7 @@ export function LeaderBoardList() {
     <div className="w-full p-3">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter names..."
+          placeholder="검색할 이름..."
           value={(table.getColumn("userName")?.getFilterValue() as string) ?? ""}
           onChange={onSearch}
           className="max-w-sm"
@@ -93,11 +94,20 @@ export function LeaderBoardList() {
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell) => {
+                    if (cell.column.id === "rank" && cell.getValue() === 1) {
+                      return (
+                        <TableCell key={cell.id}>
+                          <Gem></Gem>
+                        </TableCell>
+                      );
+                    }
+                    return (
+                      <TableCell key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             ) : (

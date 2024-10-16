@@ -53,7 +53,7 @@ export function GameList() {
     <div className="w-full p-3 flex flex-col">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter names..."
+          placeholder="검색할 이름..."
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           className="max-w-sm"
@@ -73,8 +73,11 @@ export function GameList() {
                 >
                   <TableCell className="flex gap-1">
                     {record.winTeam.map((player, idx) => (
-                      <div className="flex flex-col items-center justify-center">
-                        <Avatar key={`${record.matchTime}: ${player.userName}${idx}`}>
+                      <div
+                        key={`${record.matchTime}: ${player.userName}${idx}`}
+                        className="flex flex-col items-center justify-center"
+                      >
+                        <Avatar>
                           <AvatarImage src={player.profileUrl ?? ""} alt={player.userName} />
                           <AvatarFallback>{player.userName.slice(1, 3)}</AvatarFallback>
                         </Avatar>
