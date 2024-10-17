@@ -67,6 +67,6 @@ jobs:
           nohup java -jar /home/sejin/xmash/xmash-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev > /home/sejin/xmash/logs/xmash.log 2>&1 & disown 
           
           # Remove the old jar file 
-          echo "Deployment completed successfully"
+          echo "Deployment completed successfully!"
           exit
           EOF
