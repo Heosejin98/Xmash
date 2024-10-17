@@ -21,6 +21,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '21'
+          cache: gradle
 
       - name: Cache Gradle packages
         uses: actions/cache@v3
@@ -38,10 +39,6 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build
-        working-directory: be/xmash
-
-      - name: Run backend tests
-        run: ./gradlew test
         working-directory: be/xmash
 
       - name: Set up SSH
@@ -67,9 +64,9 @@ jobs:
           # Stop the running application if any
           pkill -f 'java -jar /home/sejin/xmash/xmash-0.0.1-SNAPSHOT.jar'
 
-          nohup java -jar /home/sejin/xmash/xmash-0.0.1-SNAPSHOT.jar > /home/sejin/xmash/logs/xmash.log 2>&1 & disown
+          nohup java -jar /home/sejin/xmash/xmash-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev > /home/sejin/xmash/logs/xmash.log 2>&1 & disown 
           
           # Remove the old jar file 
-          echo "Deployment completed successfully"
+          echo "Deployment completed successfully!"
           exit
           EOF

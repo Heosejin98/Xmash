@@ -1,0 +1,26 @@
+server:
+  port: 4242
+
+spring:
+  application:
+    name: xmash
+  datasource:
+    url: ENC(5wJlIHmgO1AWvA8eaNrmBnNui4t2aW/T/4Y4BZiJLIFF/Mr5cDUFbLawGx/RVVncpdh1awzXb9CRRDQDKo4J6Apti6uXwSLmlFmjjawAspBRNUbD+3J8zQ==)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ENC(+cOLpHmDCnRjwd/h8yrTJQ==)
+    password: ENC(N82lmEig2NTYBKRNi+8Q4dz8z+vqOE6f)
+  h2:
+    console:
+      enabled: false  # H2 콘솔 비활성화
+
+
+springdoc:
+  api-docs:
+    path: '/v3/api-docs'
+  swagger-ui:
+    path: '/swagger-ui.html'
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+    password: ${JASYPT_PASSWORD}  # 환경 변수로부터 암호화 키 읽기

@@ -33,6 +33,9 @@ dependencies {
 
 	implementation 'mysql:mysql-connector-java:8.0.33'
 
+	// application.yml 파일에 암호화된 값 사용을 위한 라이브러리
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+
 	// springdoc-openapi 적용 정보 (Swagger 적용을 위한 정보)
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
@@ -46,4 +49,10 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+
+bootRun {
+	args = ["--spring.profiles.active=local",
+	"--spring.output.ansi.enabled=always"]
 }

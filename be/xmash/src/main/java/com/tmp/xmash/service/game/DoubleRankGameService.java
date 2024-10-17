@@ -77,7 +77,7 @@ public class DoubleRankGameService implements GameService {
         List<DoubleRankMatchHistory> singleMatchHistories = doubleRankMatchRepo.findTop1000ByOrderByMatchTimeDesc();
 
         return singleMatchHistories.stream()
-                .map(a -> GameResultResponse.createDoubleRankGame(a, usersByUserId, matchType))
+                .map(matchHistory -> GameResultResponse.createDoubleRankGame(matchHistory, usersByUserId, matchType))
                 .toList();
     }
 

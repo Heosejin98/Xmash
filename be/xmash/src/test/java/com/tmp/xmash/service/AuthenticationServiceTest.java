@@ -14,8 +14,8 @@ class AuthenticationServiceTest {
     @Test
     void signUp() {
         // given...
-        String userId = "bgm";
-        String password = "bgm";
+        String userId = "test";
+        String password = "test";
         Gender gender = Gender.MALE;
         String name = "유근모";
         String email = "bgm@ex-em.com";

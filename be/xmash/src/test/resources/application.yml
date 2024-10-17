@@ -1,15 +1,20 @@
 spring:
-  datasource :
-    url: jdbc:h2:mem:test
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
-
+  application:
+    name: xmash
+  h2:
+    console:
+      enabled: true  # H2 콘솔 활성화
+    # 콘솔을 접속하기 위한 경로를 커스텀 할 수 있습니다 (기본은 /h2-console)
+    path: /h2-console
+  datasource:
+    url: jdbc:h2:mem:xmash;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE  # 메모리 DB 사용
+    driver-class-name: org.h2.Driver  # H2 드라이버 클래스
+    username: sa  # H2 기본 사용자
+    password:  # H2 기본 비밀번호 (없음)
   jpa:
     hibernate:
-      ddl-auto: create-drop
-    database-platform: org.hibernate.dialect.H2Dialect
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+      ddl-auto: update  # 엔티티 변경 시 테이블 자동 업데이트
+    database-platform: org.hibernate.dialect.H2Dialect  # H2 사용 시 필요한 설정
+  test:
+    database:
+      replace: any  # 테스트 시 임베디드 데이터베이스로 교체
