@@ -21,6 +21,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '21'
+          cache: gradle
 
       - name: Cache Gradle packages
         uses: actions/cache@v3
@@ -37,11 +38,7 @@ jobs:
         working-directory: be/xmash
 
       - name: Build with Gradle
-        run: ./gradlew build
-        working-directory: be/xmash
-
-      - name: Run backend tests
-        run: ./gradlew test
+        run: ./gradlew build --spring.profiles.active=dev
         working-directory: be/xmash
 
       - name: Set up SSH
