@@ -20,6 +20,7 @@ const RankingLink = () => {
       search={{
         matchType: "single",
       }}
+      activeOptions={{ includeSearch: false }}
       activeProps={activeProps}
     >
       Ranking
@@ -32,6 +33,7 @@ const GameLink = () => {
     <Link
       to="/game"
       className="nav-link w-14"
+      activeOptions={{ includeSearch: false }}
       activeProps={activeProps}
       search={{
         gameType: "normal",
