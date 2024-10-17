@@ -141,6 +141,7 @@ hs_err_pid*
 replay_pid*
 
 ### Gradle ###
+**/.run/
 .gradle
 **/build/
 !src/**/build/
