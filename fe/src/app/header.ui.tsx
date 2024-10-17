@@ -8,7 +8,7 @@ const Header = () => {
   const router = useRouter();
 
   return (
-    <header className="flex justify-between items-center px-4 pt-4 sticky bg-white z-10">
+    <header className="flex justify-between items-center px-4 pt-4 sticky bg-white z-10 top-0">
       <h1 className="font-bold text-xl">
         <Link to="/">Xmash</Link>
       </h1>
