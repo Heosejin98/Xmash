@@ -1,6 +1,6 @@
 import { Check, Plus } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { UserQueries } from "./user.queries";
 import {
   Button,
@@ -18,7 +18,7 @@ import { cn } from "@/shared/lib/utils";
 
 interface Props {
   values: string[];
-  setValue: (value: string[]) => void;
+  setValue: Dispatch<SetStateAction<string[]>>;
   exclude?: string[];
 }
 

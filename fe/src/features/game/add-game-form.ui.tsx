@@ -28,7 +28,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Separator } from "@radix-ui/react-select";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
-import { forwardRef } from "react";
+import { Dispatch, forwardRef, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useGameMutation } from "./add-game.mutation";
@@ -69,7 +69,7 @@ const UserListInput = forwardRef(
       exclude,
     }: {
       value: string[];
-      onChange: (v: string[]) => void;
+      onChange: Dispatch<SetStateAction<string[]>>;
       matchType: MatchType;
       exclude?: string[];
     },
