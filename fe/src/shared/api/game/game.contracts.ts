@@ -29,7 +29,8 @@ export const GameDto = z.object({
   winnerScore: z.number(),
   loserScore: z.number(),
   matchTime: z.coerce.date().transform((dateString, ctx) => {
-    const date = new Date(dateString + 'utc');
+    const date = new Date(dateString);
+    date.setHours(date.getHours() - (date.getTimezoneOffset() / 60));
     if (!z.date().safeParse(date).success) {
         ctx.addIssue({
             code: z.ZodIssueCode.invalid_date,
