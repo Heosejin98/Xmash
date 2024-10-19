@@ -79,7 +79,6 @@
     height: 100dvh;
     display: flex;
     flex-direction: column;
-    overflow: overlay;
 
     >div:first-child {
       @apply flex-1;
