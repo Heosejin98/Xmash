@@ -1,6 +1,3 @@
-server:
-  port: 4444
-
 spring:
   application:
     name: xmash

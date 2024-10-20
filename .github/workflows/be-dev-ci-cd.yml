@@ -60,11 +60,24 @@ jobs:
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:dev
 
+      - name: Upload docker compose
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-compose
+          path: .
+          if-no-files-found: error
+
   deploy:
     needs: build
     name: Deploy Backend
     runs-on: ubuntu-latest
-    steps:
+    environment: dev
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Set up SSH
         run: |
           # Create the .ssh directory
@@ -79,17 +92,29 @@ jobs:
 
       - name: Transfer files
         run: |
-          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/build/libs/xmash-0.0.1-SNAPSHOT.jar ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/xmash
+          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/src/main/resources/docker-compose-dev.yaml ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/xmash/dev/docker-compose.yml
 
       - name: Deploy to server
         run: |
           ssh -tt ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} -p ${{ secrets.GCP_SSH_PORT }} << 'EOF'
           source .bashrc
+          
           # Stop the running application if any
-          pkill -f 'java -jar /home/sejin/xmash/xmash-0.0.1-SNAPSHOT.jar'
+          echo "DB_IP_PORT=${{ secrets.MYSQL_DATABASE }}" > .env
+          echo "DB_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
+          echo "DB_USERNAME=${{ secrets.JASYPT_PASSWORD }}" >> .env
           
-          nohup java -jar /home/sejin/xmash/xmash-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev > /home/sejin/xmash/logs/xmash.log 2>&1 & disown
+          # Pull latest Docker images
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+          docker compose -f ~/dev/docker-compose.yaml pull
           
+          # Restart docker compose
+          cd ~/dev
+          docker compose up -d
+          
+          # Clean up unused Docker images
+          docker image prune -af
+        
           # Remove the old jar file
           echo "Deployment completed successfully!"
           exit
