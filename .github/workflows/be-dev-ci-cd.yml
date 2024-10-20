@@ -82,7 +82,7 @@ jobs:
 
       - name: Transfer files
         run: |
-          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/src/main/resources/docker-compose-dev.yml ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/xmash/dev      
+          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/src/main/resources/docker-compose-dev.yml ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/xmash/dev/docker-compose.yml     
 
       - name: Deploy to server
         run: |
@@ -90,12 +90,11 @@ jobs:
           source .bashrc
           
           # Stop the running application if any
-          echo "DB_IP_PORT=${{ secrets.DB_IP_PORT_DEV }}" > .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
-          echo "JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }}" >> .env
-          
-          
+          echo DB_IP_PORT='${{ secrets.DB_IP_PORT_DEV }}' > .env
+          echo DB_PASSWORD='${{ secrets.DB_PASSWORD }}' >> .env
+          echo DB_USERNAME='${{ secrets.DB_USERNAME }}' >> .env
+          echo JASYPT_PASSWORD='${{ secrets.JASYPT_PASSWORD }}' >> .env
+        
           cd ./dev
           mv docker-compose-dev.yml docker-compose.yml
           
