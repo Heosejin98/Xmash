@@ -44,7 +44,7 @@ jobs:
         working-directory: be/xmash
 
       - name: Build Docker image
-        working-directory: be
+        working-directory: be/xmash
         run: |
           ls -la
           echo "----------------------------"
