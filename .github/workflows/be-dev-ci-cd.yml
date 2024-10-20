@@ -95,13 +95,15 @@ jobs:
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
           echo "JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }}" >> .env
           
+          
+          cd ./dev
+          mv docker-compose-dev.yml docker-compose.yml
+          
           # Pull latest Docker images
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-          docker compose -f ~/dev/docker-compose.yaml pull
+          docker compose -f /homse/sejin/dev/docker-compose.yaml pull
           
           # Restart docker compose
-          cd ~/dev
-          mv docker-compose-dev.yml docker-compose.yml
           docker compose up -d
           
           # Clean up unused Docker images
