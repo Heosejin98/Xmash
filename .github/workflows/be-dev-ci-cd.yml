@@ -70,9 +70,7 @@ jobs:
 
       - name: Transfer files
         run: |
-          ls be/xmash
-          ls be/xmash/src/main/resources
-          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/src/main/resources/docker-compose-dev.yml ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/xmash/dev/docker-compose.yml
+          scp -P ${{ secrets.GCP_SSH_PORT }} -r fe/dist ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/fe          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/src/main/resources/docker-compose-dev.yml ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/xmash/dev
 
       - name: Set up SSH
         run: |
@@ -103,6 +101,7 @@ jobs:
           
           # Restart docker compose
           cd ~/dev
+          mv docker-compose-dev.yml docker-compose.yml
           docker compose up -d
           
           # Clean up unused Docker images
