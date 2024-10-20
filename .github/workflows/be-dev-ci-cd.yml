@@ -82,7 +82,7 @@ jobs:
 
       - name: Transfer files
         run: |
-          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/src/main/resources/docker-compose-dev.yml ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/xmash/dev     
+          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/src/main/resources/docker-compose-dev.yml ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/dev     
 
       - name: Deploy to server
         run: |
