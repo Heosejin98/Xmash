@@ -63,7 +63,6 @@ jobs:
     needs: build
     name: Deploy Backend
     runs-on: ubuntu-latest
-    environment: dev
 
     steps:
       - name: Checkout code
@@ -93,9 +92,10 @@ jobs:
           source .bashrc
           
           # Stop the running application if any
-          echo "DB_IP_PORT=${{ secrets.MYSQL_DATABASE }}" > .env
-          echo "DB_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
-          echo "DB_USERNAME=${{ secrets.JASYPT_PASSWORD }}" >> .env
+          echo "DB_IP_PORT=${{ secrets.DB_IP_PORT_DEV }}" > .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }}" >> .env
           
           # Pull latest Docker images
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
