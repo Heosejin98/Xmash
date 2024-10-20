@@ -2,6 +2,8 @@ FROM --platform= azul/zulu-openjdk:21
 
 RUN mkdir webapp
 
-COPY xmash/xmash-0.0.1-SNAPSHOT.jar ./webapp/app.jar
+ARG JARFILE=build/libs/*.jar
+
+COPY ${JARFILE} ./webapp/app.jar
 
 CMD ["java", "-jar", "./waebapp/app.jar", "--spring.profiles.active=dev", "--spring.output.ansi.enabled=always"]
