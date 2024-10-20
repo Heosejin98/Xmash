@@ -44,7 +44,7 @@ jobs:
         working-directory: be/xmash
 
       - name: Build Docker image
-        working-directory: be/xmash
+        working-directory: be
         run: |
           docker build \
           -f Dockerfile-dev \
