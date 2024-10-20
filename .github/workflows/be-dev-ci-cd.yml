@@ -40,7 +40,7 @@ jobs:
         working-directory: ./be/xmash
 
       - name: Build with Gradle
-        run: ./gradlew boot-jar
+        run: ./gradlew boot-bootJar
         working-directory: ./be/xmash
 
       - name: Build Docker image
