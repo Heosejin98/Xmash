@@ -68,10 +68,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Transfer files
-        run: |
-          scp -P ${{ secrets.GCP_SSH_PORT }} -r fe/dist ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/fe          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/src/main/resources/docker-compose-dev.yml ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/xmash/dev
-
       - name: Set up SSH
         run: |
           # Create the .ssh directory
@@ -82,7 +78,11 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           
           # Add the known_hosts file to avoid SSH host key verification
-          ssh-keyscan -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_PUBLIC_IP }} >> ~/.ssh/known_hosts      
+          ssh-keyscan -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_PUBLIC_IP }} >> ~/.ssh/known_hosts
+
+      - name: Transfer files
+        run: |
+          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/src/main/resources/docker-compose-dev.yml ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/xmash/dev      
 
       - name: Deploy to server
         run: |
