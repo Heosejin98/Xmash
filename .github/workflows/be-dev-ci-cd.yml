@@ -46,6 +46,8 @@ jobs:
       - name: Build Docker image
         working-directory: be
         run: |
+          ls -la
+          echo "----------------------------"
           docker build \
           -f Dockerfile-dev \
           -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:dev \
