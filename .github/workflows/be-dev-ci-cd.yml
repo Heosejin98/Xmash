@@ -66,6 +66,12 @@ jobs:
     environment: dev
 
     steps:
+      - name: Transfer files
+        run: |
+          ls be/xmash
+          ls be/xmash/src/main/resources
+          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/src/main/resources/docker-compose-dev.yml ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/xmash/dev/docker-compose.yml
+
       - name: Set up SSH
         run: |
           # Create the .ssh directory
@@ -76,12 +82,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           
           # Add the known_hosts file to avoid SSH host key verification
-          ssh-keyscan -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_PUBLIC_IP }} >> ~/.ssh/known_hosts
-
-      - name: Transfer files
-        run: |
-          ls be/xmash/src/main/resources
-          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/src/main/resources/docker-compose-dev.yml ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/xmash/dev/docker-compose.yml
+          ssh-keyscan -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_PUBLIC_IP }} >> ~/.ssh/known_hosts      
 
       - name: Deploy to server
         run: |
