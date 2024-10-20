@@ -4,11 +4,13 @@ on:
   push:
     branches:
       - be/dev
+      - be/ci/118
     paths:
       - 'be/**'
+      - '*'
 
 jobs:
-  build-deploy:
+  build:
     name: Build Backend
     runs-on: ubuntu-latest
 
@@ -41,15 +43,39 @@ jobs:
         run: ./gradlew build
         working-directory: be/xmash
 
+      - name: Build Docker image
+        working-directory: be/xmash
+        run: |
+          docker build \
+          -f Dockerfile-dev \
+          -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:dev \
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker Image
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:dev \
+
+      - name: Push Docker Image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:dev
+
+  deploy:
+    needs: build
+    name: Deploy Backend
+    runs-on: ubuntu-latest
+    steps:
       - name: Set up SSH
         run: |
           # Create the .ssh directory
           mkdir -p ~/.ssh
-
+          
           # Add the private key
           echo "${{ secrets.GCP_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-
+          
           # Add the known_hosts file to avoid SSH host key verification
           ssh-keyscan -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_PUBLIC_IP }} >> ~/.ssh/known_hosts
 
@@ -63,10 +89,11 @@ jobs:
           source .bashrc
           # Stop the running application if any
           pkill -f 'java -jar /home/sejin/xmash/xmash-0.0.1-SNAPSHOT.jar'
-
-          nohup java -jar /home/sejin/xmash/xmash-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev > /home/sejin/xmash/logs/xmash.log 2>&1 & disown 
           
-          # Remove the old jar file 
+          nohup java -jar /home/sejin/xmash/xmash-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev > /home/sejin/xmash/logs/xmash.log 2>&1 & disown
+          
+          # Remove the old jar file
           echo "Deployment completed successfully!"
           exit
           EOF
+    
