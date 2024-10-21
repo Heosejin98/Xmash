@@ -9,6 +9,7 @@ import com.tmp.xmash.dto.response.UserProfileResponse;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,12 +57,18 @@ public class UserConfigService {
 
 
     @Transactional
-    public UserProfileResponse updateUserPassword(PasswordUpdateRequest passwordUpdateReq, String userId) throws BadRequestException {
-        AppUser appUser = userRepository.findByUserId(userId).orElseThrow(() -> new BadRequestException("User not found"));
+    public UserProfileResponse updateUserPassword(PasswordUpdateRequest passwordUpdateReq, String userId) throws AuthenticationException, BadRequestException {
+        AppUser appUser = userRepository.findByUserId(userId).orElseThrow(() -> new AuthenticationException("User not found"));
+
 
         if (!passwordEncoder.matches(passwordUpdateReq.prevPassword(), appUser.getPassword())) {
             throw new BadRequestException("Password not matched");
         }
+
+        if (passwordEncoder.matches(passwordUpdateReq.newPassword(), appUser.getPassword())) {
+            throw new BadRequestException("이전 패스워드와 다른 비밀번호 입력하세요.");
+        }
+
 
         appUser.setPassword(passwordEncoder.encode(passwordUpdateReq.newPassword()));
         userRepository.save(appUser);
