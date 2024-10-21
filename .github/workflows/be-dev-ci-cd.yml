@@ -13,6 +13,8 @@ jobs:
   build:
     name: Build Backend
     runs-on: ubuntu-latest
+    environment: dev
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -59,57 +61,56 @@ jobs:
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:dev
 
+      - name: Upload docker compose
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-compose
+          path: ./be/xmash/src/main/resources/docker-compose-dev.yml
+          if-no-files-found: error
+
   deploy:
     needs: build
     name: Deploy Backend
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted]
+    environment: dev
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up SSH
+      - name: Set up environment variables
         run: |
-          # Create the .ssh directory
-          mkdir -p ~/.ssh
-          
-          # Add the private key
-          echo "${{ secrets.GCP_SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          
-          # Add the known_hosts file to avoid SSH host key verification
-          ssh-keyscan -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_PUBLIC_IP }} >> ~/.ssh/known_hosts
+          cd ~/dev
+          echo "DB_IP_PORT=${{ secrets.DB_IP_PORT }}" > .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }}" >> .env
 
-      - name: Transfer files
-        run: |
-          scp -P ${{ secrets.GCP_SSH_PORT }} -r be/xmash/src/main/resources/docker-compose-dev.yml ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/dev     
+      - name: Download docker compose
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-compose
+          path: ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
 
-      - name: Deploy to server
+      - name: Rename downloaded file
         run: |
-          ssh -tt ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} -p ${{ secrets.GCP_SSH_PORT }} << 'EOF'
-          source .bashrc
-          
-          # Stop the running application if any
-          echo DB_IP_PORT='${{ secrets.DB_IP_PORT_DEV }}' > .env
-          echo DB_PASSWORD='${{ secrets.DB_PASSWORD }}' >> .env
-          echo DB_USERNAME='${{ secrets.DB_USERNAME }}' >> .env
-          echo JASYPT_PASSWORD='${{ secrets.JASYPT_PASSWORD }}' >> .env
-        
-          cd ./dev
+          cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
           mv docker-compose-dev.yml docker-compose.yml
-          
-          # Pull latest Docker images
-          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-          docker compose -f /homse/sejin/dev/docker-compose.yaml pull
-          
-          # Restart docker compose
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Pull latest Docker images
+        run: docker compose -f ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}/docker-compose.yml pull
+
+      - name: Restart docker compose
+        run: |
+          cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
           docker compose up -d
-          
-          # Clean up unused Docker images
-          docker image prune -af
-        
-          # Remove the old jar file
-          echo "Deployment completed successfully!"
-          exit
-          EOF
+
+      - name: Clean up unused Docker images
+        run: docker image prune -af
     
