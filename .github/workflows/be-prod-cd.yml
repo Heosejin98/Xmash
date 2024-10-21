@@ -4,10 +4,8 @@ on:
   push:
     branches:
       - be/prod
-      - be/ci/118
     paths:
       - 'be/**'
-      - '*'
 
 jobs:
   build:
