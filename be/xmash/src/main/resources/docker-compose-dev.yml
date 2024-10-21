@@ -1,0 +1,9 @@
+services:
+  app:
+    image: seheo23/dev-xmash:dev
+    restart: unless-stopped
+    environment:
+      JASYPT_PASSWORD: ${JASYPT_PASSWORD}
+      TZ: Asia/Seoul
+    ports:
+      - 4444:8080
