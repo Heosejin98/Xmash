@@ -24,11 +24,13 @@ public class AuthenticationService {
 
     @Transactional
     public UserProfileResponse login(String userId, String password) throws BadRequestException {
-        AppUser appUser = userRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        AppUser appUser = userRepository.findByUserId(userId).orElseThrow(() -> new BadRequestException("비밀번호 또는 Id가 일치하지않습니다."));
 
         if (!passwordEncoder.matches(password, appUser.getPassword())) {
-            throw new BadRequestException("비밀번호가 일치하지 않습니다");
-        }
+            throw new BadRequestException("비밀번호 또는 Id가 일치하지않습니다.");
+        AppUser appUser = userRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+
 
         return new UserProfileResponse(appUser.getUserId(),
                 appUser.getName(),
