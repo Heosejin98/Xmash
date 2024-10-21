@@ -51,7 +51,7 @@ export function LoginForm() {
     mutate(data, {
       onError: (error) => {
         console.log("onError", error);
-        toast.error("Failed to update password", {
+        toast.error(error.response?.data?.message, {
           style: {
             backgroundColor: "#f44336",
             color: "#fff",

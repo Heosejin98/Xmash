@@ -5,12 +5,13 @@ import {
   UseMutationOptions,
   useMutation,
 } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 export function useLoginMutation(
   options?: Pick<
     UseMutationOptions<
       Awaited<ReturnType<typeof AuthService.loginUserMutation>>,
-      DefaultError,
+      AxiosError<DefaultError>,
       LoginUserDto,
       unknown
     >,

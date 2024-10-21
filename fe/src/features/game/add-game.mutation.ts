@@ -4,12 +4,13 @@ import {
   UseMutationOptions,
   useMutation,
 } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 export function useGameMutation(
   options?: Pick<
     UseMutationOptions<
       Awaited<ReturnType<typeof GameService.gameMutation>>,
-      DefaultError,
+      AxiosError<DefaultError>,
       CreateGameDto,
       unknown
     >,

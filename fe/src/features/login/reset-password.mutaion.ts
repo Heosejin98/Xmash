@@ -4,12 +4,13 @@ DefaultError,
 UseMutationOptions,
 useMutation,
 } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 export function useResetPasswordMutation(
   options?: Pick<
     UseMutationOptions<
       Awaited<ReturnType<typeof AuthService.passwordResetMutation>>,
-      DefaultError,
+      AxiosError<DefaultError>,
       PasswordResetDto,
       unknown
     >,
