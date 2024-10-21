@@ -36,12 +36,12 @@ jobs:
 
       - name: Remove prev files
         run: |
-          ssh -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} "rm -rf /home/sejin/fe"
+          ssh -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} "rm -rf /home/jinbekim/fe"
 
       - name: Transfer files
         run: |
-          scp -P ${{ secrets.GCP_SSH_PORT }} -r fe/dist ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/sejin/fe
+          scp -P ${{ secrets.GCP_SSH_PORT }} -r fe/dist ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/jinbekim/fe
 
       - name: Make re
         run: |
-          ssh -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} "cd /home/sejin && make re"
+          ssh -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} "cd /home/jinbekim && make re"
