@@ -30,6 +30,7 @@ public class AuthenticationService {
             throw new BadRequestException("비밀번호 또는 Id가 일치하지않습니다.");
         }
 
+
         return new UserProfileResponse(appUser.getUserId(),
                 appUser.getName(),
                 appUser.getEmail(),
