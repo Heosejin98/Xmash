@@ -65,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: docker-compose
-          path: ./be/xmash/src/main/resources/docker-compose-dev.yml
+          path: ./be/xmash/src/main/resources/docker-compose-prod.yml
           if-no-files-found: error
 
   deploy:
