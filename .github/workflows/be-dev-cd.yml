@@ -77,9 +77,6 @@ jobs:
     steps:
       - name: Set up environment variables
         run: |
-          cd ~/
-          ls
-          pwd
           cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
           echo "DB_IP_PORT=${{ secrets.DB_IP_PORT }}" > .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
