@@ -92,7 +92,6 @@ jobs:
       - name: Rename downloaded file
         run: |
           cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
-          who
           mv docker-compose-dev.yml docker-compose.yml
 
       - name: Login to Docker Hub
@@ -102,12 +101,13 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Pull latest Docker images
-        run: docker compose -f ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}/docker-compose.yml pull
+        run: |
+          docker-compose -f ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}/docker-compose.yml pull
 
       - name: Restart docker compose
         run: |
           cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
-          docker compose up -d
+          docker-compose up -d
 
       - name: Clean up unused Docker images
         run: docker image prune -af
