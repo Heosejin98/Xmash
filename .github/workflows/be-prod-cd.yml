@@ -1,4 +1,4 @@
-name: BE DEV CD Pipeline
+name: BE PROD CD Pipeline
 
 on:
   push:
@@ -72,7 +72,7 @@ jobs:
     needs: build
     name: Deploy Backend
     runs-on: [self-hosted]
-    environment: dev
+    environment: prod
 
     steps:
       - name: Set up environment variables
