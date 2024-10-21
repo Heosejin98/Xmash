@@ -20,6 +20,7 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     private GlobalExceptionResponse handleBadRequestException(BadRequestException e) {
         log.error("Bad Request Exception : {}", e.getMessage());
+        
         return new GlobalExceptionResponse(e.getMessage());
     }
 
