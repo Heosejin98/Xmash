@@ -6,4 +6,4 @@ services:
       JASYPT_PASSWORD: ${JASYPT_PASSWORD}
       TZ: Asia/Seoul
     ports:
-      - 4444:8080
+      - 4242:8080
