@@ -20,6 +20,7 @@ import { useForm } from "react-hook-form";
 import { useLoginMutation } from "./login.mutation";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { toast } from "sonner";
 
 const useLoginForm = () =>
   useForm<LoginUserDto>({
@@ -50,6 +51,12 @@ export function LoginForm() {
     mutate(data, {
       onError: (error) => {
         console.log("onError", error);
+        toast.error("Failed to update password", {
+          style: {
+            backgroundColor: "#f44336",
+            color: "#fff",
+          },
+        });
       },
       onSuccess: async () => {
         await navigate({
