@@ -92,6 +92,7 @@ jobs:
       - name: Rename downloaded file
         run: |
           cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
+          who
           mv docker-compose-dev.yml docker-compose.yml
 
       - name: Login to Docker Hub

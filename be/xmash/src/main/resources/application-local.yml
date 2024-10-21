@@ -8,7 +8,7 @@ spring:
     password: ENC(N82lmEig2NTYBKRNi+8Q4dz8z+vqOE6f)
   h2:
     console:
-      enabled: false  # H2 콘솔 비활성화
+      enabled: false  # H2 콘솔 비활성화.
 
 springdoc:
   api-docs:
