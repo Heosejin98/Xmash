@@ -57,7 +57,7 @@ public class UserConfigService {
 
     @Transactional
     public UserProfileResponse updateUserPassword(PasswordUpdateRequest passwordUpdateReq, String userId) throws BadRequestException {
-        AppUser appUser = userRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        AppUser appUser = userRepository.findByUserId(userId).orElseThrow(() -> new BadRequestException("User not found"));
 
         if (!passwordEncoder.matches(passwordUpdateReq.prevPassword(), appUser.getPassword())) {
             throw new BadRequestException("Password not matched");
