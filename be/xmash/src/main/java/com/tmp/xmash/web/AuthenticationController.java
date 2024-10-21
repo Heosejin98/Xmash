@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,15 +26,11 @@ public class AuthenticationController {
     public ResponseEntity<UserProfileResponse> loginPost(
             HttpSession session,
             @RequestBody LoginRequest loginRequest
-    ) {
-        try {
-            UserProfileResponse userInfoResponse = loginService.login(loginRequest.userId(), loginRequest.password());
-            session.setAttribute("userId", loginRequest.userId());
+    ) throws BadRequestException {
+        UserProfileResponse userInfoResponse = loginService.login(loginRequest.userId(), loginRequest.password());
+        session.setAttribute("userId", loginRequest.userId());
 
-            return ResponseEntity.ok(userInfoResponse);
-        } catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();  // 로그인 실패 메시지;
-        }
+        return ResponseEntity.ok(userInfoResponse);
     }
 
     @PostMapping("/logout")
