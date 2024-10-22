@@ -16,6 +16,7 @@ springdoc:
     path: '/v3/api-docs'
   swagger-ui:
     path: '/swagger-ui.html'
+    display-request-duration: true
 
 jasypt:
   encryptor:
