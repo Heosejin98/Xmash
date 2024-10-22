@@ -1,6 +1,6 @@
 services:
   app:
-    image: seheo23/prod-xmash:dev
+    image: seheo23/prod-xmash:prod
     restart: unless-stopped
     environment:
       JASYPT_PASSWORD: ${JASYPT_PASSWORD}
