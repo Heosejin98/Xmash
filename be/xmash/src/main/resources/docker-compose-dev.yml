@@ -4,6 +4,7 @@ services:
     restart: unless-stopped
     environment:
       JASYPT_PASSWORD: ${JASYPT_PASSWORD}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
       TZ: Asia/Seoul
     ports:
       - 4243:8080

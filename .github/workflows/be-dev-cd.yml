@@ -81,6 +81,8 @@ jobs:
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
           echo "JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }}" >> .env
+          echo "CORS_ALLOWED_ORIGINS=${{ secrets.CORS_ALLOWED_ORIGINS }}" >> .env
+
 
       - name: Download docker compose
         uses: actions/download-artifact@v4

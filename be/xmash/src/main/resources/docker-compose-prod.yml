@@ -1,9 +1,10 @@
 services:
   app:
-    image: seheo23/dev-xmash:dev
+    image: seheo23/prod-xmash:dev
     restart: unless-stopped
     environment:
       JASYPT_PASSWORD: ${JASYPT_PASSWORD}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
       TZ: Asia/Seoul
     ports:
       - 4242:8080
