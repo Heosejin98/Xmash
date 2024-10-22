@@ -33,6 +33,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useGameMutation } from "./add-game.mutation";
 import { GameQueries } from "@/entities/game/game.queries";
+import { useAuthStore } from "@/entities/user/user.store";
 
 interface Props {
   onSuccess?: () => void;
@@ -108,8 +109,9 @@ const UserListInput = forwardRef(
   }
 );
 
-const useGameInfoForm = () =>
-  useForm<CreateGameDto>({
+const useGameInfoForm = () => {
+  const store = useAuthStore();
+  return useForm<CreateGameDto>({
     resolver: async (values, context, options) => {
       const zodValidation = await zodResolver(CreateGameDto)(values, context, options);
       if (Object.keys(zodValidation.errors).length) {
@@ -169,7 +171,7 @@ const useGameInfoForm = () =>
       };
     },
     defaultValues: {
-      homeTeam: [],
+      homeTeam: [store.user?.userId ?? ""],
       awayTeam: [],
       homeScore: 0,
       awayScore: 0,
@@ -177,6 +179,7 @@ const useGameInfoForm = () =>
       gameType: "normal",
     },
   });
+};
 
 export const GameInfoForm = ({ onError, onSuccess }: Props) => {
   const form = useGameInfoForm();
