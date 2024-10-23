@@ -45,8 +45,6 @@ jobs:
       - name: Build Docker image
         working-directory: ./be/xmash
         run: |
-          ls -la
-          echo "----------------------------"
           echo ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:prod
           docker build -f Dockerfile-prod -t ${{ secrets.DOCKERHUB_USERNAME }}"/"${{ secrets.DOCKERHUB_IMAGE_NAME }}:prod ./
 
