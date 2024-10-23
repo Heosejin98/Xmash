@@ -1,5 +1,6 @@
 package com.tmp.xmash.db.entity;
 
+import com.tmp.xmash.util.XmashTimeCreator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,6 +40,6 @@ public class SingleRankMatchHistory {
         this.loserId = loserId;
         this.winnerScore = winnerScore;
         this.loserScore = loserScore;
-        this.matchTime = LocalDateTime.now();
+        this.matchTime = XmashTimeCreator.getCurrentTimeUTC();
     }
 }
