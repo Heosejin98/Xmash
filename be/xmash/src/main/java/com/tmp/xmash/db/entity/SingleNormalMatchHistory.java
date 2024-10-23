@@ -1,5 +1,6 @@
 package com.tmp.xmash.db.entity;
 
+import com.tmp.xmash.util.XmashTimeCreator;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,6 +33,6 @@ public class SingleNormalMatchHistory {
         this.loserId = loserId;
         this.winnerScore = winnerScore;
         this.loserScore = loserScore;
-        this.matchTime = LocalDateTime.now();
+        this.matchTime = XmashTimeCreator.getCurrentTimeUTC();
     }
 }
