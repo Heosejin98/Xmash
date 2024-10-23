@@ -5,6 +5,9 @@ services:
     environment:
       JASYPT_PASSWORD: ${JASYPT_PASSWORD}
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      DB_IP_PORT: ${DB_IP_PORT}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
       TZ: Asia/Seoul
     ports:
       - "4243:8080"
