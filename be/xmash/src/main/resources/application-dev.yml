@@ -1,6 +1,3 @@
-server:
-  port: 4243
-
 spring:
   application:
     name: xmash
@@ -9,6 +6,10 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
   h2:
     console:
       enabled: false  # H2 콘솔 비활성화.
