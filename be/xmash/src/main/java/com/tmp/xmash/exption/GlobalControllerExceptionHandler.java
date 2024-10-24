@@ -28,7 +28,7 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(AuthenticationException.class)
     private GlobalExceptionResponse handleAuthenticationException(AuthenticationException e) {
-        log.error("Bad Request Exception : {}", e.getMessage());
+        log.error("Authentication Exception : {}", e.getMessage());
         return new GlobalExceptionResponse(e.getMessage());
     }
 
