@@ -10,4 +10,4 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       TZ: Asia/Seoul
     ports:
-      - "4242:8080"
+      - "4242:4242"
