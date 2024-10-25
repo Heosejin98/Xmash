@@ -23,9 +23,7 @@ export const Route = createFileRoute("/_auth")({
 function AuthLayout() {
   return (
     <>
-      <DepthHeader>
-        <h2 className="font-semibold text-lg">Profile</h2>
-      </DepthHeader>
+      <DepthHeader></DepthHeader>
       <Card className="w-4/5 m-auto">
         <Outlet />
       </Card>

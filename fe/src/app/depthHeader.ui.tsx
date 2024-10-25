@@ -3,7 +3,7 @@ import { useRouter } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
 import { ReactNode } from "react";
 
-const DepthHeader = ({ children }: { children: ReactNode }) => {
+const DepthHeader = ({ children }: { children?: ReactNode }) => {
   const router = useRouter();
   const goBack = () => router.history.back();
 

@@ -13,12 +13,6 @@ import {
   FormLabel,
   FormMessage,
   Input,
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Tabs,
   TabsContent,
   TabsList,
@@ -42,22 +36,32 @@ interface Props {
 
 const MatchTypeInput = forwardRef(
   ({ ...props }: { value: string; onChange: (v: string) => void }, _) => (
-    <Select name="matchType" value={props.value} onValueChange={props.onChange}>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select MatchType" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          {Object.values(MatchType.Values)
-            .filter((v) => v !== "all")
-            .map((value) => (
-              <SelectItem key={value} value={value}>
-                {value}
-              </SelectItem>
-            ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <div className="wrapper">
+      <div className="option">
+        <input
+          className="input"
+          type="radio"
+          name="btn"
+          checked={props.value === "single"}
+          onClick={() => props.onChange("single")}
+        />
+        <div className="btn">
+          <span className="span">단식</span>
+        </div>
+      </div>
+      <div className="option">
+        <input
+          className="input"
+          type="radio"
+          name="btn"
+          checked={props.value === "double"}
+          onClick={() => props.onChange("double")}
+        />
+        <div className="btn">
+          <span className="span">복식</span>
+        </div>
+      </div>
+    </div>
   )
 );
 
@@ -239,7 +243,6 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
               name="matchType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>MatchType</FormLabel>
                   <FormControl>
                     <MatchTypeInput {...field}></MatchTypeInput>
                   </FormControl>
@@ -351,7 +354,6 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
               name="matchType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>MatchType</FormLabel>
                   <FormControl>
                     <MatchTypeInput {...field}></MatchTypeInput>
                   </FormControl>
