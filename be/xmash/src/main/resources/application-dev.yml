@@ -22,7 +22,6 @@ springdoc:
     path: '/swagger-ui.html'
     display-request-duration: true
 
-
 cors:
   allowed:
     origins: ${CORS_ALLOWED_ORIGINS}
