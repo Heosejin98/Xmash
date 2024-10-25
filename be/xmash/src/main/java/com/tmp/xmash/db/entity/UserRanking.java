@@ -49,7 +49,12 @@ public class UserRanking {
     }
 
     public void updateLpAndTier(int lp) {
-        this.lp = lp;
+        if (this.tier == Tier.UNRANK) {
+            this.lp = 1000 + lp;
+        } else {
+            this.lp += lp;
+        }
+
         if (this.lp > 1300) {
             this.tier = Tier.DIAMOND;
         }
@@ -64,7 +69,13 @@ public class UserRanking {
     }
 
     public void updateTeamLpAndTeamTier(int lp) {
-        this.teamLp = lp;
+        if (this.teamTier == Tier.UNRANK) {
+            this.teamLp = 1000 + lp;
+        } else {
+            this.teamLp += lp;
+        }
+
+
         if (this.teamLp > 1300) {
             this.teamTier = Tier.DIAMOND;
         }
@@ -79,6 +90,6 @@ public class UserRanking {
     }
 
     public static UserRanking createDefault(AppUser appUser) {
-        return new UserRanking(Tier.GOLD, 1000, appUser);
+        return new UserRanking(Tier.UNRANK, 0, appUser);
     }
 }

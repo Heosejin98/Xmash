@@ -17,7 +17,6 @@ spring:
     console:
       enabled: false  # H2 콘솔 비활성화
 
-
 springdoc:
   api-docs:
     path: '/v3/api-docs'
