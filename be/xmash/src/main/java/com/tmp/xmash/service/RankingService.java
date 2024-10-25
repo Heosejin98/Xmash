@@ -20,8 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RankingService {
 
     private final UserRankingRepository userRankingRepository;
-
-
+    
     @Transactional(readOnly = true)
     public List<RankingResponse> getRanking(MatchType matchType) throws BadRequestException {
         AtomicInteger index = new AtomicInteger(1);

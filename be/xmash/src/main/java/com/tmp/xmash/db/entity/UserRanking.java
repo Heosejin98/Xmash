@@ -69,7 +69,13 @@ public class UserRanking {
     }
 
     public void updateTeamLpAndTeamTier(int lp) {
-        this.teamLp = lp;
+        if (this.teamTier == Tier.UNRANK) {
+            this.teamLp = 1000 + lp;
+        } else {
+            this.teamLp += lp;
+        }
+
+
         if (this.teamLp > 1300) {
             this.teamTier = Tier.DIAMOND;
         }
