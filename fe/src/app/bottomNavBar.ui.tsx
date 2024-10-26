@@ -62,7 +62,7 @@ const AddLink = () => {
 
 const BottomNavBar = () => {
   return (
-    <nav className="flex justify-between p-4 left-0 bottom-0 w-full h-nav z-10 bg-muted fixed">
+    <nav className="flex justify-between p-4 bottom-0 w-full h-nav z-10 bg-muted fixed max-w-[600px]">
       <RankingLink />
       <AddLink></AddLink>
       <GameLink />
