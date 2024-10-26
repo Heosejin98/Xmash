@@ -1,6 +1,5 @@
-import DepthHeader from "@/app/depthHeader.ui";
-import { Card } from "@/shared/ui";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
+import DepthHeader from "@/app/depthHeader.ui";
 
 export const Route = createFileRoute("/_auth")({
   beforeLoad: ({ context, location }) => {
@@ -24,9 +23,7 @@ function AuthLayout() {
   return (
     <>
       <DepthHeader></DepthHeader>
-      <Card className="w-4/5 m-auto">
-        <Outlet />
-      </Card>
+      <Outlet />
     </>
   );
 }

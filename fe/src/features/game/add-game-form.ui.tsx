@@ -1,6 +1,8 @@
+import { GameQueries } from "@/entities/game/game.queries";
 import { UserQueries } from "@/entities/user/user.queries";
+import { useAuthStore } from "@/entities/user/user.store";
 import { UserSelect } from "@/entities/user/userSelect.ui";
-import { CreateGameDto, GameType, MatchType } from "@/shared/api/game";
+import { CreateGameDto, MatchType } from "@/shared/api/game";
 import {
   Avatar,
   AvatarFallback,
@@ -13,69 +15,30 @@ import {
   FormLabel,
   FormMessage,
   Input,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
 } from "@/shared/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Separator } from "@radix-ui/react-select";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { X } from "lucide-react";
 import { Dispatch, forwardRef, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useGameMutation } from "./add-game.mutation";
-import { GameQueries } from "@/entities/game/game.queries";
-import { useAuthStore } from "@/entities/user/user.store";
 
 interface Props {
   onSuccess?: () => void;
   onError?: (error: any) => void;
 }
 
-const MatchTypeInput = forwardRef(
-  ({ ...props }: { value: string; onChange: (v: string) => void }, _) => (
-    <div className="wrapper">
-      <div className="option">
-        <input
-          className="input"
-          type="radio"
-          name="btn"
-          checked={props.value === "single"}
-          onClick={() => props.onChange("single")}
-        />
-        <div className="btn">
-          <span className="span">단식</span>
-        </div>
-      </div>
-      <div className="option">
-        <input
-          className="input"
-          type="radio"
-          name="btn"
-          checked={props.value === "double"}
-          onClick={() => props.onChange("double")}
-        />
-        <div className="btn">
-          <span className="span">복식</span>
-        </div>
-      </div>
-    </div>
-  )
-);
-
 const UserListInput = forwardRef(
   (
     {
       value,
       onChange,
-      matchType,
       exclude,
     }: {
       value: string[];
       onChange: Dispatch<SetStateAction<string[]>>;
-      matchType: MatchType;
       exclude?: string[];
     },
     _
@@ -104,8 +67,7 @@ const UserListInput = forwardRef(
             </div>
           ))}
 
-        {((matchType === "double" && value.length < 2) ||
-          (matchType === "single" && value.length < 1)) && (
+        {value.length < 2 && (
           <UserSelect values={value} setValue={onChange} exclude={exclude}></UserSelect>
         )}
       </div>
@@ -189,9 +151,15 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
   const form = useGameInfoForm();
   const { mutate } = useGameMutation();
   const client = useQueryClient();
+  const navigate = useNavigate();
 
   const onSubmit = async (data: CreateGameDto) => {
-    mutate(data, {
+    const req: CreateGameDto = {
+      ...data,
+      matchType: data.homeTeam.length === 1 ? MatchType.Enum.single : MatchType.Enum.double,
+    };
+
+    mutate(req, {
       onError: (error) => {
         console.log("onError", error);
         onError?.(error);
@@ -214,244 +182,131 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
             color: "#fff",
           },
         });
+
+        navigate({
+          to: "/game",
+          search: {
+            gameType: data.gameType,
+            matchType: data.matchType,
+          },
+        });
       },
     });
   };
 
   return (
-    <Tabs
-      defaultValue="normal"
-      className="w-full"
-      onValueChange={(type) => form.setValue("gameType", type as GameType)}
-    >
-      <TabsList className="grid grid-cols-2">
-        <TabsTrigger value="normal">Normal</TabsTrigger>
-        <TabsTrigger value="rank">Rank</TabsTrigger>
-      </TabsList>
+    <Form {...form}>
+      <form
+        id="game-info"
+        className="grid w-full items-center gap-4 p-2"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <div className="flex justify-between">
+          <FormField
+            control={form.control}
+            name="homeTeam"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Home Users</FormLabel>
+                <FormControl>
+                  <UserListInput {...field} exclude={form.getValues("awayTeam")}></UserListInput>
+                </FormControl>
+                <FormMessage></FormMessage>
+              </FormItem>
+            )}
+          />
 
-      <Separator className="my-8" />
+          <FormField
+            control={form.control}
+            name="homeScore"
+            render={({ field }) => (
+              <FormItem className="flex flex-col items-end">
+                <FormLabel>Home Score</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    className="min-w-20 w-20"
+                    type="number"
+                    min={0}
+                    max={50}
+                    step={1}
+                    autoComplete="off"
+                    onChange={(e) => {
+                      field.onChange(e.target.value.replace(/^0+/, ""));
+                    }}
+                  ></Input>
+                </FormControl>
+                <FormMessage></FormMessage>
+              </FormItem>
+            )}
+          />
+        </div>
 
-      <TabsContent value="normal">
-        <Form {...form}>
-          <form
-            id="game-info"
-            className="grid w-full items-center gap-4"
-            onSubmit={form.handleSubmit(onSubmit)}
+        <div className="flex justify-between">
+          <FormField
+            control={form.control}
+            name="awayTeam"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Away Users</FormLabel>
+                <FormControl>
+                  <UserListInput {...field} exclude={form.getValues("homeTeam")}></UserListInput>
+                </FormControl>
+                <FormMessage></FormMessage>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="awayScore"
+            render={({ field }) => (
+              <FormItem className="flex flex-col items-end">
+                <FormLabel>Away Score</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    className="min-w-20 w-20"
+                    type="number"
+                    min={0}
+                    max={50}
+                    step={1}
+                    autoComplete="off"
+                    onChange={(e) => {
+                      field.onChange(e.target.value.replace(/^0+/, ""));
+                    }}
+                  ></Input>
+                </FormControl>
+                <FormMessage></FormMessage>
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="h-20 w-20"></div>
+
+        <div className="flex justify-between">
+          <Button
+            type="submit"
+            className="h-10"
+            onClick={() => {
+              form.setValue("gameType", "rank");
+            }}
           >
-            <FormField
-              control={form.control}
-              name="matchType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <MatchTypeInput {...field}></MatchTypeInput>
-                  </FormControl>
-                  <FormMessage></FormMessage>
-                </FormItem>
-              )}
-            />
-
-            <div className="flex justify-between">
-              <FormField
-                control={form.control}
-                name="homeTeam"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Home Users</FormLabel>
-                    <FormControl>
-                      <UserListInput
-                        {...field}
-                        matchType={form.getValues("matchType")}
-                        exclude={form.getValues("awayTeam")}
-                      ></UserListInput>
-                    </FormControl>
-                    <FormMessage></FormMessage>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="homeScore"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Home Score</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="number"
-                        min={0}
-                        max={50}
-                        step={1}
-                        autoComplete="off"
-                        onChange={(e) => {
-                          field.onChange(e.target.value.replace(/^0+/, ""));
-                        }}
-                      ></Input>
-                    </FormControl>
-                    <FormMessage></FormMessage>
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="flex justify-between">
-              <FormField
-                control={form.control}
-                name="awayTeam"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Away Users</FormLabel>
-                    <FormControl>
-                      <UserListInput
-                        {...field}
-                        matchType={form.getValues("matchType")}
-                        exclude={form.getValues("homeTeam")}
-                      ></UserListInput>
-                    </FormControl>
-                    <FormMessage></FormMessage>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="awayScore"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Away Score</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="number"
-                        min={0}
-                        max={50}
-                        step={1}
-                        autoComplete="off"
-                        onChange={(e) => {
-                          field.onChange(e.target.value.replace(/^0+/, ""));
-                        }}
-                      ></Input>
-                    </FormControl>
-                    <FormMessage></FormMessage>
-                  </FormItem>
-                )}
-              />
-            </div>
-          </form>
-        </Form>
-      </TabsContent>
-
-      <TabsContent value="rank">
-        <Form {...form}>
-          <form
-            id="game-info"
-            className="grid w-full items-center gap-4"
-            onSubmit={form.handleSubmit(onSubmit)}
+            랭크 게임 등록
+          </Button>
+          <Button
+            type="submit"
+            variant="outline"
+            className="h-10"
+            onClick={() => {
+              form.setValue("gameType", "normal");
+            }}
           >
-            <FormField
-              control={form.control}
-              name="matchType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <MatchTypeInput {...field}></MatchTypeInput>
-                  </FormControl>
-                  <FormMessage></FormMessage>
-                </FormItem>
-              )}
-            />
-
-            <div className="flex justify-between">
-              <FormField
-                control={form.control}
-                name="homeTeam"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Home Users</FormLabel>
-                    <FormControl>
-                      <UserListInput
-                        {...field}
-                        matchType={form.getValues("matchType")}
-                        exclude={form.getValues("awayTeam")}
-                      ></UserListInput>
-                    </FormControl>
-                    <FormMessage></FormMessage>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="homeScore"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Home Score</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="number"
-                        min={0}
-                        max={50}
-                        step={1}
-                        autoComplete="off"
-                        onChange={(e) => {
-                          field.onChange(e.target.value.replace(/^0+/, ""));
-                        }}
-                      ></Input>
-                    </FormControl>
-                    <FormMessage></FormMessage>
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="flex justify-between">
-              <FormField
-                control={form.control}
-                name="awayTeam"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Away Users</FormLabel>
-                    <FormControl>
-                      <UserListInput
-                        {...field}
-                        matchType={form.getValues("matchType")}
-                        exclude={form.getValues("homeTeam")}
-                      ></UserListInput>
-                    </FormControl>
-                    <FormMessage></FormMessage>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="awayScore"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Away Score</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="number"
-                        min={0}
-                        max={50}
-                        step={1}
-                        autoComplete="off"
-                        onChange={(e) => {
-                          field.onChange(e.target.value.replace(/^0+/, ""));
-                        }}
-                      ></Input>
-                    </FormControl>
-                    <FormMessage></FormMessage>
-                  </FormItem>
-                )}
-              />
-            </div>
-          </form>
-        </Form>
-      </TabsContent>
-    </Tabs>
+            노멀 게임 등록
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 };

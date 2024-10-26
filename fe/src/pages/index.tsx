@@ -19,10 +19,12 @@ function AuthLayout() {
           <Trophy></Trophy>
           <span>TBU</span>
         </Card>
-        <Card className="w-24 h-24 flex shadow-lg flex-col items-center justify-center shadow-blue-200 bg-blue-600 text-gray-100 ">
-          <Plus className="animate-ping"></Plus>
-          <span className="">경기 등록</span>
-        </Card>
+        <Link to="/add">
+          <Card className="w-24 h-24 flex shadow-lg flex-col items-center justify-center shadow-blue-200 bg-blue-600 text-gray-100 ">
+            <Plus className="animate-ping"></Plus>
+            <span className="">경기 등록</span>
+          </Card>
+        </Link>
         <Link to="/ranking" search={{ matchType: "single" }}>
           <Card className="w-24 h-24 flex  shadow-lg flex-col items-center justify-center shadow-blue-200 bg-blue-600 text-gray-100 ">
             <Medal className="animate-pulse" />

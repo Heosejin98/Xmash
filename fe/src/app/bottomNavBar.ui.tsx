@@ -1,8 +1,6 @@
-import { useAuthStore } from "@/entities/user/user.store";
-import { AddGameButton } from "@/features/game/add-game.ui";
 import { Link } from "@tanstack/react-router";
+import { Gamepad2, Medal, Plus } from "lucide-react";
 import { CSSProperties } from "react";
-import { Gamepad2, Medal } from "lucide-react";
 
 const activeProps: {
   style: CSSProperties;
@@ -48,12 +46,25 @@ const GameLink = () => {
   );
 };
 
+const AddLink = () => {
+  return (
+    <Link
+      to="/add"
+      className="nav-link  w-14 h-14 flex flex-col items-center group"
+      activeOptions={{ includeSearch: false }}
+      activeProps={activeProps}
+    >
+      <Plus className="group-data-[status=active]:animate-bounce"></Plus>
+      <span className="text-xs">경기 등록</span>
+    </Link>
+  );
+};
+
 const BottomNavBar = () => {
-  const store = useAuthStore();
   return (
     <nav className="flex justify-between p-4 left-0 bottom-0 w-full h-nav z-10 bg-muted fixed">
       <RankingLink />
-      {store.isAuthenticated && <AddGameButton></AddGameButton>}
+      <AddLink></AddLink>
       <GameLink />
     </nav>
   );

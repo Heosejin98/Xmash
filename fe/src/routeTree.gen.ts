@@ -17,6 +17,7 @@ import { Route as AuthImport } from './pages/_auth'
 import { Route as IndexImport } from './pages/index'
 import { Route as LayoutRankingImport } from './pages/_layout/ranking'
 import { Route as LayoutGameImport } from './pages/_layout/game'
+import { Route as AuthAddImport } from './pages/_auth/add'
 import { Route as AuthProfileIndexImport } from './pages/_auth/profile/index'
 import { Route as AuthProfileResetPasswordImport } from './pages/_auth/profile/reset-password'
 
@@ -50,6 +51,11 @@ const LayoutRankingRoute = LayoutRankingImport.update({
 const LayoutGameRoute = LayoutGameImport.update({
   path: '/game',
   getParentRoute: () => LayoutRoute,
+} as any)
+
+const AuthAddRoute = AuthAddImport.update({
+  path: '/add',
+  getParentRoute: () => AuthRoute,
 } as any)
 
 const AuthProfileIndexRoute = AuthProfileIndexImport.update({
@@ -94,6 +100,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/_auth/add': {
+      id: '/_auth/add'
+      path: '/add'
+      fullPath: '/add'
+      preLoaderRoute: typeof AuthAddImport
+      parentRoute: typeof AuthImport
+    }
     '/_layout/game': {
       id: '/_layout/game'
       path: '/game'
@@ -130,6 +143,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
   AuthRoute: AuthRoute.addChildren({
+    AuthAddRoute,
     AuthProfileResetPasswordRoute,
     AuthProfileIndexRoute,
   }),
@@ -157,6 +171,7 @@ export const routeTree = rootRoute.addChildren({
     "/_auth": {
       "filePath": "_auth.tsx",
       "children": [
+        "/_auth/add",
         "/_auth/profile/reset-password",
         "/_auth/profile/"
       ]
@@ -170,6 +185,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/_auth/add": {
+      "filePath": "_auth/add.tsx",
+      "parent": "/_auth"
     },
     "/_layout/game": {
       "filePath": "_layout/game.tsx",
