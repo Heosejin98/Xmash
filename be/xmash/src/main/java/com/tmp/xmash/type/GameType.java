@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 public enum GameType {
     NORMAL,
+    TOURNAMENT,
     RANK;
 
     @JsonValue

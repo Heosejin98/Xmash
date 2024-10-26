@@ -34,6 +34,7 @@ public class GameServiceFactory {
     public GameService getGameService(MatchType matchType, GameType gameType) {
         return switch (gameType) {
             case NORMAL -> getNormalGameService(matchType);
+            case TOURNAMENT -> null;
             case RANK -> getRankGameService(matchType);
         };
     }

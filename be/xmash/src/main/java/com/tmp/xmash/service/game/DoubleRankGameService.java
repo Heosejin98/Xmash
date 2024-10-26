@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class DoubleRankGameService implements GameService {
+public class DoubleRankGameService implements GameService, GamePostAble {
 
     private final DoubleRankMatchRepo doubleRankMatchRepo;
     private final UserRepository userRepository;
@@ -36,6 +36,7 @@ public class DoubleRankGameService implements GameService {
     @Transactional
     @Override
     public boolean matchDone(GameResultRequest gameResultRequest)  {
+        checkScore(gameResultRequest);
 
         List<String> homeTeam = gameResultRequest.homeTeam();
         List<String> awayTeam = gameResultRequest.awayTeam();

@@ -15,9 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Objects;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
@@ -42,29 +40,16 @@ public class GameController {
     }
 
     @PostMapping("/game/{gameType}/{matchType}")
-    public ResponseEntity<Boolean> updateSingleGameResult(
+    public ResponseEntity<Boolean> doneGameResult(
             HttpSession session,
         @Parameter(name = "matchType", description = "매치타입(단식, 복식)을 지정합니다.", required = true, in = ParameterIn.PATH) @PathVariable MatchType matchType,
         @Parameter(name = "gameType", description = "게임 타입을 지정합니다.", required = true, in = ParameterIn.PATH) @PathVariable("gameType") GameType gameType,
         @Parameter(name = "GameRequest", description = "게임 결과 등록 요청 데이터", required = true) @Valid @RequestBody GameResultRequest gameResultRequest
-    ) throws BadRequestException, AuthenticationException {
+    ) throws AuthenticationException {
 
         String userId = (String) session.getAttribute("userId");
         if (userId == null) {
             throw new AuthenticationException("로그인 후 게임 등록 가능");
-        }
-
-        if (MatchType.ALL == matchType) {
-            throw new BadRequestException("ALL 타입 등록 불가능");
-        }
-
-        if (Objects.equals(gameResultRequest.homeScore(), gameResultRequest.awayScore())) {
-            throw new BadRequestException("무승부는 등록 불가능합니다.");
-        }
-
-        int winnerScore = Math.max(gameResultRequest.homeScore(), gameResultRequest.awayScore());
-        if (winnerScore < 11) {
-            throw new BadRequestException("11점 이상 게임만 등록 가능합니다.");
         }
 
         GameService gameService = gameServiceFactory.getGameService(matchType, gameType);

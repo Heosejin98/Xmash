@@ -2,6 +2,7 @@ package com.tmp.xmash.service.game;
 
 import com.tmp.xmash.dto.request.GameResultRequest;
 import com.tmp.xmash.dto.response.GameResultResponse;
+import com.tmp.xmash.exption.GamePostException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ public class NormalGameService implements GameService {
 
     @Override
     public boolean matchDone(GameResultRequest gameResultRequest) {
-        throw new IllegalArgumentException("ALL MATCHES ARE DONE IN SINGLE OR DOUBLE MODE");
+        throw new GamePostException("ALL 타입 등록 불가능");
     }
 
     @Override
