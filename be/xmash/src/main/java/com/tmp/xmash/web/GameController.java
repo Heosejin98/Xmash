@@ -4,6 +4,7 @@ import com.tmp.xmash.dto.request.GameResultRequest;
 import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.service.game.GameService;
 import com.tmp.xmash.service.game.GameServiceFactory;
+import com.tmp.xmash.service.game.TournamentGameService;
 import com.tmp.xmash.type.GameType;
 import com.tmp.xmash.type.MatchType;
 import com.tmp.xmash.web.editor.GameTypeEditor;
@@ -19,12 +20,7 @@ import lombok.AllArgsConstructor;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -32,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GameController {
 
     private final GameServiceFactory gameServiceFactory;
+    private final TournamentGameService tournamentGameService;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -47,14 +44,26 @@ public class GameController {
         @Parameter(name = "GameRequest", description = "게임 결과 등록 요청 데이터", required = true) @Valid @RequestBody GameResultRequest gameResultRequest
     ) throws AuthenticationException {
 
-//        String userId = (String) session.getAttribute("userId");
-//        if (userId == null) {
-//            throw new AuthenticationException("로그인 후 게임 등록 가능");
-//        }
+        String userId = (String) session.getAttribute("userId");
+        if (userId == null) {
+            throw new AuthenticationException("로그인 후 게임 등록 가능");
+        }
 
         GameService gameService = gameServiceFactory.getGameService(matchType, gameType);
 
         return ResponseEntity.ok(gameService.matchDone(gameResultRequest));
+    }
+
+
+    @PostMapping("/game/tournament")
+    public ResponseEntity<Boolean> doneTournamentGameResult(
+            HttpSession session
+    )  {
+        String userId = (String) session.getAttribute("userId");
+
+        tournamentGameService.registration(userId);
+
+        return ResponseEntity.ok(true);
     }
 
 

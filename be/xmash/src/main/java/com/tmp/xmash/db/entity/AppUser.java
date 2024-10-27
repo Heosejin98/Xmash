@@ -32,7 +32,7 @@ public class AppUser {
     @JoinTable(
             name = "app_user_user_ranking_map",  // 연관관계 테이블 이름 명시
             joinColumns = @JoinColumn(name = "app_user_id"),  // AppUser 외래 키
-            inverseJoinColumns = @JoinColumn(name = "user_ranking_id")  // UserRanking 외래 키
+                inverseJoinColumns = @JoinColumn(name = "user_ranking_id")  // UserRanking 외래 키
     )
     private List<UserRanking> userRankings = new ArrayList<>();
 

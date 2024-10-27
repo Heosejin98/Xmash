@@ -4,7 +4,7 @@ import com.tmp.xmash.dto.response.GlobalExceptionResponse;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.log4j.Log4j2;
 import org.apache.coyote.BadRequestException;
-import org.apache.tomcat.websocket.AuthenticationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,7 +17,7 @@ public class GlobalControllerExceptionHandler {
 
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(BadRequestException.class)
+    @ExceptionHandler(GamePostException.class)
     private GlobalExceptionResponse handleBadRequestException(BadRequestException e) {
         log.error("Bad Request Exception : {}", e.getMessage());
         

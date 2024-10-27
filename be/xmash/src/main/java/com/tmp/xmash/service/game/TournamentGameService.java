@@ -1,18 +1,30 @@
 package com.tmp.xmash.service.game;
 
-import com.tmp.xmash.dto.request.GameResultRequest;
-import com.tmp.xmash.dto.response.GameResultResponse;
-import java.util.List;
+import com.tmp.xmash.db.entity.AppUser;
+import com.tmp.xmash.db.entity.TournamentRegistration;
+import com.tmp.xmash.db.entity.TournamentSeason;
+import com.tmp.xmash.db.repositroy.TournamentRegistrationRepo;
+import com.tmp.xmash.db.repositroy.TournamentSeasonRepo;
+import com.tmp.xmash.exption.AuthenticationException;
+import com.tmp.xmash.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-public class TournamentGameService implements GameService {
-    
-    @Override
-    public boolean matchDone(GameResultRequest gameResultRequest)  {
-        return false;
+@Service
+@RequiredArgsConstructor
+public class TournamentGameService {
+
+    private final TournamentRegistrationRepo tournamentRegistrationRepo;
+    private final TournamentSeasonRepo tournamentSeasonRepo;
+    private final UserService userService;
+
+    public void registration(String userId)  {
+        if (userId == null) throw new AuthenticationException("로그인 세션 만료");
+
+        AppUser appUser = userService.findByUserId(userId);
+        TournamentSeason tournamentSeason = tournamentSeasonRepo.findByCurrentSeasonTrue();
+        TournamentRegistration tournamentRegistration = new TournamentRegistration(tournamentSeason.getSeason(), appUser);
+        tournamentRegistrationRepo.save(tournamentRegistration);
     }
 
-    @Override
-    public List<GameResultResponse> getMatchHistory() {
-        return List.of();
-    }
 }
