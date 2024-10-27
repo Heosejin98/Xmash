@@ -47,10 +47,10 @@ public class GameController {
         @Parameter(name = "GameRequest", description = "게임 결과 등록 요청 데이터", required = true) @Valid @RequestBody GameResultRequest gameResultRequest
     ) throws AuthenticationException {
 
-        String userId = (String) session.getAttribute("userId");
-        if (userId == null) {
-            throw new AuthenticationException("로그인 후 게임 등록 가능");
-        }
+//        String userId = (String) session.getAttribute("userId");
+//        if (userId == null) {
+//            throw new AuthenticationException("로그인 후 게임 등록 가능");
+//        }
 
         GameService gameService = gameServiceFactory.getGameService(matchType, gameType);
 

@@ -4,4 +4,4 @@ ARG JARFILE=build/libs/*.jar
 
 COPY ${JARFILE} ./app.jar
 
-CMD ["java", "-jar", "./app.jar", "--spring.profiles.active=dev"]
+CMD ["java", "-jar", "./app.jar", "--spring.profiles.active=dev", "--spring.output.ansi.enabled=always"]

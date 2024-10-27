@@ -25,10 +25,8 @@ public class AppUser {
     private String name;
     @Setter
     private String password;
-
     @Enumerated(EnumType.STRING)
     private Gender gender;
-
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(

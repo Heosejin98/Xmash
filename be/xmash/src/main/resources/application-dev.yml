@@ -15,8 +15,7 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
   h2:
     console:
-      enabled: false  # H2 콘솔 비활성화.
-
+      enabled: false  # H2 콘솔 비활성화
 
 springdoc:
   api-docs:
@@ -24,7 +23,6 @@ springdoc:
   swagger-ui:
     path: '/swagger-ui.html'
     display-request-duration: true
-
 
 cors:
   allowed:
