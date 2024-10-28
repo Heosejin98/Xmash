@@ -1,5 +1,6 @@
 import { GameInfoForm } from "@/features/game/add-game-form.ui";
 import { createFileRoute } from "@tanstack/react-router";
+import { Card } from "@/shared/ui";
 
 const AddGame = () => {
   // const funnel = useFunnel<{
@@ -18,7 +19,9 @@ const AddGame = () => {
 
   return (
     <>
-      <GameInfoForm></GameInfoForm>
+      <Card className="p-4 m-4">
+        <GameInfoForm></GameInfoForm>
+      </Card>
     </>
   );
 };

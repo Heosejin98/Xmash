@@ -24,6 +24,7 @@ import { Dispatch, forwardRef, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useGameMutation } from "./add-game.mutation";
+import { cn } from "@/shared/lib/utils";
 
 interface Props {
   onSuccess?: () => void;
@@ -36,22 +37,24 @@ const UserListInput = forwardRef(
       value,
       onChange,
       exclude,
+      className,
     }: {
       value: string[];
       onChange: Dispatch<SetStateAction<string[]>>;
       exclude?: string[];
+      className?: string;
     },
     _
   ) => {
     const { data = [] } = useQuery(UserQueries.userAllQuery());
 
     return (
-      <div className="flex">
+      <div className={cn("flex gap-2", className)}>
         {data
           .filter((user) => value.includes(user.userId))
           .map((user) => (
             <div className="relative inline-block" key={user.userId}>
-              <Avatar className="mr-2">
+              <Avatar>
                 <AvatarImage src={user.profileUrl ?? ""} alt={user.userName} />
                 <AvatarFallback>{user.userName.slice(1, 3)}</AvatarFallback>
               </Avatar>
@@ -186,8 +189,8 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
         navigate({
           to: "/game",
           search: {
-            gameType: data.gameType,
-            matchType: data.matchType,
+            gameType: req.gameType,
+            matchType: req.matchType,
           },
         });
       },
@@ -215,12 +218,31 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="awayTeam"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Away Users</FormLabel>
+                <FormControl>
+                  <UserListInput
+                    {...field}
+                    className="items-end flex-row-reverse"
+                    exclude={form.getValues("homeTeam")}
+                  ></UserListInput>
+                </FormControl>
+                <FormMessage></FormMessage>
+              </FormItem>
+            )}
+          />
+        </div>
 
+        <div className="flex justify-between">
           <FormField
             control={form.control}
             name="homeScore"
             render={({ field }) => (
-              <FormItem className="flex flex-col items-end">
+              <FormItem className="flex flex-col">
                 <FormLabel>Home Score</FormLabel>
                 <FormControl>
                   <Input
@@ -240,23 +262,6 @@ export const GameInfoForm = ({ onError, onSuccess }: Props) => {
               </FormItem>
             )}
           />
-        </div>
-
-        <div className="flex justify-between">
-          <FormField
-            control={form.control}
-            name="awayTeam"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Away Users</FormLabel>
-                <FormControl>
-                  <UserListInput {...field} exclude={form.getValues("homeTeam")}></UserListInput>
-                </FormControl>
-                <FormMessage></FormMessage>
-              </FormItem>
-            )}
-          />
-
           <FormField
             control={form.control}
             name="awayScore"
