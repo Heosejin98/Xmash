@@ -18,9 +18,9 @@ public record TournamentGameResponse(
         List<PlayerResponse> homeTeamPlayers,
         @Schema(name = "awayTeamPlayers", description = "어웨이팀 User 정보")
         List<PlayerResponse> awayTeamPlayers,
-        @Schema(name = "awayTeamPlayers", description = "어웨이팀 User 정보")
+        @Schema(name = "setGameResultResponses", description = "세트 게임 정보")
         List<SetGameResultResponse> setGameResultResponses,
-        @Schema(name = "awayTeamId", example = "2", description = "setGameResultResponses 따른 승리자 id")
+        @Schema(name = "winnerId", example = "2", description = "setGameResultResponses 따른 승리자 id")
         long winnerId
 )  {
 
