@@ -17,6 +17,7 @@ import { Route as AuthImport } from './pages/_auth'
 import { Route as IndexImport } from './pages/index'
 import { Route as LayoutRankingImport } from './pages/_layout/ranking'
 import { Route as LayoutGameImport } from './pages/_layout/game'
+import { Route as AuthTournamentImport } from './pages/_auth/tournament'
 import { Route as AuthAddImport } from './pages/_auth/add'
 import { Route as AuthProfileIndexImport } from './pages/_auth/profile/index'
 import { Route as AuthProfileResetPasswordImport } from './pages/_auth/profile/reset-password'
@@ -51,6 +52,11 @@ const LayoutRankingRoute = LayoutRankingImport.update({
 const LayoutGameRoute = LayoutGameImport.update({
   path: '/game',
   getParentRoute: () => LayoutRoute,
+} as any)
+
+const AuthTournamentRoute = AuthTournamentImport.update({
+  path: '/tournament',
+  getParentRoute: () => AuthRoute,
 } as any)
 
 const AuthAddRoute = AuthAddImport.update({
@@ -107,6 +113,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAddImport
       parentRoute: typeof AuthImport
     }
+    '/_auth/tournament': {
+      id: '/_auth/tournament'
+      path: '/tournament'
+      fullPath: '/tournament'
+      preLoaderRoute: typeof AuthTournamentImport
+      parentRoute: typeof AuthImport
+    }
     '/_layout/game': {
       id: '/_layout/game'
       path: '/game'
@@ -144,6 +157,7 @@ export const routeTree = rootRoute.addChildren({
   IndexRoute,
   AuthRoute: AuthRoute.addChildren({
     AuthAddRoute,
+    AuthTournamentRoute,
     AuthProfileResetPasswordRoute,
     AuthProfileIndexRoute,
   }),
@@ -172,6 +186,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_auth.tsx",
       "children": [
         "/_auth/add",
+        "/_auth/tournament",
         "/_auth/profile/reset-password",
         "/_auth/profile/"
       ]
@@ -188,6 +203,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_auth/add": {
       "filePath": "_auth/add.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/tournament": {
+      "filePath": "_auth/tournament.tsx",
       "parent": "/_auth"
     },
     "/_layout/game": {

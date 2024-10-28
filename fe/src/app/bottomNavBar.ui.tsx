@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Gamepad2, Medal, Plus } from "lucide-react";
+import { Gamepad2, Medal, Plus, Trophy } from "lucide-react";
 import { CSSProperties } from "react";
 
 const activeProps: {
@@ -60,13 +60,31 @@ const AddLink = () => {
   );
 };
 
+const TournamentLink = () => {
+  return (
+    <Link
+      to="/tournament"
+      disabled
+      className="nav-link w-14 h-14 flex flex-col items-center group text-gray-300"
+      activeOptions={{ includeSearch: false }}
+      activeProps={activeProps}
+    >
+      <Trophy className="group-data-[status=active]:animate-bounce"></Trophy>
+      <span className="text-xs">대회 준비중</span>
+    </Link>
+  );
+};
+
 const BottomNavBar = () => {
   return (
-    <nav className="flex justify-between p-4 bottom-0 w-full h-nav z-10 bg-muted fixed max-w-[600px]">
-      <RankingLink />
-      <AddLink></AddLink>
-      <GameLink />
-    </nav>
+    <footer>
+      <nav className="flex justify-between p-4 bottom-0 w-full h-nav z-10 bg-muted fixed max-w-[600px]">
+        <RankingLink />
+        <TournamentLink />
+        <AddLink />
+        <GameLink />
+      </nav>
+    </footer>
   );
 };
 
