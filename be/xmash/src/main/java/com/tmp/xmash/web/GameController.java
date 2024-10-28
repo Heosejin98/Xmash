@@ -2,6 +2,7 @@ package com.tmp.xmash.web;
 
 import com.tmp.xmash.dto.request.GameResultRequest;
 import com.tmp.xmash.dto.response.GameResultResponse;
+import com.tmp.xmash.dto.response.TournamentGameResponse;
 import com.tmp.xmash.service.game.GameService;
 import com.tmp.xmash.service.game.GameServiceFactory;
 import com.tmp.xmash.service.game.TournamentGameService;
@@ -76,6 +77,16 @@ public class GameController {
 
         return ResponseEntity.ok(gameService.getMatchHistory());
     }
+
+    @GetMapping("/game/tournament")
+    @Operation(summary = "토너먼트 경기 조회 (mock)", description = "시즌 별 토너먼트 경기 결과 or 진행 상태 조회")
+    public ResponseEntity<List<TournamentGameResponse>> getTournamentGame(
+            @RequestParam int season
+    ) {
+
+        return ResponseEntity.ok(null);
+    }
+
 
 
     @GetMapping("/match-type")

@@ -1,10 +1,7 @@
 package com.tmp.xmash.db.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -29,4 +26,12 @@ public class TournamentSeason {
 
     private LocalDateTime endTime;
 
+    @Builder
+    public TournamentSeason(int season, String seasonName, boolean currentSeason, LocalDateTime startTime, LocalDateTime endTime) {
+        this.season = season;
+        this.seasonName = seasonName;
+        this.currentSeason = currentSeason;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }

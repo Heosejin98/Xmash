@@ -39,6 +39,7 @@ public class AppUser {
     @OneToMany(mappedBy = "appUser", fetch = FetchType.LAZY)
     private List<UserTeamRanking> userTeamRankings = new ArrayList<>();
 
+    @Builder
     public AppUser(String userId,
                    String password,
                    String email,
