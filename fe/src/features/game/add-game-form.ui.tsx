@@ -53,7 +53,7 @@ const UserListInput = forwardRef(
         {data
           .filter((user) => value.includes(user.userId))
           .map((user) => (
-            <div className="relative inline-block" key={user.userId}>
+            <div className={cn("relative inline-block", className)} key={user.userId}>
               <Avatar>
                 <AvatarImage src={user.profileUrl ?? ""} alt={user.userName} />
                 <AvatarFallback>{user.userName.slice(1, 3)}</AvatarFallback>
