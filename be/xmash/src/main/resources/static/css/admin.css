@@ -1,0 +1,21 @@
+.sidebar {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar .nav-link {
+    padding: 0.5rem 1rem;
+    color: #333;
+    transition: all 0.3s;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #444;
+}
+
+.navbar {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+main {
+    background-color: #f8f9fa;
+} 

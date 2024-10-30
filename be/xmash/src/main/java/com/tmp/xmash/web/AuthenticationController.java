@@ -1,6 +1,12 @@
 package com.tmp.xmash.web;
 
+import org.apache.coyote.BadRequestException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import com.tmp.xmash.dto.request.LoginRequest;
+import com.tmp.xmash.dto.request.SignUpRequest;
 import com.tmp.xmash.dto.response.UserProfileResponse;
 import com.tmp.xmash.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,31 +15,39 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.BadRequestException;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
 @Tag(name = "Authentication", description = "Authentication 전적 관련 api")
 public class AuthenticationController {
 
-    private final AuthenticationService loginService;
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
     public ResponseEntity<UserProfileResponse> loginPost(
             HttpSession session,
             @RequestBody LoginRequest loginRequest
     ) throws BadRequestException {
-        UserProfileResponse userInfoResponse = loginService.login(loginRequest.userId(), loginRequest.password());
+        UserProfileResponse userInfoResponse = authenticationService.login(loginRequest.userId(), loginRequest.password());
         session.setAttribute("userId", loginRequest.userId());
 
         return ResponseEntity.ok(userInfoResponse);
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/signup")
+    public ResponseEntity<Void> signupPost(
+            @RequestBody SignUpRequest request
+    )  {
+        authenticationService.signUp(request.userId(), 
+                        request.password(), 
+                        request.email(),
+                        request.userName(),
+                        request.gender());
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/logout") 
     public ResponseEntity<Boolean> logoutPost(
             HttpSession session,
             HttpServletRequest request,

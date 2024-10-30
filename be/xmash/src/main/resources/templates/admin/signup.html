@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="content">
+    <div class="container">
+        <h2 class="mb-4">회원 가입</h2>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="signUpForm">
+                            <div class="mb-3">
+                                <label for="userId" class="form-label">아이디</label>
+                                <input type="text" class="form-control" id="userId" 
+                                       required minlength="4" maxlength="20"
+                                       placeholder="아이디를 입력하세요">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="userName" class="form-label">이름</label>
+                                <input type="text" class="form-control" id="userName" 
+                                       required minlength="4" maxlength="20"
+                                       placeholder="이름을 입력하세요">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">이메일</label>
+                                <input type="email" class="form-control" id="email" 
+                                       required
+                                       placeholder="이메일을 입력하세요">
+                                <div class="form-text">유효한 이메일 주소를 입력해주세요.</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">성별</label>
+                                <div class="d-flex gap-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" 
+                                               name="gender" id="genderMale" value="MALE" required>
+                                        <label class="form-check-label" for="genderMale">
+                                            남성
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" 
+                                               name="gender" id="genderFemale" value="FEMALE">
+                                        <label class="form-check-label" for="genderFemale">
+                                            여성
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label">비밀번호</label>
+                                <input type="password" class="form-control" id="password" 
+                                       required minlength="8"
+                                       placeholder="비밀번호를 입력하세요">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">비밀번호 확인</label>
+                                <input type="password" class="form-control" id="confirmPassword" 
+                                       required
+                                       placeholder="비밀번호를 다시 입력하세요">
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">회원가입</button>
+                            </div>
+                        </form>
+                        
+                        <div id="resultMessage" class="alert mt-3" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+    document.getElementById('signUpForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const userId = document.getElementById('userId').value;
+        const userName = document.getElementById('userName').value;
+        const email = document.getElementById('email').value;
+        const gender = document.querySelector('input[name="gender"]:checked')?.value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const messageDiv = document.getElementById('resultMessage');
+        
+        // 이메일 유효성 검사
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showMessage('유효한 이메일 주소를 입력해주세요.', 'danger');
+            return;
+        }
+
+        // 성별 선택 확인
+        if (!gender) {
+            showMessage('성별을 선택해주세요.', 'danger');
+            return;
+        }
+        
+        // 비밀번호 확인
+        if (password !== confirmPassword) {
+            showMessage('비밀번호가 일치하지 않습니다.', 'danger');
+            return;
+        }
+        
+        try {
+            const response = await fetch('/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userName: userName,
+                    email: email,
+                    userId: userId,
+                    gender: gender,
+                    password: password
+                })
+            });
+                        
+            if (response.ok) {
+                showMessage('회원가입이 완료되었습니다!', 'success');
+            } else {
+                throw new Error(data.message || '회원가입 실패');
+            }
+        } catch (error) {
+            showMessage(error.message, 'danger');
+        }
+    });
+
+    // 이메일 실시간 유효성 검사
+    document.getElementById('email').addEventListener('input', function(e) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (this.value && !emailRegex.test(this.value)) {
+            this.setCustomValidity('유효한 이메일 주소를 입력해주세요.');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+
+    function showMessage(message, type) {
+        const messageDiv = document.getElementById('resultMessage');
+        messageDiv.textContent = message;
+        messageDiv.className = `alert alert-${type} mt-3`;
+        messageDiv.style.display = 'block';
+    }
+
+    // 아이디 입력 필드 유효성 검사
+    document.getElementById('userName').addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^a-zA-Z0-9]/g, '');
+    });
+
+    // 비밀번호 실시간 확인
+    document.getElementById('confirmPassword').addEventListener('input', function(e) {
+        const password = document.getElementById('password').value;
+        if (this.value && this.value !== password) {
+            this.setCustomValidity('비밀번호가 일치하지 않습니다.');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+    </script>
+
+    <style>
+    .card {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    
+    .form-control:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    
+    .alert {
+        transition: all 0.3s ease-in-out;
+    }
+    
+    .btn-primary {
+        padding: 0.75rem;
+    }
+
+    .form-check-input:checked {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+    </style>
+</div>
+</html>
