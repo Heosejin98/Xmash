@@ -1,5 +1,8 @@
 server:
   port: 4242
+  servlet:
+    session:
+      timeout: 30d
 
 spring:
   application:
