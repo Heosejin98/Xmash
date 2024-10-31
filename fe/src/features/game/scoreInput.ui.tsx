@@ -216,6 +216,7 @@ export const ScoreInputForm = (formData: ScoresInput) => {
                         min={0}
                         max={50}
                         step={1}
+                        inputMode="numeric"
                         autoComplete="off"
                         onChange={(e) => {
                           field.onChange(e.target.value.replace(/^0+/, ""));
@@ -240,6 +241,7 @@ export const ScoreInputForm = (formData: ScoresInput) => {
                         min={0}
                         max={50}
                         step={1}
+                        inputMode="numeric"
                         autoComplete="off"
                         onChange={(e) => {
                           field.onChange(e.target.value.replace(/^0+/, ""));
