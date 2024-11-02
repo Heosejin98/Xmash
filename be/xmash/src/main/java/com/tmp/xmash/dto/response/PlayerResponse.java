@@ -1,5 +1,7 @@
 package com.tmp.xmash.dto.response;
 
+import com.tmp.xmash.db.entity.AppUser;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
@@ -16,4 +18,7 @@ public record PlayerResponse(
         @Schema(name = "profileUrl", example = "/images/profiles/test.jpg", description = "프로필 사진 경로 (아직 미구현, 항상 null)")
         String profileUrl
 ) {
+        public static PlayerResponse from(AppUser appUser) {
+            return new PlayerResponse(appUser.getUserId(), appUser.getName(), null);
+        }       
 }

@@ -18,13 +18,18 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "app_user_id")
     private Long id;
+
     private String userId;
+
     @Setter
     private String email;
+
     @Setter
     private String name;
+
     @Setter
     private String password;
+    
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -54,13 +59,6 @@ public class AppUser {
 
     public void addUserRanking(UserRanking userRanking) {
         this.userRankings.add(userRanking);
-    }
-
-    public UserTeamRanking getCurrentUserTeamRanking() {
-        return userTeamRankings.stream()
-                .filter(userTeamRanking -> userTeamRanking.getSeason() == CURRENT_SEASON)
-                .findFirst()
-                .orElse(null);
     }
 
     public UserRanking getCurrentUserRanking() {

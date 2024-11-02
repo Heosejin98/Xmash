@@ -2,13 +2,17 @@ package com.tmp.xmash.db.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 public class TournamentSeason {
 
     @Id
@@ -26,12 +30,9 @@ public class TournamentSeason {
 
     private LocalDateTime endTime;
 
-    @Builder
-    public TournamentSeason(int season, String seasonName, boolean currentSeason, LocalDateTime startTime, LocalDateTime endTime) {
-        this.season = season;
-        this.seasonName = seasonName;
-        this.currentSeason = currentSeason;
-        this.startTime = startTime;
-        this.endTime = endTime;
-    }
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tournament_season_id")
+    @BatchSize(size = 64)
+    private Set<DoubleTournamentMatchResult> doubleTournamentMatchResults = new HashSet<>();
+
 }

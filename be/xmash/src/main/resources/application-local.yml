@@ -5,7 +5,7 @@ spring:
     url: ENC(UjQMa2lNzIAPXTwAhmYz2EI6Z2Ko8CxXvbC34JwjxLWQmMR2FdJQrBH6tG6Iiv43spc58g8qedobYixvoFbR+/Jac7ZZNe2sxpHPjDMILwCtAR7CoCA4GQ==)
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ENC(+cOLpHmDCnRjwd/h8yrTJQ==)
-    password: qwer1234!@
+    password: ENC(vaBzipJGlEx7697EnnmFJTtfDSVZhBrS)
   jpa:
     properties:
       hibernate:
