@@ -2,10 +2,10 @@ spring:
   application:
     name: xmash
   datasource:
-    url: ENC(XTinqhNkg90Vj3zg4eh+qE9epKjcKkGfhwFYV//vU2Lfbmksg0NVaa1QgXW0O/dX0a0PYruXWDTd7BodnnuZ7IkvaDr7NVjFYm8eh4vHlt2MLxx72dkF/Q==)
+    url: ENC(UjQMa2lNzIAPXTwAhmYz2EI6Z2Ko8CxXvbC34JwjxLWQmMR2FdJQrBH6tG6Iiv43spc58g8qedobYixvoFbR+/Jac7ZZNe2sxpHPjDMILwCtAR7CoCA4GQ==)
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ENC(+cOLpHmDCnRjwd/h8yrTJQ==)
-    password: ENC(N82lmEig2NTYBKRNi+8Q4dz8z+vqOE6f)
+    password: ENC(vaBzipJGlEx7697EnnmFJTtfDSVZhBrS)
   jpa:
     properties:
       hibernate:
@@ -24,4 +24,4 @@ springdoc:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-    password: ${JASYPT_PASSWORD}  # 환경 변수로부터 암호화 키 읽기
+    password: very!hard@pw

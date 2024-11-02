@@ -1,0 +1,20 @@
+<div class="container">
+    <h2 class="mb-4">대시보드</h2>
+    
+    <div class="row">
+        <!-- 통계 카드 -->
+        <div th:each="card : ${dashboardData}" class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${card.value.title}">제목</h5>
+                    <h2 class="card-text">
+                        <span th:text="${card.value.value}">0</span>
+                        <small th:text="${card.value.unit}">단위</small>
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ 
+</div> 

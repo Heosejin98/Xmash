@@ -1,5 +1,6 @@
 package com.tmp.xmash.type;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Gender {
@@ -15,5 +16,11 @@ public enum Gender {
     @JsonValue
     public String getDisplayName() {
         return displayName;
+    }
+
+    @JsonCreator
+    public static Gender fromString(String value) {
+        if (value == null) return null;
+        return Gender.valueOf(value.toUpperCase());
     }
 }

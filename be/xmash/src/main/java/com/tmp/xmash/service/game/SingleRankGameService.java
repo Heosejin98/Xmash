@@ -23,7 +23,7 @@ import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
-public class SingleRankGameService implements GameService {
+public class SingleRankGameService implements GameService, GamePostAble {
 
     private final SingleRankMatchHistoryRepo singleMatchHistoryRepo;
 
@@ -36,6 +36,8 @@ public class SingleRankGameService implements GameService {
     @Transactional
     @Override
     public boolean matchDone(GameResultRequest gameResultRequest) {
+        checkScore(gameResultRequest);
+
         Set<AppUser> matchUsers = userRepository.findByUserIdIn(Set.of(
                 gameResultRequest.homeTeam().getFirst(),
                 gameResultRequest.awayTeam().getFirst()));

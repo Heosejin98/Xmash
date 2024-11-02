@@ -20,7 +20,7 @@ import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
-public class SingleNormalGameService implements GameService {
+public class SingleNormalGameService implements GameService, GamePostAble {
 
     private final SingleMatchHistoryRepo singleMatchHistoryRepo;
 
@@ -32,6 +32,8 @@ public class SingleNormalGameService implements GameService {
     @Transactional
     @Override
     public boolean matchDone(GameResultRequest gameResultRequest) {
+        checkScore(gameResultRequest);
+
         MatchEvaluator matchEvaluator = new MatchEvaluator(gameResultRequest);
 
         SingleNormalMatchHistory singleNormalMatchHistory = matchEvaluator.resolveMatchWinner();

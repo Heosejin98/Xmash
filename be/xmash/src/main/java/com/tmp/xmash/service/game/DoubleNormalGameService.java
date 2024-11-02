@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class DoubleNormalGameService implements GameService {
+public class DoubleNormalGameService implements GameService, GamePostAble {
 
     private final DoubleNormalMatchRepo doubleNormalMatchRepo;
     private final UserRepository userRepository;
@@ -28,6 +28,7 @@ public class DoubleNormalGameService implements GameService {
     @Transactional
     @Override
     public boolean matchDone(GameResultRequest gameResultRequest) {
+        checkScore(gameResultRequest);
         DoubleMatchEvaluator matchEvaluator = new DoubleMatchEvaluator(gameResultRequest);
 
         DoubleNormalMatchHistory singleMatchHistory = matchEvaluator.resolveMatchWinner();

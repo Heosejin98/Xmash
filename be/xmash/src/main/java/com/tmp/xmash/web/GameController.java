@@ -2,8 +2,10 @@ package com.tmp.xmash.web;
 
 import com.tmp.xmash.dto.request.GameResultRequest;
 import com.tmp.xmash.dto.response.GameResultResponse;
+import com.tmp.xmash.dto.response.TournamentGameResponse;
 import com.tmp.xmash.service.game.GameService;
 import com.tmp.xmash.service.game.GameServiceFactory;
+import com.tmp.xmash.service.game.TournamentGameService;
 import com.tmp.xmash.type.GameType;
 import com.tmp.xmash.type.MatchType;
 import com.tmp.xmash.web.editor.GameTypeEditor;
@@ -15,18 +17,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Objects;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -34,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GameController {
 
     private final GameServiceFactory gameServiceFactory;
+    private final TournamentGameService tournamentGameService;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -42,34 +38,33 @@ public class GameController {
     }
 
     @PostMapping("/game/{gameType}/{matchType}")
-    public ResponseEntity<Boolean> updateSingleGameResult(
+    public ResponseEntity<Boolean> doneGameResult(
             HttpSession session,
         @Parameter(name = "matchType", description = "매치타입(단식, 복식)을 지정합니다.", required = true, in = ParameterIn.PATH) @PathVariable MatchType matchType,
         @Parameter(name = "gameType", description = "게임 타입을 지정합니다.", required = true, in = ParameterIn.PATH) @PathVariable("gameType") GameType gameType,
         @Parameter(name = "GameRequest", description = "게임 결과 등록 요청 데이터", required = true) @Valid @RequestBody GameResultRequest gameResultRequest
-    ) throws BadRequestException, AuthenticationException {
+    ) throws AuthenticationException {
 
-//        String userId = (String) session.getAttribute("userId");
-//        if (userId == null) {
-//            throw new AuthenticationException("로그인 후 게임 등록 가능");
-//        }
-
-        if (MatchType.ALL == matchType) {
-            throw new BadRequestException("ALL 타입 등록 불가능");
-        }
-
-        if (Objects.equals(gameResultRequest.homeScore(), gameResultRequest.awayScore())) {
-            throw new BadRequestException("무승부는 등록 불가능합니다.");
-        }
-
-        int winnerScore = Math.max(gameResultRequest.homeScore(), gameResultRequest.awayScore());
-        if (winnerScore < 11) {
-            throw new BadRequestException("11점 이상 게임만 등록 가능합니다.");
+        String userId = (String) session.getAttribute("userId");
+        if (userId == null) {
+            throw new AuthenticationException("로그인 후 게임 등록 가능");
         }
 
         GameService gameService = gameServiceFactory.getGameService(matchType, gameType);
 
         return ResponseEntity.ok(gameService.matchDone(gameResultRequest));
+    }
+
+
+    @PostMapping("/game/tournament")
+    public ResponseEntity<Boolean> doneTournamentGameResult(
+            HttpSession session
+    )  {
+        String userId = (String) session.getAttribute("userId");
+
+        tournamentGameService.registration(userId);
+
+        return ResponseEntity.ok(true);
     }
 
 
@@ -82,6 +77,15 @@ public class GameController {
 
         return ResponseEntity.ok(gameService.getMatchHistory());
     }
+
+    @GetMapping("/game/tournament")
+    @Operation(summary = "토너먼트 경기 조회", description = "시즌 별 토너먼트 경기 결과 or 진행 상태 조회")
+    public ResponseEntity<List<TournamentGameResponse>> getTournamentGame(
+            @RequestParam int season
+    ) {
+        return ResponseEntity.ok(tournamentGameService.getTournamentInfo(season));
+    }
+
 
 
     @GetMapping("/match-type")
