@@ -3,6 +3,11 @@ server:
   servlet:
     session:
       timeout: 30d
+      cookie:
+        max-age: 30d  # 30일
+        name: JSESSIONID
+        http-only: true
+        path: /
 
 spring:
   application:
