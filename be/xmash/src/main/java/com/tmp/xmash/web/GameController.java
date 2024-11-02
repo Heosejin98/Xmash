@@ -79,12 +79,11 @@ public class GameController {
     }
 
     @GetMapping("/game/tournament")
-    @Operation(summary = "토너먼트 경기 조회 (mock)", description = "시즌 별 토너먼트 경기 결과 or 진행 상태 조회")
+    @Operation(summary = "토너먼트 경기 조회", description = "시즌 별 토너먼트 경기 결과 or 진행 상태 조회")
     public ResponseEntity<List<TournamentGameResponse>> getTournamentGame(
             @RequestParam int season
     ) {
-
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(tournamentGameService.getTournamentInfo(season));
     }
 
 
