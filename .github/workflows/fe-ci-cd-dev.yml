@@ -1,0 +1,47 @@
+name: FE CI/CD Pipeline Dev
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "fe/**"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+        working-directory: fe
+
+      - name: Build-dev
+        run: bun run build:dev
+        working-directory: fe
+
+      - name: Set up SSH
+        run: |
+          # Create the .ssh directory
+          mkdir -p ~/.ssh
+
+          # Add the private key
+          echo "${{ secrets.GCP_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          # Add the known_hosts file to avoid SSH host key verification
+          ssh-keyscan -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_PUBLIC_IP }} >> ~/.ssh/known_hosts
+
+      - name: Remove prev files
+        run: |
+          ssh -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} "rm -rf /home/jinbekim/fe-dev"
+
+      - name: Transfer files
+        run: |
+          scp -P ${{ secrets.GCP_SSH_PORT }} -r fe/dist ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/jinbekim/fe-dev
+
+      - name: Make re
+        run: |
+          ssh -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} "cd /home/jinbekim && make re-dev"

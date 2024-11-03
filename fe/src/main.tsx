@@ -40,6 +40,9 @@ const InnerApp = () => {
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
+
+  document.title = import.meta.env.MODE === "development" ? "Dev" : "Xmash";
+
   root.render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
