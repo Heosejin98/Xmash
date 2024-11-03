@@ -8,9 +8,9 @@ export type LoginUserDto = z.infer<typeof LoginUserDto>
 
 
 export const PasswordResetDto = z.object({
-  prevPassword: z.string(),
-  newPassword: z.string(),
-  confirmNewPassword: z.string(),
+  prevPassword: z.string().min(1, { message: "현재 비밀번호를 입력해주세요." }).default(""),
+  newPassword: z.string().min(1, { message: "새 비밀번호를 입력해주세요." }).default(""),
+  confirmNewPassword: z.string().min(1, { message: "새 비밀번호를 한번 더 입력해주세요." }).default(""),
 })
 export type PasswordResetDto = z.infer<typeof PasswordResetDto>
 
