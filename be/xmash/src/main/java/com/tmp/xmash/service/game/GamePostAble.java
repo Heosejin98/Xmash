@@ -5,6 +5,8 @@ import com.tmp.xmash.exption.GamePostException;
 
 public interface GamePostAble {
 
+    boolean matchDone(GameResultRequest gameResultRequest);
+
     default void checkScore(GameResultRequest gameResultRequest) {
         if (gameResultRequest.homeScore() == gameResultRequest.awayScore()) {
             throw new GamePostException("무승부는 등록 불가능합니다.");

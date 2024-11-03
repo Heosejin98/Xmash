@@ -52,11 +52,11 @@ public class RankingService {
     @Transactional
     public void updateRanking(Set<UserRanking> winner, Set<UserRanking> loser, int resultLp) {
         for (UserRanking userRanking : winner) {
-            userRanking.updateTeamLpAndTeamTier(userRanking.getTeamLp() + resultLp);
+            userRanking.updateTeamLpAndTeamTier(resultLp);
         }
 
         for (UserRanking userRanking : loser) {
-            userRanking.updateTeamLpAndTeamTier(userRanking.getTeamLp() - resultLp);
+            userRanking.updateTeamLpAndTeamTier(resultLp * -1);
         }
 
         Set<UserRanking> userRankings = new HashSet<>(winner);

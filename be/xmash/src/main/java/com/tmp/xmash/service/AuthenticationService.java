@@ -5,9 +5,9 @@ import com.tmp.xmash.db.entity.UserRanking;
 import com.tmp.xmash.db.repositroy.UserRankingRepository;
 import com.tmp.xmash.db.repositroy.UserRepository;
 import com.tmp.xmash.dto.response.UserProfileResponse;
+import com.tmp.xmash.exption.BadRequestException;
 import com.tmp.xmash.type.Gender;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +23,7 @@ public class AuthenticationService {
 
 
     @Transactional
-    public UserProfileResponse login(String userId, String password) throws BadRequestException {
+    public UserProfileResponse login(String userId, String password) {
         AppUser appUser = userRepository.findByUserId(userId).orElseThrow(() -> new BadRequestException("비밀번호 또는 Id가 일치하지않습니다."));
 
         if (!passwordEncoder.matches(password, appUser.getPassword())) {

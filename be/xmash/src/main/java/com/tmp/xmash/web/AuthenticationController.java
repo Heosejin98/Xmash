@@ -1,10 +1,5 @@
 package com.tmp.xmash.web;
 
-import org.apache.coyote.BadRequestException;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 import com.tmp.xmash.dto.request.LoginRequest;
 import com.tmp.xmash.dto.request.SignUpRequest;
 import com.tmp.xmash.dto.response.UserProfileResponse;
@@ -15,6 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
@@ -27,7 +26,7 @@ public class AuthenticationController {
     public ResponseEntity<UserProfileResponse> loginPost(
             HttpSession session,
             @RequestBody LoginRequest loginRequest
-    ) throws BadRequestException {
+    ) {
         UserProfileResponse userInfoResponse = authenticationService.login(loginRequest.userId(), loginRequest.password());
         session.setAttribute("userId", loginRequest.userId());
 
