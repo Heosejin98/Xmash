@@ -36,7 +36,8 @@ function Profile() {
             </Button>
           </nav>
           <p className="mt-10 text-right text-xs text-gray-400">
-            앱 버전 {import.meta.env.VITE_APP_VERSION}
+            앱 버전 {import.meta.env.VITE_APP_VERSION}{" "}
+            {import.meta.env.MODE === "development" && "dev"}
           </p>
         </CardContent>
       </Card>

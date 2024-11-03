@@ -1,8 +1,11 @@
-name: FE CI/CD Pipeline
+name: FE CI/CD Pipeline Dev
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - main
+    paths:
+      - "fe/**"
 
 jobs:
   build-and-deploy:
@@ -15,8 +18,8 @@ jobs:
         run: bun install
         working-directory: fe
 
-      - name: Build
-        run: bun run build
+      - name: Build-dev
+        run: bun run build:dev
         working-directory: fe
 
       - name: Set up SSH
@@ -33,12 +36,12 @@ jobs:
 
       - name: Remove prev files
         run: |
-          ssh -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} "rm -rf /home/jinbekim/fe"
+          ssh -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} "rm -rf /home/jinbekim/fe-dev"
 
       - name: Transfer files
         run: |
-          scp -P ${{ secrets.GCP_SSH_PORT }} -r fe/dist ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/jinbekim/fe
+          scp -P ${{ secrets.GCP_SSH_PORT }} -r fe/dist ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }}:/home/jinbekim/fe-dev
 
       - name: Make re
         run: |
-          ssh -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} "cd /home/jinbekim && make re"
+          ssh -p ${{ secrets.GCP_SSH_PORT }} ${{ secrets.GCP_SSH_USER }}@${{ secrets.GCP_PUBLIC_IP }} "cd /home/jinbekim && make re-dev"
