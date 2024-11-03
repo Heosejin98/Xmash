@@ -1,4 +1,4 @@
-package com.tmp.xmash.service.game;
+package com.tmp.xmash.service.game.Impl;
 
 import static java.util.function.UnaryOperator.identity;
 import static java.util.stream.Collectors.toMap;
@@ -12,6 +12,8 @@ import com.tmp.xmash.domain.DoubleMatchEvaluator;
 import com.tmp.xmash.dto.request.GameResultRequest;
 import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.service.RankingService;
+import com.tmp.xmash.service.game.GamePostAble;
+import com.tmp.xmash.service.game.GameService;
 import com.tmp.xmash.type.MatchType;
 import java.util.List;
 import java.util.Map;
@@ -24,14 +26,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class DoubleRankGameService implements GameService, GamePostAble {
+public class DoubleGameService implements GameService, GamePostAble {
+
+    private final static MatchType matchType = MatchType.DOUBLE;
 
     private final DoubleRankMatchRepo doubleRankMatchRepo;
     private final UserRepository userRepository;
-
     private final RankingService rankingService;
 
-    private final static MatchType matchType = MatchType.DOUBLE;
 
     @Transactional
     @Override

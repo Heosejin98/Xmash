@@ -10,19 +10,15 @@ public class GameServiceConfig {
     // GameServiceFactory 빈 등록
     @Bean
     public GameServiceFactory gameServiceFactory(
-            @Qualifier("normalGameService") GameService normalGameService,
-            @Qualifier("singleNormalGameService") GameService singleGameService,
-            @Qualifier("doubleNormalGameService") GameService doubleGameService,
-            @Qualifier("singleRankGameService") GameService singleRankGameService,
-            @Qualifier("doubleRankGameService") GameService doubleRankGameService,
+            @Qualifier("singleGameService") GameService singleRankGameService,
+            @Qualifier("doubleGameService") GameService doubleRankGameService,
             @Qualifier("rankGameService") GameService rankGameService
     ) {
-        return new GameServiceFactory(normalGameService,
-                singleGameService,
-                doubleGameService,
+        return new GameServiceFactory(
                 singleRankGameService,
                 doubleRankGameService,
-                rankGameService);
+                rankGameService
+        );
     }
 
 }

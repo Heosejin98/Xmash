@@ -1,74 +1,40 @@
 package com.tmp.xmash.service.game;
 
-import com.tmp.xmash.type.GameType;
-import com.tmp.xmash.type.MatchType;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
+
+import com.tmp.xmash.type.MatchType;
 
 @Configuration
 public class GameServiceFactory {
 
-    private final GameService normalGameService;
-    private final GameService singleNormalGameService;
-    private final GameService doubleNormalGameService;
-    private final GameService singleRanklGameService;
-    private final GameService doubleRankGameService;
-    private final GameService rankGameService;
+    private final GameService singleGameService;
+    private final GameService doubleGameService;
+    private final GameService totalGameService;
 
     public GameServiceFactory(
-            @Qualifier("normalGameService") GameService normalGameService,
-            @Qualifier("singleNormalGameService") GameService singleNormalGameService,
-            @Qualifier("doubleNormalGameService") GameService doubleNormalGameService,
-            @Qualifier("singleRankGameService") GameService singleRanklGameService,
-            @Qualifier("doubleRankGameService") GameService doubleRankGameService,
-            @Qualifier("rankGameService") GameService rankGameService
+            @Qualifier("singleGameService") GameService singleGameService,
+            @Qualifier("doubleGameService") GameService doubleGameService,
+            @Qualifier("rankGameService") GameService totalGameService
     ) {
-        this.normalGameService = normalGameService;
-        this.singleNormalGameService = singleNormalGameService;
-        this.doubleNormalGameService = doubleNormalGameService;
-        this.singleRanklGameService = singleRanklGameService;
-        this.doubleRankGameService = doubleRankGameService;
-        this.rankGameService = rankGameService;
+        this.singleGameService = singleGameService;
+        this.doubleGameService = doubleGameService;
+        this.totalGameService = totalGameService;
     }
 
-    public GameService getGameService(MatchType matchType, GameType gameType) {
-        return switch (gameType) {
-            case NORMAL -> getNormalGameService(matchType);
-            case TOURNAMENT -> null;
-            case RANK -> getRankGameService(matchType);
+    public GameService getGameService(MatchType matchType) {
+        return switch (matchType) {
+            case SINGLE -> singleGameService;
+            case DOUBLE -> doubleGameService;
+            case ALL -> totalGameService;
         };
     }
 
-
-    private GameService getNormalGameService(MatchType matchType) {
-        if (MatchType.SINGLE == matchType) {
-            return singleNormalGameService;
-        }
-
-        if (MatchType.DOUBLE == matchType) {
-            return doubleNormalGameService;
-        }
-
-        if (MatchType.ALL == matchType) {
-            return normalGameService;
-        }
-
-        throw new IllegalArgumentException("Unknown matchType: " + matchType + " or gameType: " + matchType);
-    }
-
-    private GameService getRankGameService(MatchType matchType) {
-        if (MatchType.SINGLE == matchType) {
-            return singleRanklGameService;
-        }
-
-        if (MatchType.DOUBLE == matchType) {
-            return doubleRankGameService;
-        }
-
-        if (MatchType.ALL == matchType) {
-            return rankGameService;
-        }
-
-        throw new IllegalArgumentException("Unknown matchType: " + matchType + " or gameType: " + matchType);
+    public GamePostAble getGamePostAble(MatchType matchType) {
+        return switch (matchType) {
+            case SINGLE -> (GamePostAble) singleGameService;
+            case DOUBLE -> (GamePostAble) doubleGameService;
+            default -> throw new IllegalArgumentException("게임 등록이 불가능한 매치 타입입니다: " + matchType);
+        };
     }
 }

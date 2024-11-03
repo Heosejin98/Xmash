@@ -1,4 +1,4 @@
-package com.tmp.xmash.service.game;
+package com.tmp.xmash.service.game.Impl;
 
 import com.tmp.xmash.db.entity.AppUser;
 import com.tmp.xmash.db.entity.SingleRankMatchHistory;
@@ -9,6 +9,8 @@ import com.tmp.xmash.domain.MatchEvaluator;
 import com.tmp.xmash.dto.request.GameResultRequest;
 import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.service.RankingService;
+import com.tmp.xmash.service.game.GamePostAble;
+import com.tmp.xmash.service.game.GameService;
 import com.tmp.xmash.type.MatchType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,15 +25,13 @@ import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
-public class SingleRankGameService implements GameService, GamePostAble {
-
-    private final SingleRankMatchHistoryRepo singleMatchHistoryRepo;
-
-    private final UserRepository userRepository;
-
-    private final RankingService rankingService;
+public class SingleGameService implements GameService, GamePostAble {
 
     private static final MatchType matchType = MatchType.SINGLE;
+
+    private final SingleRankMatchHistoryRepo singleMatchHistoryRepo;
+    private final UserRepository userRepository;
+    private final RankingService rankingService;
 
     @Transactional
     @Override

@@ -3,7 +3,7 @@ package com.tmp.xmash.exption;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class BadRequestException extends RuntimeException{
+public class BadRequestException extends RuntimeException {
     public BadRequestException(String message) {
         super(message);
         log.error(message);
