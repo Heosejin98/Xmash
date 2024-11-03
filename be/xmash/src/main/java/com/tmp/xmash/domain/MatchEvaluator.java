@@ -3,7 +3,6 @@ package com.tmp.xmash.domain;
 import static com.tmp.xmash.common.AppConstants.DEFAULT_WINNER_LP;
 import static com.tmp.xmash.common.AppConstants.RANDOM_GENERATOR;
 
-import com.tmp.xmash.db.entity.SingleNormalMatchHistory;
 import com.tmp.xmash.db.entity.SingleRankMatchHistory;
 import com.tmp.xmash.dto.request.GameResultRequest;
 
@@ -39,28 +38,9 @@ public class MatchEvaluator {
         return DEFAULT_WINNER_LP + (RANDOM_GENERATOR.nextInt(5) * 2);
     }
 
-    public SingleNormalMatchHistory resolveMatchWinner()  {
-        if (homeScore > awayScore) {
-            return SingleNormalMatchHistory.builder()
-                    .winnerId(homeId)
-                    .winnerScore(homeScore)
-                    .loserId(awayId)
-                    .loserScore(awayScore)
-                    .build();
-        }
-
-        return SingleNormalMatchHistory.builder()
-                .winnerId(awayId)
-                .winnerScore(awayScore)
-                .loserId(homeId)
-                .loserScore(homeScore)
-                .build();
-    }
-
     public boolean isHomeWinner() {
         return homeScore > awayScore;
     }
-
 
     public SingleRankMatchHistory resolveMatchWinner2()  {
         if (isHomeWinner()) {

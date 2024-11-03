@@ -3,7 +3,6 @@ package com.tmp.xmash.exption;
 import com.tmp.xmash.dto.response.GlobalExceptionResponse;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.log4j.Log4j2;
-import org.apache.coyote.BadRequestException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Log4j2
 public class GlobalControllerExceptionHandler {
-
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(GamePostException.class)
