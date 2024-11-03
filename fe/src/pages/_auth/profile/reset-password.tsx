@@ -35,7 +35,7 @@ const useResetForm = () =>
           values,
           errors: {
             confirmNewPassword: {
-              message: "Passwords do not match",
+              message: "비밀번호가 일치하지 않습니다.",
               type: "manual",
             },
           },
@@ -81,9 +81,9 @@ function ResetPassword() {
   return (
     <>
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Change Password</CardTitle>
+        <CardTitle className="text-2xl font-bold">비밀번호 변경</CardTitle>
         <CardDescription>
-          Enter your current and new password to update your account
+          현재 비밀번호와 새 비밀번호를 입력하여 계정을 업데이트하십시오.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -94,11 +94,11 @@ function ResetPassword() {
               name="prevPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Prev Password</FormLabel>
+                  <FormLabel>현재 비밀번호</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="Prev Password"
+                      placeholder="현재 비밀번호"
                       autoComplete="Prev Password"
                       {...field}
                     />
@@ -113,11 +113,11 @@ function ResetPassword() {
               name="newPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>New Password</FormLabel>
+                  <FormLabel>새로운 비밀번호</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="New Password"
+                      placeholder="새로운 비밀번호"
                       autoComplete="New Password"
                       {...field}
                     />
@@ -132,11 +132,11 @@ function ResetPassword() {
               name="confirmNewPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel>비밀번호 확인 </FormLabel>
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="Confirm Password"
+                      placeholder="비밀번호 확인"
                       autoComplete="Confirm Password"
                       {...field}
                     />
@@ -147,7 +147,7 @@ function ResetPassword() {
             />
 
             <Button type="submit" className="w-full">
-              Update Password
+              비밀번호 변경하기
             </Button>
           </form>
         </Form>
