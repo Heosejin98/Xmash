@@ -1,11 +1,8 @@
 name: FE CI/CD Pipeline
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "fe/**"
+  release:
+    types: [created]
 
 jobs:
   build-and-deploy:
