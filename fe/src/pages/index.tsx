@@ -32,7 +32,7 @@ function AuthLayout() {
             <span className="">랭킹 검색</span>
           </Card>
         </Link>
-        <Link to="/game" search={{ gameType: "normal", matchType: "all" }}>
+        <Link to="/game" search={{ matchType: "all" }}>
           <Card className="w-24 h-24 flex flex-col items-center justify-center shadow-yellow-100 bg-yellow-400 text-gray-800">
             <Gamepad2 className="animate-bounce" />
 

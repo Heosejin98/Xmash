@@ -36,7 +36,6 @@ const GameLink = () => {
       activeOptions={{ includeSearch: false }}
       activeProps={activeProps}
       search={{
-        gameType: "normal",
         matchType: "all",
       }}
     >

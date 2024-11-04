@@ -1,5 +1,5 @@
 import { Route } from "@/pages/_layout/game";
-import { GameType, MatchType } from "@/shared/api/game";
+import { MatchType } from "@/shared/api/game";
 import {
   Avatar,
   AvatarFallback,
@@ -14,26 +14,20 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { GameQueries } from "./game.queries";
-import { GameTypeTabs } from "./gameType.tabs.ui";
 import { MatchTypeTabs } from "./matchType.tabs.ui";
 
 export function GameList() {
-  const { gameType, matchType } = Route.useSearch();
+  const { matchType } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
 
-  const setGameType = (gameType: GameType) => {
-    navigate({ search: { gameType, matchType } });
-  };
-
   const setMatchType = (matchType: MatchType) => {
-    navigate({ search: { matchType, gameType } });
+    navigate({ search: { matchType } });
   };
 
   const [searchValue, setSearchValue] = useState("");
 
   const { data } = useQuery(
     GameQueries.gameQuery({
-      gameType: gameType,
       matchType: matchType,
     })
   );
@@ -60,7 +54,6 @@ export function GameList() {
         />
       </div>
       <div className="rounded-md border">
-        <GameTypeTabs onChange={setGameType} type={gameType} />
         <MatchTypeTabs onChange={setMatchType} type={matchType} />
 
         <Table>

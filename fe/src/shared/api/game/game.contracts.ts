@@ -3,9 +3,6 @@ import { z } from "zod";
 export const MatchType = z.enum(["single", "double", "all"]);
 export type MatchType = z.infer<typeof MatchType>;
 
-export const GameType = z.enum(["normal", "rank"]);
-export type GameType = z.infer<typeof GameType>;
-
 export const PlayerDto = z.object({
   userId: z.string(),
   userName: z.string(),
@@ -19,7 +16,6 @@ export const CreateGameDto = z.object({
   homeScore: z.coerce.number().int().step(1).nonnegative().gte(0).lte(50),
   awayScore: z.coerce.number().int().step(1).nonnegative().gte(0).lte(50),
   matchType: MatchType,
-  gameType: GameType,
 });
 export type CreateGameDto = z.infer<typeof CreateGameDto>;
 
@@ -45,6 +41,5 @@ export type GameDto = z.infer<typeof GameDto>;
 
 export const GameParamsQueryDto = z.object({
   matchType: MatchType,
-  gameType: GameType,
 });
 export type GameParamsQueryDto = z.infer<typeof GameParamsQueryDto>;

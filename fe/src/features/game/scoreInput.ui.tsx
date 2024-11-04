@@ -1,4 +1,3 @@
-import { GameQueries } from "@/entities/game/game.queries";
 import { UserQueries } from "@/entities/user/user.queries";
 import { CreateGameDto } from "@/shared/api/game";
 import { cn } from "@/shared/lib/utils";
@@ -21,7 +20,7 @@ import {
   CardContent,
 } from "@/shared/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { forwardRef } from "react";
 import { useForm } from "react-hook-form";
@@ -110,7 +109,6 @@ const useGameInfoForm = ({ awayTeam, homeTeam, matchType }: ScoresInput) => {
       matchType,
       homeScore: 0,
       awayScore: 0,
-      gameType: "normal",
     },
   });
 };
@@ -118,7 +116,6 @@ const useGameInfoForm = ({ awayTeam, homeTeam, matchType }: ScoresInput) => {
 export const ScoreInputForm = (formData: ScoresInput) => {
   const form = useGameInfoForm(formData);
   const { mutate } = useGameMutation();
-  const client = useQueryClient();
   const navigate = useNavigate();
 
   const onSubmit = async (data: CreateGameDto) => {
@@ -135,7 +132,6 @@ export const ScoreInputForm = (formData: ScoresInput) => {
       },
       onSuccess: async () => {
         form.reset();
-        client.invalidateQueries({ queryKey: GameQueries.keys[data.gameType] });
 
         toast.success("Game has been created successfully", {
           style: {
@@ -148,7 +144,6 @@ export const ScoreInputForm = (formData: ScoresInput) => {
           to: "/game",
           replace: true,
           search: {
-            gameType: data.gameType,
             matchType: data.matchType,
           },
         });
@@ -257,24 +252,8 @@ export const ScoreInputForm = (formData: ScoresInput) => {
             <div className="h-20 w-20"></div>
 
             <div className="flex justify-between">
-              <Button
-                type="submit"
-                className="h-10"
-                onClick={() => {
-                  form.setValue("gameType", "rank");
-                }}
-              >
-                랭크 게임 등록
-              </Button>
-              <Button
-                type="submit"
-                variant="outline"
-                className="h-10"
-                onClick={() => {
-                  form.setValue("gameType", "normal");
-                }}
-              >
-                노멀 게임 등록
+              <Button type="submit" variant="outline" className="h-10">
+                게임 등록
               </Button>
             </div>
           </form>

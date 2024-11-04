@@ -10,13 +10,12 @@ export class GameQueries {
     rank: ['game', 'rank'] as const,
   }
 
-  static gameQuery({ gameType, matchType }: GameParamsQueryDto) {
+  static gameQuery({ matchType }: GameParamsQueryDto) {
     return queryOptions({
-      queryKey: [...this.keys.root, gameType, matchType],
+      queryKey: [...this.keys.root, matchType],
       queryFn: async ({ signal }) => {
         return (await GameService.gameQuery({
           params: {
-            gameType,
             matchType,
           }, signal
         })).data;
