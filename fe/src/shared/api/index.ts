@@ -2,8 +2,8 @@ import axios, { AxiosError } from 'axios'
 import { z } from 'zod'
 
 export const api = axios.create({
-  baseURL: import.meta.env.SSR ? '/api' :
-  import.meta.env.MODE === 'development' ? import.meta.env.VITE_API_DEV_URL :
+  baseURL: import.meta.env.MODE === 'development' ? '/api' :
+  import.meta.env.MODE === 'staging' ? import.meta.env.VITE_API_DEV_URL :
   import.meta.env.VITE_API_URL,
   withCredentials: true,
 })
