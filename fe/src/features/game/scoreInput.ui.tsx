@@ -251,11 +251,9 @@ export const ScoreInputForm = (formData: ScoresInput) => {
 
             <div className="h-20 w-20"></div>
 
-            <div className="flex justify-between">
-              <Button type="submit" variant="outline" className="h-10">
-                게임 등록
-              </Button>
-            </div>
+            <Button type="submit" className="h-10 p-0">
+              게임 등록
+            </Button>
           </form>
         </Form>
       </CardContent>
