@@ -22,7 +22,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useGameMutation } from "./add-game.mutation";
@@ -118,6 +118,7 @@ export const ScoreInputForm = ({ onPrev, ...formData }: ScoresInput & { onPrev: 
   const form = useGameInfoForm(formData);
   const { mutate } = useGameMutation();
   const navigate = useNavigate();
+  const [tmpValue, onChangeTmpValue] = useState(0);
 
   const onSubmit = async (data: CreateGameDto) => {
     mutate(data, {
@@ -215,9 +216,17 @@ export const ScoreInputForm = ({ onPrev, ...formData }: ScoresInput & { onPrev: 
                           max={50}
                           step={1}
                           inputMode="numeric"
-                          autoComplete="off"
+                          onFocus={() => {
+                            onChangeTmpValue(field.value);
+                            field.onChange("");
+                          }}
+                          onBlur={() => {
+                            if (!field.value) {
+                              field.onChange(tmpValue);
+                            }
+                          }}
                           onChange={(e) => {
-                            field.onChange(e.target.value.replace(/^0+/, ""));
+                            field.onChange(e.target.value.replace(/^0+(\d+)/, "$1"));
                           }}
                         ></Input>
                       </FormControl>
@@ -240,9 +249,17 @@ export const ScoreInputForm = ({ onPrev, ...formData }: ScoresInput & { onPrev: 
                           max={50}
                           step={1}
                           inputMode="numeric"
-                          autoComplete="off"
+                          onFocus={() => {
+                            onChangeTmpValue(field.value);
+                            field.onChange("");
+                          }}
+                          onBlur={() => {
+                            if (!field.value) {
+                              field.onChange(tmpValue);
+                            }
+                          }}
                           onChange={(e) => {
-                            field.onChange(e.target.value.replace(/^0+/, ""));
+                            field.onChange(e.target.value.replace(/^0+(\d+)/, "$1"));
                           }}
                         ></Input>
                       </FormControl>
