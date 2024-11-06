@@ -24,6 +24,7 @@ const AddGame = () => {
       return (
         <MatchTypeInputButton
           onNext={(matchType) => funnel.history.push("homeTeam", { matchType })}
+          onPrev={() => funnel.history.back()}
         ></MatchTypeInputButton>
       );
     case "homeTeam":
@@ -34,8 +35,9 @@ const AddGame = () => {
           teamType="home"
           team={funnel.context.homeTeam}
           onNext={(players) =>
-            funnel.history.push("awayTeam", { ...funnel.context, homeTeam: players })
+            funnel.history.replace("awayTeam", { ...funnel.context, homeTeam: players })
           }
+          onPrev={() => funnel.history.back()}
         ></PlayersInputForm>
       );
     case "awayTeam":
@@ -46,7 +48,10 @@ const AddGame = () => {
           teamType="away"
           team={funnel.context.awayTeam}
           onNext={(players) =>
-            funnel.history.push("scores", { ...funnel.context, awayTeam: players })
+            funnel.history.replace("scores", { ...funnel.context, awayTeam: players })
+          }
+          onPrev={(awayTeam: string[]) =>
+            funnel.history.replace("homeTeam", { ...funnel.context, awayTeam })
           }
         ></PlayersInputForm>
       );
@@ -56,6 +61,7 @@ const AddGame = () => {
           matchType={funnel.context.matchType}
           awayTeam={funnel.context.awayTeam}
           homeTeam={funnel.context.homeTeam}
+          onPrev={() => funnel.history.replace("awayTeam", { ...funnel.context })}
         ></ScoreInputForm>
       );
   }

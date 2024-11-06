@@ -1,5 +1,4 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
-import DepthHeader from "@/app/depthHeader.ui";
 
 export const Route = createFileRoute("/_auth")({
   beforeLoad: ({ context, location }) => {
@@ -22,7 +21,6 @@ export const Route = createFileRoute("/_auth")({
 function AuthLayout() {
   return (
     <>
-      <DepthHeader></DepthHeader>
       <Outlet />
     </>
   );

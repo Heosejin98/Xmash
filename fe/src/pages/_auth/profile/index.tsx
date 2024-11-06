@@ -2,6 +2,7 @@ import { useLogout } from "@/features/login/logout.hook";
 import { Button, Card, CardContent, CardHeader, CardTitle } from "@/shared/ui";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
+import DepthHeader from "@/app/depthHeader.ui";
 
 export const Route = createFileRoute("/_auth/profile/")({
   component: Profile,
@@ -12,6 +13,8 @@ function Profile() {
 
   return (
     <>
+      <DepthHeader></DepthHeader>
+
       <Card className="w-4/5 m-auto">
         <CardHeader>
           <CardTitle>설정</CardTitle>

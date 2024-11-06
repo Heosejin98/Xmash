@@ -27,6 +27,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useGameMutation } from "./add-game.mutation";
 import { ScoresInput } from "./context";
+import DepthHeader from "@/app/depthHeader.ui";
 
 const UserListInput = forwardRef(
   (
@@ -113,7 +114,7 @@ const useGameInfoForm = ({ awayTeam, homeTeam, matchType }: ScoresInput) => {
   });
 };
 
-export const ScoreInputForm = (formData: ScoresInput) => {
+export const ScoreInputForm = ({ onPrev, ...formData }: ScoresInput & { onPrev: () => void }) => {
   const form = useGameInfoForm(formData);
   const { mutate } = useGameMutation();
   const navigate = useNavigate();
@@ -152,111 +153,114 @@ export const ScoreInputForm = (formData: ScoresInput) => {
   };
 
   return (
-    <Card className="m-4 h-full">
-      <CardHeader>
-        <CardTitle>점수 입력</CardTitle>
-        <CardDescription>점수를 입력해 주세요.</CardDescription>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4 flex-1">
-        <Form {...form}>
-          <form
-            id="game-info"
-            className="grid w-full items-center gap-4 p-2"
-            onSubmit={form.handleSubmit(onSubmit)}
-          >
-            <div className="flex justify-between">
-              <FormField
-                control={form.control}
-                name="homeTeam"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Home</FormLabel>
-                    <FormControl>
-                      <UserListInput {...field}></UserListInput>
-                    </FormControl>
-                    <FormMessage></FormMessage>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="awayTeam"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col items-end">
-                    <FormLabel>Away</FormLabel>
-                    <FormControl>
-                      <UserListInput
-                        {...field}
-                        className="items-end flex-row-reverse"
-                      ></UserListInput>
-                    </FormControl>
-                    <FormMessage></FormMessage>
-                  </FormItem>
-                )}
-              />
-            </div>
+    <>
+      <DepthHeader onPrev={onPrev}></DepthHeader>
+      <Card className="m-4 h-full">
+        <CardHeader>
+          <CardTitle>점수 입력</CardTitle>
+          <CardDescription>점수를 입력해 주세요.</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4 flex-1">
+          <Form {...form}>
+            <form
+              id="game-info"
+              className="grid w-full items-center gap-4 p-2"
+              onSubmit={form.handleSubmit(onSubmit)}
+            >
+              <div className="flex justify-between">
+                <FormField
+                  control={form.control}
+                  name="homeTeam"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Home</FormLabel>
+                      <FormControl>
+                        <UserListInput {...field}></UserListInput>
+                      </FormControl>
+                      <FormMessage></FormMessage>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="awayTeam"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col items-end">
+                      <FormLabel>Away</FormLabel>
+                      <FormControl>
+                        <UserListInput
+                          {...field}
+                          className="items-end flex-row-reverse"
+                        ></UserListInput>
+                      </FormControl>
+                      <FormMessage></FormMessage>
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-            <div className="flex justify-between">
-              <FormField
-                control={form.control}
-                name="homeScore"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Score</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        className="min-w-20 w-20"
-                        type="number"
-                        min={0}
-                        max={50}
-                        step={1}
-                        inputMode="numeric"
-                        autoComplete="off"
-                        onChange={(e) => {
-                          field.onChange(e.target.value.replace(/^0+/, ""));
-                        }}
-                      ></Input>
-                    </FormControl>
-                    <FormMessage></FormMessage>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="awayScore"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col items-end">
-                    <FormLabel>Score</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        className="min-w-20 w-20"
-                        type="number"
-                        min={0}
-                        max={50}
-                        step={1}
-                        inputMode="numeric"
-                        autoComplete="off"
-                        onChange={(e) => {
-                          field.onChange(e.target.value.replace(/^0+/, ""));
-                        }}
-                      ></Input>
-                    </FormControl>
-                    <FormMessage className="text-right"></FormMessage>
-                  </FormItem>
-                )}
-              />
-            </div>
+              <div className="flex justify-between">
+                <FormField
+                  control={form.control}
+                  name="homeScore"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Score</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="min-w-20 w-20"
+                          type="number"
+                          min={0}
+                          max={50}
+                          step={1}
+                          inputMode="numeric"
+                          autoComplete="off"
+                          onChange={(e) => {
+                            field.onChange(e.target.value.replace(/^0+/, ""));
+                          }}
+                        ></Input>
+                      </FormControl>
+                      <FormMessage></FormMessage>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="awayScore"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col items-end">
+                      <FormLabel>Score</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          className="min-w-20 w-20"
+                          type="number"
+                          min={0}
+                          max={50}
+                          step={1}
+                          inputMode="numeric"
+                          autoComplete="off"
+                          onChange={(e) => {
+                            field.onChange(e.target.value.replace(/^0+/, ""));
+                          }}
+                        ></Input>
+                      </FormControl>
+                      <FormMessage className="text-right"></FormMessage>
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-            <div className="h-20 w-20"></div>
+              <div className="h-20 w-20"></div>
 
-            <Button type="submit" className="h-10 p-0">
-              게임 등록
-            </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+              <Button type="submit" className="h-10 p-0">
+                게임 등록
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </>
   );
 };

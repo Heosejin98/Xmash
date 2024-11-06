@@ -1,3 +1,4 @@
+import DepthHeader from "@/app/depthHeader.ui";
 import { RankingQueries } from "@/entities/ranking/ranking.queries";
 import { UserQueries } from "@/entities/user/user.queries";
 import { MatchType } from "@/shared/api/game";
@@ -70,13 +71,14 @@ const UserListInput = forwardRef(
 
 interface Props {
   onNext: (players: string[]) => void;
+  onPrev?: (players: string[]) => void;
   matchType: MatchType;
   teamType: "home" | "away";
   team?: string[];
   exclude?: string[];
 }
 
-export const PlayersInputForm = ({ onNext, matchType, team, exclude, teamType }: Props) => {
+export const PlayersInputForm = ({ onNext, onPrev, matchType, team, exclude, teamType }: Props) => {
   const [players, onChangePlayers] = useState<string[]>(team ?? []);
   const requiredPlayers = useMemo(() => (matchType === "single" ? 1 : 2), [matchType]);
   const { data } = useQuery(RankingQueries.rankingQuery(matchType));
@@ -100,38 +102,47 @@ export const PlayersInputForm = ({ onNext, matchType, team, exclude, teamType }:
   }, [teamType]);
 
   return (
-    <Card className="m-4 h-full">
-      <CardHeader>
-        <CardTitle>{teamType.toUpperCase()} 선수 입력</CardTitle>
-        <CardDescription>선수를 입력해 주세요.</CardDescription>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4 flex-1">
-        <div className="items-start flex-col flex gap-4">
-          <UserListInput
-            requiredPlayers={requiredPlayers}
-            value={players}
-            onChange={onChangePlayers}
-          ></UserListInput>
-        </div>
+    <>
+      <DepthHeader
+        onPrev={() => {
+          onPrev?.(players);
+        }}
+      ></DepthHeader>
+      <Card className="m-4 h-full">
+        <CardHeader>
+          <CardTitle>{teamType.toUpperCase()} 선수 입력</CardTitle>
+          <CardDescription>선수를 입력해 주세요.</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4 flex-1">
+          <div className="items-start flex-col flex gap-4">
+            <UserListInput
+              requiredPlayers={requiredPlayers}
+              value={players}
+              onChange={onChangePlayers}
+            ></UserListInput>
+          </div>
 
-        {requiredPlayers === players.length && (
-          <Button type="button" className="h-10 w-full" onClick={() => onNext(players)}>
-            다음
-          </Button>
-        )}
+          {requiredPlayers === players.length && (
+            <Button type="button" className="h-10 w-full" onClick={() => onNext(players)}>
+              다음
+            </Button>
+          )}
 
-        {requiredPlayers !== players.length && (
-          <>
-            <Label>선수 목록</Label>
+          {requiredPlayers !== players.length && (
+            <>
+              <Label>선수 목록</Label>
 
-            <ScrollArea className="h-80 border rounded-lg">
-              {data
-                .filter((user) => !exclude?.includes(user.userId))
-                .map((user) => (
-                  <div
-                    className={cn("relative my-2 p-2 flex gap-3", {
-                      "bg-gray-100": players.includes(user.userId),
-                    })}
+              <ScrollArea className="h-80 border rounded-lg">
+                {data.map((user) => (
+                  <button
+                    type="button"
+                    disabled={exclude?.includes(user.userId)}
+                    className={cn(
+                      "relative my-2 p-2 flex gap-3 w-full disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-200",
+                      {
+                        "bg-gray-100": players.includes(user.userId),
+                      }
+                    )}
                     key={user.userId}
                     onClick={() => onClickPlayer(user.userId)}
                   >
@@ -143,12 +154,13 @@ export const PlayersInputForm = ({ onNext, matchType, team, exclude, teamType }:
                       <span className="text-sm font-bold">{user.userName}</span>
                       <span className="text-xs">{user.tier}</span>
                     </div>
-                  </div>
+                  </button>
                 ))}
-            </ScrollArea>
-          </>
-        )}
-      </CardContent>
-    </Card>
+              </ScrollArea>
+            </>
+          )}
+        </CardContent>
+      </Card>
+    </>
   );
 };
