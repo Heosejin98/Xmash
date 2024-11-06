@@ -30,6 +30,7 @@ const AddGame = () => {
     case "homeTeam":
       return (
         <PlayersInputForm
+          key="home"
           matchType={funnel.context.matchType}
           exclude={funnel.context.awayTeam}
           teamType="home"
@@ -43,6 +44,7 @@ const AddGame = () => {
     case "awayTeam":
       return (
         <PlayersInputForm
+          key="away"
           matchType={funnel.context.matchType}
           exclude={funnel.context.homeTeam}
           teamType="away"

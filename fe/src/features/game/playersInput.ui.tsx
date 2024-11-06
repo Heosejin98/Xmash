@@ -18,7 +18,7 @@ import {
 } from "@/shared/ui";
 import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
-import { Dispatch, forwardRef, SetStateAction, useEffect, useMemo, useState } from "react";
+import { Dispatch, forwardRef, SetStateAction, useMemo, useState } from "react";
 
 const UserListInput = forwardRef(
   (
@@ -97,9 +97,7 @@ export const PlayersInputForm = ({ onNext, onPrev, matchType, team, exclude, tea
     onChangePlayers([...players, userId]);
   };
 
-  useEffect(() => {
-    onChangePlayers(team ?? []);
-  }, [teamType]);
+  // const router = useRouter();
 
   return (
     <>
@@ -131,6 +129,12 @@ export const PlayersInputForm = ({ onNext, onPrev, matchType, team, exclude, tea
           {requiredPlayers !== players.length && (
             <>
               <Label>선수 목록</Label>
+
+              {/* <Input
+                placeholder="검색할 이름..."
+                className="max-w-sm"
+                onFocus={() => router.history.push("/user/search")}
+              /> */}
 
               <ScrollArea className="h-80 border rounded-lg">
                 {data.map((user) => (
