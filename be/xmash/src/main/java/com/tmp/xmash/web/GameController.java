@@ -38,11 +38,9 @@ public class GameController {
         binder.registerCustomEditor(MatchType.class, new MatchTypeEditor());
     }
 
-    @PostMapping("/game/{gameType}/{matchType}")
+    @PostMapping("/game")
     public ResponseEntity<Boolean> doneGameResult(
             HttpSession session,
-        @Parameter(name = "matchType", description = "매치타입(단식, 복식)을 지정합니다.", required = true, in = ParameterIn.PATH) @PathVariable MatchType matchType,
-        @Parameter(name = "gameType", description = "게임 타입을 지정합니다.", required = true, in = ParameterIn.PATH) @PathVariable("gameType") GameType gameType,
         @Parameter(name = "GameRequest", description = "게임 결과 등록 요청 데이터", required = true) @Valid @RequestBody GameResultRequest gameResultRequest
     ) throws AuthenticationException {
         String userId = (String) session.getAttribute("userId");
@@ -50,9 +48,18 @@ public class GameController {
             throw new AuthenticationException("로그인 후 게임 등록 가능");
         }
 
-        GamePostAble gameService = gameServiceFactory.getGamePostAble(matchType);
+        GamePostAble gameService = gameServiceFactory.getGamePostAble(gameResultRequest.matchType());
 
         return ResponseEntity.ok(gameService.matchDone(gameResultRequest));
+    }
+
+    @GetMapping("/game")
+    public ResponseEntity<List<GameResultResponse>> getGameResult(
+            @Parameter(name = "matchType", description = "매치타입(단식, 복식)을 지정합니다.", required = true, in = ParameterIn.PATH) @RequestParam MatchType matchType
+    ) {
+        GameService gameService = gameServiceFactory.getGameService(matchType);
+
+        return ResponseEntity.ok(gameService.getMatchHistory());
     }
 
 
@@ -69,15 +76,7 @@ public class GameController {
     }
 
 
-    @GetMapping("/game/{gameType}/{matchType}")
-    public ResponseEntity<List<GameResultResponse>> getGameResult(
-            @Parameter(name = "matchType", description = "매치타입(단식, 복식)을 지정합니다.", required = true, in = ParameterIn.PATH) @PathVariable MatchType matchType,
-            @Parameter(name = "gameType", description = "게임타입(랭크, 노말)을 지정합니다.", required = true, in = ParameterIn.PATH) @PathVariable GameType gameType
-    ) {
-        GameService gameService = gameServiceFactory.getGameService(matchType);
 
-        return ResponseEntity.ok(gameService.getMatchHistory());
-    }
 
     @GetMapping("/game/tournament")
     @Operation(summary = "토너먼트 경기 조회", description = "시즌 별 토너먼트 경기 결과 or 진행 상태 조회")
