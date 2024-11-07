@@ -41,7 +41,6 @@ public class GameController {
     @PostMapping("/game")
     public ResponseEntity<Boolean> doneGameResult(
             HttpSession session,
-        @Parameter(name = "matchType", description = "매치타입(단식, 복식)을 지정합니다.", required = true, in = ParameterIn.PATH) @RequestParam MatchType matchType,
         @Parameter(name = "GameRequest", description = "게임 결과 등록 요청 데이터", required = true) @Valid @RequestBody GameResultRequest gameResultRequest
     ) throws AuthenticationException {
         String userId = (String) session.getAttribute("userId");
@@ -49,7 +48,7 @@ public class GameController {
             throw new AuthenticationException("로그인 후 게임 등록 가능");
         }
 
-        GamePostAble gameService = gameServiceFactory.getGamePostAble(matchType);
+        GamePostAble gameService = gameServiceFactory.getGamePostAble(gameResultRequest.matchType());
 
         return ResponseEntity.ok(gameService.matchDone(gameResultRequest));
     }
