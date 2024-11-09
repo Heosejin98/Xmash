@@ -15,10 +15,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(GamePostException.class)
+    @ExceptionHandler(BadRequestException.class)
     private GlobalExceptionResponse handleBadRequestException(BadRequestException e) {
         log.error("Bad Request Exception : {}", e.getMessage());
         
+        return new GlobalExceptionResponse(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(GamePostException.class)
+    private GlobalExceptionResponse handleGamePostException(GamePostException e) {
+        log.error("GamePost Exception : {}", e.getMessage());
         return new GlobalExceptionResponse(e.getMessage());
     }
 

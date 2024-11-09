@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public record GameResultResponse(
+        long idx,
         List<PlayerResponse> winTeam,
         List<PlayerResponse> loseTeam,
         int winnerScore,
@@ -33,6 +34,7 @@ public record GameResultResponse(
         List<PlayerResponse> loserTeam = List.of(new PlayerResponse(loserId, loserName, null));
 
         return new GameResultResponse(
+                matchResult.getId(),
                 winTeam,
                 loserTeam,
                 matchResult.getWinnerScore(),
@@ -63,6 +65,7 @@ public record GameResultResponse(
         );
 
         return new GameResultResponse(
+                matchResult.getId(),
                 winTeam,
                 loserTeam,
                 matchResult.getWinnerScore(),

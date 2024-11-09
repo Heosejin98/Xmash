@@ -1,5 +1,6 @@
 package com.tmp.xmash.web;
 
+import com.tmp.xmash.dto.request.GameModifyRequest;
 import com.tmp.xmash.dto.request.GameResultRequest;
 import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.dto.response.TournamentGameResponse;
@@ -38,7 +39,7 @@ public class GameController {
         binder.registerCustomEditor(MatchType.class, new MatchTypeEditor());
     }
 
-    @PostMapping("/game")
+    @PostMapping("/games")
     public ResponseEntity<Boolean> doneGameResult(
             HttpSession session,
         @Parameter(name = "GameRequest", description = "게임 결과 등록 요청 데이터", required = true) @Valid @RequestBody GameResultRequest gameResultRequest
@@ -53,7 +54,24 @@ public class GameController {
         return ResponseEntity.ok(gameService.matchDone(gameResultRequest.toMatchEvaluator()));
     }
 
-    @GetMapping("/game")
+    @PatchMapping("/games/{matchId}")
+    public ResponseEntity<Void> modifyGameResult(
+            HttpSession session,
+            @Parameter(name = "matchId", description = "match_history_id") long matchId,
+            @Parameter(name = "GameRequest", description = "게임 결과 등록 요청 데이터", required = true) @Valid @RequestBody GameModifyRequest gameModifyRequest
+    ) {
+        String userId = (String) session.getAttribute("userId");
+        if (userId == null) {
+            throw new AuthenticationException("로그인 후 게임 수정 가능");
+        }
+
+        GamePostAble gameService = gameServiceFactory.getGamePostAble(gameModifyRequest.matchType());
+        gameService.modifyMatchHistory(gameModifyRequest, matchId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/games")
     public ResponseEntity<List<GameResultResponse>> getGameResult(
             @Parameter(name = "matchType", description = "매치타입(단식, 복식)을 지정합니다.", required = true, in = ParameterIn.PATH) @RequestParam MatchType matchType
     ) {
@@ -63,7 +81,7 @@ public class GameController {
     }
 
 
-    @PostMapping("/game/tournament")
+    @PostMapping("/games/tournament")
     @Operation(summary = "토너먼트 경기 신청", description = "오픈된 시즌 토너먼트 신청")
     public ResponseEntity<Boolean> doneTournamentGameResult(
             HttpSession session
@@ -78,7 +96,7 @@ public class GameController {
 
 
 
-    @GetMapping("/game/tournament")
+    @GetMapping("/games/tournament")
     @Operation(summary = "토너먼트 경기 조회", description = "시즌 별 토너먼트 경기 결과 or 진행 상태 조회")
     public ResponseEntity<List<TournamentGameResponse>> getTournamentGame(
             @RequestParam int season

@@ -56,4 +56,12 @@ public class SingleRankMatchHistory {
         this.matchTime = XmashTimeCreator.getCurrentTimeUTC();
         this.lp = lp;
     }
+
+    public void updateMatchHistory(String winnerId, String loserId,
+                                    int winnerScore, int loserScore) {
+        this.winnerId = winnerId;
+        this.loserId = loserId;
+        this.winnerScore = winnerScore;
+        this.loserScore = loserScore;
+    }
 }

@@ -60,4 +60,14 @@ public class DoubleRankMatchHistory {
         this.matchTime = XmashTimeCreator.getCurrentTimeUTC();
         this.lp = lp;
     }
+
+    public void updateMatchHistory(String winner1Id, String winner2Id, String loser1Id,
+                                   String loser2Id, int winnerScore, int loserScore) {
+        this.winner1Id = winner1Id;
+        this.winner2Id = winner2Id;
+        this.loser1Id = loser1Id;
+        this.loser2Id = loser2Id;
+        this.winnerScore = winnerScore;
+        this.loserScore = loserScore;
+    }
 }

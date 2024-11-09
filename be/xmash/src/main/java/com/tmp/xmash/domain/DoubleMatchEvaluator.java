@@ -4,59 +4,60 @@ import com.tmp.xmash.db.entity.AppUser;
 import com.tmp.xmash.db.entity.DoubleRankMatchHistory;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 public class DoubleMatchEvaluator extends MatchEvaluator {
 
-    private final List<String> homeUserIds;
-
-    private final List<String> awayUserIds;
-
     public DoubleMatchEvaluator(List<String> homeTeamIds, List<String> awayUserIds, int homeScore, int awayScore) {
-        super(homeScore, awayScore, getResultLp(homeScore, awayScore));
-        this.homeUserIds = homeTeamIds;
-        this.awayUserIds = awayUserIds;
+        super(homeScore,
+                awayScore,
+                crateResultLp(homeScore, awayScore),
+                new Team(homeTeamIds.getFirst(), homeTeamIds.getLast()),
+                new Team(awayUserIds.getFirst(), awayUserIds.getLast()));
     }
 
     @Override
     public List<String> getUserIds() {
-        return Stream.concat(homeUserIds.stream(), awayUserIds.stream())
-                .toList();
+        return List.of(homeTeam.userId1(), homeTeam.userId2(),
+                awayTeam.userId1(), awayTeam.userId2());
     }
 
     @Override
     public List<AppUser> getHomeUser(List<AppUser> matchUsers) {
         return matchUsers.stream()
-                .filter(a -> homeUserIds.contains(a.getUserId()))
+                .filter(user -> homeTeam.userId1().equals(user.getUserId()) ||
+                        homeTeam.userId2().equals(user.getUserId()))
                 .toList();
     }
 
     @Override
     public List<AppUser> getAwayUser(List<AppUser> matchUsers) {
         return matchUsers.stream()
-                .filter(a -> awayUserIds.contains(a.getUserId()))
+                .filter(user -> awayTeam.userId1().equals(user.getUserId()) ||
+                        awayTeam.userId2().equals(user.getUserId()))
                 .toList();
     }
 
     public DoubleRankMatchHistory resolveRankMatchWinner()  {
         if (homeScore > awayScore) {
             return DoubleRankMatchHistory.builder()
-                    .winner1Id(homeUserIds.get(0))
-                    .winner2Id(homeUserIds.get(1))
+                    .winner1Id(homeTeam.userId1())
+                    .winner2Id(homeTeam.userId2())
                     .winnerScore(homeScore)
-                    .loser1Id(awayUserIds.get(0))
-                    .loser2Id(awayUserIds.get(1))
+                    .loser1Id(awayTeam.userId1())
+                    .loser2Id(awayTeam.userId2())
                     .loserScore(awayScore)
+                    .lp(resultLp)
                     .build();
         }
 
         return DoubleRankMatchHistory.builder()
-                .winner1Id(awayUserIds.get(0))
-                .winner2Id(awayUserIds.get(1))
+                .winner1Id(awayTeam.userId1())
+                .winner2Id(awayTeam.userId2())
                 .winnerScore(awayScore)
-                .loser1Id(homeUserIds.get(0))
-                .loser2Id(homeUserIds.get(1))
+                .loser1Id(homeTeam.userId1())
+                .loser2Id(homeTeam.userId2())
                 .loserScore(homeScore)
+                .lp(resultLp)
                 .build();
     }
 }

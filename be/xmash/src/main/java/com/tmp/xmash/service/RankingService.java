@@ -40,15 +40,6 @@ public class RankingService {
         throw new BadRequestException("단식 또는 복식을 입력하세요 match type: " + matchType);
     }
 
-
-    @Transactional
-    public void updateRanking(UserRanking winner, UserRanking loser, int resultLp) {
-        winner.updateLpAndTier(resultLp);
-        loser.updateLpAndTier(resultLp * -1);
-        Set<UserRanking> userRankings = Set.of(winner, loser);
-        userRankingRepository.saveAll(userRankings);
-    }
-
     @Transactional
     public void updateRanking(List<UserRanking> winner, List<UserRanking> loser, int resultLp) {
         for (UserRanking userRanking : winner) {
@@ -63,5 +54,4 @@ public class RankingService {
         userRankings.addAll(loser);
         userRankingRepository.saveAll(userRankings);
     }
-
 }

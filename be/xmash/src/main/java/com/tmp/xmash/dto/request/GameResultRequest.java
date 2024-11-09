@@ -6,8 +6,8 @@ import com.tmp.xmash.domain.SingleMatchEvaluator;
 import com.tmp.xmash.exption.BadRequestException;
 import com.tmp.xmash.type.MatchType;
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.List;
-import java.util.NoSuchElementException;
 
 
 @Schema(description = "게임 결과 요청 데이터")
@@ -42,5 +42,4 @@ public record GameResultRequest(
                         case ALL -> throw new BadRequestException("all type 게임 등록 불가능");
                 };
         }
-
 }

@@ -5,7 +5,6 @@ import com.tmp.xmash.exption.GamePostException;
 import lombok.Getter;
 
 import java.util.List;
-import java.util.Set;
 
 import static com.tmp.xmash.common.AppConstants.DEFAULT_WINNER_LP;
 import static com.tmp.xmash.common.AppConstants.RANDOM_GENERATOR;
@@ -19,10 +18,16 @@ public abstract class MatchEvaluator {
 
     protected final int resultLp;
 
-    protected MatchEvaluator(int homeScore, int awayScore, int resultLp) {
+    protected final Team homeTeam;
+
+    protected final Team awayTeam;
+
+    protected MatchEvaluator(int homeScore, int awayScore, int resultLp, Team homeTeam, Team awayTeam) {
         this.homeScore = homeScore;
         this.awayScore = awayScore;
         this.resultLp = resultLp;
+        this.homeTeam = homeTeam;
+        this.awayTeam = awayTeam;
     }
 
     public boolean isHomeWinner() {
@@ -45,7 +50,7 @@ public abstract class MatchEvaluator {
 
     public abstract List<AppUser> getAwayUser(List<AppUser> matchUsers);
 
-    protected static int getResultLp(int homeScore, int awayScore) {
+    protected static int crateResultLp(int homeScore, int awayScore) {
         int winnerScore = Math.max(homeScore, awayScore);
 
         if (winnerScore <= 11) {
