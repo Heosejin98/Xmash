@@ -1,65 +1,61 @@
 package com.tmp.xmash.domain;
 
-import static com.tmp.xmash.common.AppConstants.DEFAULT_WINNER_LP;
-import static com.tmp.xmash.common.AppConstants.RANDOM_GENERATOR;
-
+import com.tmp.xmash.db.entity.AppUser;
 import com.tmp.xmash.db.entity.DoubleRankMatchHistory;
-import com.tmp.xmash.dto.request.GameResultRequest;
+
 import java.util.List;
+import java.util.stream.Stream;
 
-public class DoubleMatchEvaluator {
+public class DoubleMatchEvaluator extends MatchEvaluator {
 
-    private final List<String> homeTeamIds;
+    private final List<String> homeUserIds;
 
-    private final List<String> awayTeamIds;
+    private final List<String> awayUserIds;
 
-    private final int homeScore;
-
-    private final int awayScore;
-
-    public DoubleMatchEvaluator(GameResultRequest gameResultRequest) {
-        this.homeTeamIds = gameResultRequest.homeTeam();
-        this.awayTeamIds = gameResultRequest.awayTeam();
-        this.homeScore = gameResultRequest.homeScore();
-        this.awayScore = gameResultRequest.awayScore();
+    public DoubleMatchEvaluator(List<String> homeTeamIds, List<String> awayUserIds, int homeScore, int awayScore) {
+        super(homeScore, awayScore, getResultLp(homeScore, awayScore));
+        this.homeUserIds = homeTeamIds;
+        this.awayUserIds = awayUserIds;
     }
 
-    public boolean isHomeWinner() {
-        return homeScore > awayScore;
+    @Override
+    public List<String> getUserIds() {
+        return Stream.concat(homeUserIds.stream(), awayUserIds.stream())
+                .toList();
     }
 
-    public int getResultLp() {
-        int winnerScore = isHomeWinner() ? homeScore : awayScore;
+    @Override
+    public List<AppUser> getHomeUser(List<AppUser> matchUsers) {
+        return matchUsers.stream()
+                .filter(a -> homeUserIds.contains(a.getUserId()))
+                .toList();
+    }
 
-        if (winnerScore <= 11) {
-            return DEFAULT_WINNER_LP;
-        }
-
-        if (winnerScore <= 20) {
-            return DEFAULT_WINNER_LP + RANDOM_GENERATOR.nextInt(5);
-        }
-
-        return DEFAULT_WINNER_LP + (RANDOM_GENERATOR.nextInt(5) * 2);
+    @Override
+    public List<AppUser> getAwayUser(List<AppUser> matchUsers) {
+        return matchUsers.stream()
+                .filter(a -> awayUserIds.contains(a.getUserId()))
+                .toList();
     }
 
     public DoubleRankMatchHistory resolveRankMatchWinner()  {
         if (homeScore > awayScore) {
             return DoubleRankMatchHistory.builder()
-                    .winner1Id(homeTeamIds.get(0))
-                    .winner2Id(homeTeamIds.get(1))
+                    .winner1Id(homeUserIds.get(0))
+                    .winner2Id(homeUserIds.get(1))
                     .winnerScore(homeScore)
-                    .loser1Id(awayTeamIds.get(0))
-                    .loser2Id(awayTeamIds.get(1))
+                    .loser1Id(awayUserIds.get(0))
+                    .loser2Id(awayUserIds.get(1))
                     .loserScore(awayScore)
                     .build();
         }
 
         return DoubleRankMatchHistory.builder()
-                .winner1Id(awayTeamIds.get(0))
-                .winner2Id(awayTeamIds.get(1))
+                .winner1Id(awayUserIds.get(0))
+                .winner2Id(awayUserIds.get(1))
                 .winnerScore(awayScore)
-                .loser1Id(homeTeamIds.get(0))
-                .loser2Id(homeTeamIds.get(1))
+                .loser1Id(homeUserIds.get(0))
+                .loser2Id(homeUserIds.get(1))
                 .loserScore(homeScore)
                 .build();
     }

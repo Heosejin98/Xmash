@@ -3,6 +3,7 @@ package com.tmp.xmash.web;
 import com.tmp.xmash.dto.request.GameResultRequest;
 import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.dto.response.TournamentGameResponse;
+import com.tmp.xmash.exption.AuthenticationException;
 import com.tmp.xmash.service.game.GamePostAble;
 import com.tmp.xmash.service.game.GameService;
 import com.tmp.xmash.service.game.GameServiceFactory;
@@ -19,7 +20,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.AllArgsConstructor;
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +42,7 @@ public class GameController {
     public ResponseEntity<Boolean> doneGameResult(
             HttpSession session,
         @Parameter(name = "GameRequest", description = "게임 결과 등록 요청 데이터", required = true) @Valid @RequestBody GameResultRequest gameResultRequest
-    ) throws AuthenticationException {
+    ) {
         String userId = (String) session.getAttribute("userId");
         if (userId == null) {
             throw new AuthenticationException("로그인 후 게임 등록 가능");
@@ -50,7 +50,7 @@ public class GameController {
 
         GamePostAble gameService = gameServiceFactory.getGamePostAble(gameResultRequest.matchType());
 
-        return ResponseEntity.ok(gameService.matchDone(gameResultRequest));
+        return ResponseEntity.ok(gameService.matchDone(gameResultRequest.toMatchEvaluator()));
     }
 
     @GetMapping("/game")

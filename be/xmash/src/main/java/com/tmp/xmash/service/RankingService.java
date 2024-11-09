@@ -50,7 +50,7 @@ public class RankingService {
     }
 
     @Transactional
-    public void updateRanking(Set<UserRanking> winner, Set<UserRanking> loser, int resultLp) {
+    public void updateRanking(List<UserRanking> winner, List<UserRanking> loser, int resultLp) {
         for (UserRanking userRanking : winner) {
             userRanking.updateTeamLpAndTeamTier(resultLp);
         }

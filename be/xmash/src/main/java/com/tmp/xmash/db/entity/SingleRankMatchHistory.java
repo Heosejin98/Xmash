@@ -24,22 +24,36 @@ public class SingleRankMatchHistory {
     @Column(name = "match_history_id")
     private Long id;
 
+    @Column(nullable = false)
     private LocalDateTime matchTime;
 
+    @Column(nullable = false)
     private String winnerId;
 
+    @Column(nullable = false)
     private String loserId;
 
+    @Column(nullable = false)
     private int winnerScore;
 
+    @Column(nullable = false)
     private int loserScore;
 
+    @Column(nullable = false)
+    private int lp;
+
     @Builder
-    public SingleRankMatchHistory(String winnerId, String loserId, int winnerScore, int loserScore) {
+    public SingleRankMatchHistory(String winnerId,
+                                  String loserId,
+                                  int winnerScore,
+                                  int loserScore,
+                                  int lp
+    ) {
         this.winnerId = winnerId;
         this.loserId = loserId;
         this.winnerScore = winnerScore;
         this.loserScore = loserScore;
         this.matchTime = XmashTimeCreator.getCurrentTimeUTC();
+        this.lp = lp;
     }
 }

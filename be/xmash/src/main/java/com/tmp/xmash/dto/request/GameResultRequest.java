@@ -1,8 +1,13 @@
 package com.tmp.xmash.dto.request;
 
+import com.tmp.xmash.domain.DoubleMatchEvaluator;
+import com.tmp.xmash.domain.MatchEvaluator;
+import com.tmp.xmash.domain.SingleMatchEvaluator;
+import com.tmp.xmash.exption.BadRequestException;
 import com.tmp.xmash.type.MatchType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 @Schema(description = "게임 결과 요청 데이터")
@@ -22,5 +27,20 @@ public record GameResultRequest(
         @Schema(description = "단식, 복식", example = "double")
         MatchType matchType
 ) {
+        public MatchEvaluator toMatchEvaluator() {
+                return switch (matchType) {
+                        case SINGLE -> new SingleMatchEvaluator(
+                                homeTeam().getFirst(),
+                                awayTeam().getFirst(),
+                                homeScore(),
+                                awayScore());
+                        case DOUBLE -> new DoubleMatchEvaluator(
+                                homeTeam(),
+                                awayTeam(),
+                                homeScore(),
+                                awayScore());
+                        case ALL -> throw new BadRequestException("all type 게임 등록 불가능");
+                };
+        }
 
 }

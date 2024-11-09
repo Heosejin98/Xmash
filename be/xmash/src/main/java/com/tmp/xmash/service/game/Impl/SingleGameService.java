@@ -6,9 +6,10 @@ import com.tmp.xmash.db.entity.UserRanking;
 import com.tmp.xmash.db.repositroy.SingleRankMatchHistoryRepo;
 import com.tmp.xmash.db.repositroy.UserRepository;
 import com.tmp.xmash.domain.MatchEvaluator;
-import com.tmp.xmash.dto.request.GameResultRequest;
+import com.tmp.xmash.domain.SingleMatchEvaluator;
 import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.service.RankingService;
+import com.tmp.xmash.service.UserService;
 import com.tmp.xmash.service.game.GamePostAble;
 import com.tmp.xmash.service.game.GameService;
 import com.tmp.xmash.type.MatchType;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static java.util.function.UnaryOperator.identity;
 import static java.util.stream.Collectors.toMap;
@@ -32,37 +32,34 @@ public class SingleGameService implements GameService, GamePostAble {
     private final SingleRankMatchHistoryRepo singleMatchHistoryRepo;
     private final UserRepository userRepository;
     private final RankingService rankingService;
+    private final UserService userService;
 
     @Transactional
     @Override
-    public boolean matchDone(GameResultRequest gameResultRequest) {
-        checkScore(gameResultRequest);
+    public boolean matchDone(MatchEvaluator evaluator) {
+        SingleMatchEvaluator matchEvaluator = (SingleMatchEvaluator) evaluator;
+        matchEvaluator.checkScore();
 
-        Set<AppUser> matchUsers = userRepository.findByUserIdIn(Set.of(
-                gameResultRequest.homeTeam().getFirst(),
-                gameResultRequest.awayTeam().getFirst()));
-        AppUser homeUser = matchUsers.stream()
-                .filter(a -> a.getUserId().equals(gameResultRequest.homeTeam().getFirst()))
+        List<AppUser> matchUsers = userService.findByUserIdIn(matchEvaluator.getUserIds());
+        AppUser homeUser = matchEvaluator.getHomeUser(matchUsers).stream()
                 .findFirst()
                 .orElseThrow();
-        AppUser awayUser = matchUsers.stream()
-                .filter(a -> a.getUserId().equals(gameResultRequest.awayTeam().getFirst()))
+        AppUser awayUser = matchEvaluator.getAwayUser(matchUsers).stream()
                 .findFirst()
                 .orElseThrow();
 
-        MatchEvaluator matchEvaluator = new MatchEvaluator(gameResultRequest);
-        singleMatchHistoryRepo.save(matchEvaluator.resolveMatchWinner2());
+        singleMatchHistoryRepo.save(matchEvaluator.resolveMatchWinner());
 
         UserRanking homeSeasonRanking =  homeUser.getCurrentUserRanking();
         UserRanking awaySeasonRanking =  awayUser.getCurrentUserRanking();
 
-        if (matchEvaluator.isHomeWinner()) {
-            rankingService.updateRanking(homeSeasonRanking, awaySeasonRanking, matchEvaluator.getResultLp());
+        if (evaluator.isHomeWinner()) {
+            rankingService.updateRanking(homeSeasonRanking, awaySeasonRanking, evaluator.getResultLp());
 
             return true;
         }
 
-        rankingService.updateRanking(awaySeasonRanking, homeSeasonRanking, matchEvaluator.getResultLp());
+        rankingService.updateRanking(awaySeasonRanking, homeSeasonRanking, evaluator.getResultLp());
         return false;
     }
 
