@@ -15,14 +15,14 @@ public interface GamePostAble {
     void modifyMatchHistory(GameModifyRequest matchEvaluator, long matchId);
 
     default RequestUserRanking getRequestUserRanking(MatchEvaluator doubleMatchEvaluator, List<AppUser> matchUsers) {
-        List<AppUser> homeUsers = doubleMatchEvaluator.getHomeUser(matchUsers);
-        List<AppUser> awayUser = doubleMatchEvaluator.getAwayUser(matchUsers);
-        List<UserRanking> homeSeasonRanking = homeUsers.stream()
+        List<AppUser> winner = doubleMatchEvaluator.getHomeUser(matchUsers);
+        List<AppUser> loser = doubleMatchEvaluator.getAwayUser(matchUsers);
+        List<UserRanking> winnerRankings = winner.stream()
                 .map(AppUser::getCurrentUserRanking)
                 .toList();
-        List<UserRanking> awaySeasonRanking =  awayUser.stream()
+        List<UserRanking> loserRankings =  loser.stream()
                 .map(AppUser::getCurrentUserRanking)
                 .toList();
-        return new RequestUserRanking(homeSeasonRanking, awaySeasonRanking);
+        return new RequestUserRanking(winnerRankings, loserRankings);
     }
 }
