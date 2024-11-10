@@ -45,9 +45,12 @@ public class DoubleRankMatchHistory {
     @Column(nullable = false)
     private LocalDateTime matchTime;
 
+    @Column(nullable = false)
+    private int lp;
+
     @Builder
     public DoubleRankMatchHistory(String winner1Id, String winner2Id, String loser1Id,
-            String loser2Id, int winnerScore, int loserScore) {
+            String loser2Id, int winnerScore, int loserScore, int lp) {
         this.winner1Id = winner1Id;
         this.winner2Id = winner2Id;
         this.loser1Id = loser1Id;
@@ -55,6 +58,16 @@ public class DoubleRankMatchHistory {
         this.winnerScore = winnerScore;
         this.loserScore = loserScore;
         this.matchTime = XmashTimeCreator.getCurrentTimeUTC();
+        this.lp = lp;
     }
 
+    public void updateMatchHistory(String winner1Id, String winner2Id, String loser1Id,
+                                   String loser2Id, int winnerScore, int loserScore) {
+        this.winner1Id = winner1Id;
+        this.winner2Id = winner2Id;
+        this.loser1Id = loser1Id;
+        this.loser2Id = loser2Id;
+        this.winnerScore = winnerScore;
+        this.loserScore = loserScore;
+    }
 }

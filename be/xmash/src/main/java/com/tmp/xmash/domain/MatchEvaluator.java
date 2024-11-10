@@ -1,31 +1,57 @@
 package com.tmp.xmash.domain;
 
+import com.tmp.xmash.db.entity.AppUser;
+import com.tmp.xmash.exption.GamePostException;
+import lombok.Getter;
+
+import java.util.List;
+
 import static com.tmp.xmash.common.AppConstants.DEFAULT_WINNER_LP;
 import static com.tmp.xmash.common.AppConstants.RANDOM_GENERATOR;
 
-import com.tmp.xmash.db.entity.SingleRankMatchHistory;
-import com.tmp.xmash.dto.request.GameResultRequest;
+@Getter
+public abstract class MatchEvaluator {
 
-public class MatchEvaluator {
+    protected final int homeScore;
 
+    protected final int awayScore;
 
-    private final String homeId;
+    protected final int resultLp;
 
-    private final String awayId;
+    protected final Team homeTeam;
 
-    private final int homeScore;
+    protected final Team awayTeam;
 
-    private final int awayScore;
-
-    public MatchEvaluator(GameResultRequest gameResultRequest) {
-        this.homeId = gameResultRequest.homeTeam().getFirst();
-        this.awayId = gameResultRequest.awayTeam().getFirst();
-        this.homeScore = gameResultRequest.homeScore();
-        this.awayScore = gameResultRequest.awayScore();
+    protected MatchEvaluator(int homeScore, int awayScore, int resultLp, Team homeTeam, Team awayTeam) {
+        this.homeScore = homeScore;
+        this.awayScore = awayScore;
+        this.resultLp = resultLp;
+        this.homeTeam = homeTeam;
+        this.awayTeam = awayTeam;
     }
 
-    public int getResultLp() {
-        int winnerScore = isHomeWinner() ? homeScore : awayScore;
+    public boolean isHomeWinner() {
+        return homeScore > awayScore;
+    }
+
+    public void checkScore() {
+        if (isDraw()) {
+            throw new GamePostException("무승부는 등록 불가능합니다.");
+        }
+
+        if (isScoreBelowMinimum()) {
+            throw new GamePostException("11점 이상 게임만 등록 가능합니다.");
+        }
+    }
+
+    public abstract List<String> getUserIds();
+
+    public abstract List<AppUser> getHomeUser(List<AppUser> matchUsers);
+
+    public abstract List<AppUser> getAwayUser(List<AppUser> matchUsers);
+
+    protected static int crateResultLp(int homeScore, int awayScore) {
+        int winnerScore = Math.max(homeScore, awayScore);
 
         if (winnerScore <= 11) {
             return DEFAULT_WINNER_LP;
@@ -38,26 +64,12 @@ public class MatchEvaluator {
         return DEFAULT_WINNER_LP + (RANDOM_GENERATOR.nextInt(5) * 2);
     }
 
-    public boolean isHomeWinner() {
-        return homeScore > awayScore;
+    private boolean isScoreBelowMinimum() {
+        int winnerScore = Math.max(homeScore, awayScore);
+        return winnerScore < 11;
     }
 
-    public SingleRankMatchHistory resolveMatchWinner2()  {
-        if (isHomeWinner()) {
-            return SingleRankMatchHistory.builder()
-                    .winnerId(homeId)
-                    .winnerScore(homeScore)
-                    .loserId(awayId)
-                    .loserScore(awayScore)
-                    .build();
-        }
-
-        return SingleRankMatchHistory.builder()
-                .winnerId(awayId)
-                .winnerScore(awayScore)
-                .loserId(homeId)
-                .loserScore(homeScore)
-                .build();
+    private boolean isDraw() {
+        return homeScore == awayScore;
     }
-
 }

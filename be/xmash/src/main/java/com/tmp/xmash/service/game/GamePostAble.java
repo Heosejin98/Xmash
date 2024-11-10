@@ -1,21 +1,28 @@
 package com.tmp.xmash.service.game;
 
-import com.tmp.xmash.dto.request.GameResultRequest;
-import com.tmp.xmash.exption.GamePostException;
+import com.tmp.xmash.db.entity.AppUser;
+import com.tmp.xmash.db.entity.UserRanking;
+import com.tmp.xmash.domain.MatchEvaluator;
+import com.tmp.xmash.dto.request.GameModifyRequest;
+import com.tmp.xmash.domain.RequestUserRanking;
+
+import java.util.List;
 
 public interface GamePostAble {
 
-    boolean matchDone(GameResultRequest gameResultRequest);
+    boolean matchDone(MatchEvaluator gameResultRequest);
 
-    default void checkScore(GameResultRequest gameResultRequest) {
-        if (gameResultRequest.homeScore() == gameResultRequest.awayScore()) {
-            throw new GamePostException("무승부는 등록 불가능합니다.");
-        }
+    void modifyMatchHistory(GameModifyRequest matchEvaluator, long matchId);
 
-        int winnerScore = Math.max(gameResultRequest.homeScore(), gameResultRequest.awayScore());
-        if (winnerScore < 11) {
-            throw new GamePostException("11점 이상 게임만 등록 가능합니다.");
-        }
+    default RequestUserRanking getRequestUserRanking(MatchEvaluator doubleMatchEvaluator, List<AppUser> matchUsers) {
+        List<AppUser> homeUsers = doubleMatchEvaluator.getHomeUser(matchUsers);
+        List<AppUser> awayUser = doubleMatchEvaluator.getAwayUser(matchUsers);
+        List<UserRanking> homeSeasonRanking = homeUsers.stream()
+                .map(AppUser::getCurrentUserRanking)
+                .toList();
+        List<UserRanking> awaySeasonRanking =  awayUser.stream()
+                .map(AppUser::getCurrentUserRanking)
+                .toList();
+        return new RequestUserRanking(homeSeasonRanking, awaySeasonRanking);
     }
-
 }
