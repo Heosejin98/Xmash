@@ -15,6 +15,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { GameQueries } from "./game.queries";
 import { MatchTypeTabs } from "./matchType.tabs.ui";
+import { createFuzzyMatcher } from "@/shared/lib/search";
 
 export function GameList() {
   const { matchType } = Route.useSearch();
@@ -33,13 +34,15 @@ export function GameList() {
   );
 
   const tableRows = useMemo(() => {
+    const reg = createFuzzyMatcher(searchValue);
+
     return data
       ?.filter((d) => matchType === "all" || d.matchType === matchType)
       ?.filter(
         (d) =>
           searchValue === "" ||
-          d.winTeam.some((p) => p.userName.includes(searchValue)) ||
-          d.loseTeam.some((p) => p.userName.includes(searchValue))
+          d.winTeam.some((p) => reg.test(p.userName)) ||
+          d.loseTeam.some((p) => reg.test(p.userName))
       );
   }, [data, matchType, searchValue]);
 
@@ -51,6 +54,7 @@ export function GameList() {
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           className="max-w-sm"
+          type="search"
         />
       </div>
       <div className="rounded-md border">

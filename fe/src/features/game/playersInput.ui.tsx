@@ -2,6 +2,7 @@ import DepthHeader from "@/app/depthHeader.ui";
 import { RankingQueries } from "@/entities/ranking/ranking.queries";
 import { UserQueries } from "@/entities/user/user.queries";
 import { MatchType } from "@/shared/api/game";
+import { createFuzzyMatcher } from "@/shared/lib/search";
 import { cn } from "@/shared/lib/utils";
 import {
   Avatar,
@@ -13,6 +14,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  Input,
   Label,
   ScrollArea,
 } from "@/shared/ui";
@@ -99,6 +101,17 @@ export const PlayersInputForm = ({ onNext, onPrev, matchType, team, exclude, tea
 
   // const router = useRouter();
 
+  const [search, setSearch] = useState("");
+
+  const filterList = useMemo(() => {
+    if (!data) {
+      return [];
+    }
+    const matcher = createFuzzyMatcher(search);
+
+    return data.filter((user) => matcher.test(user.userName ?? ""));
+  }, [data, search]);
+
   return (
     <>
       <DepthHeader
@@ -130,14 +143,16 @@ export const PlayersInputForm = ({ onNext, onPrev, matchType, team, exclude, tea
             <>
               <Label>선수 목록</Label>
 
-              {/* <Input
+              <Input
                 placeholder="검색할 이름..."
                 className="max-w-sm"
-                onFocus={() => router.history.push("/user/search")}
-              /> */}
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
 
               <ScrollArea className="h-80 border rounded-lg">
-                {data.map((user) => (
+                {filterList.map((user) => (
                   <button
                     type="button"
                     disabled={exclude?.includes(user.userId)}

@@ -17,6 +17,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { RankingTypeTabs } from "./rankingType.tabs.ui";
 import { MatchType } from "@/shared/api/game";
 import { Gem } from "lucide-react";
+import { createFuzzyMatcher } from "@/shared/lib/search";
 
 const columns: ColumnDef<RankingDto>[] = [
   {
@@ -26,6 +27,10 @@ const columns: ColumnDef<RankingDto>[] = [
   {
     accessorKey: "userName",
     header: "이름",
+    filterFn: (row, columnId, filterValue) => {
+      const reg = createFuzzyMatcher(filterValue);
+      return reg.test(row.getValue(columnId));
+    },
   },
   {
     accessorKey: "tier",
@@ -77,6 +82,7 @@ export function LeaderBoardList() {
           placeholder="검색할 이름..."
           value={(table.getColumn("userName")?.getFilterValue() as string) ?? ""}
           onChange={onSearch}
+          type="search"
           className="max-w-sm"
         />
         <RankingTypeTabs onChange={setMatchType} type={matchType} />
