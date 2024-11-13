@@ -1,5 +1,5 @@
 import { UserQueries } from "@/entities/user/user.queries";
-import { CreateGameDto } from "@/shared/api/game";
+import { CreateGameDto, UpdateGameDto } from "@/shared/api/game";
 import { cn } from "@/shared/lib/utils";
 import {
   Avatar,
@@ -21,13 +21,14 @@ import {
 } from "@/shared/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { forwardRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useGameMutation } from "./add-game.mutation";
 import { ScoresInput } from "./context";
 import DepthHeader from "@/app/depthHeader.ui";
+import { useUpdateGameMutation } from "../update-game/update-game.mutation";
 
 const UserListInput = forwardRef(
   (
@@ -59,7 +60,7 @@ const UserListInput = forwardRef(
   }
 );
 
-const useGameInfoForm = ({ awayTeam, homeTeam, matchType }: ScoresInput) => {
+const useGameInfoForm = ({ awayTeam, homeTeam, matchType, awayScore, homeScore }: ScoresInput) => {
   return useForm<CreateGameDto>({
     resolver: async (values, context, options) => {
       const zodValidation = await zodResolver(CreateGameDto)(values, context, options);
@@ -108,49 +109,94 @@ const useGameInfoForm = ({ awayTeam, homeTeam, matchType }: ScoresInput) => {
       homeTeam,
       awayTeam,
       matchType,
-      homeScore: 0,
-      awayScore: 0,
+      homeScore: homeScore ?? 0,
+      awayScore: awayScore ?? 0,
     },
   });
 };
 
 export const ScoreInputForm = ({ onPrev, ...formData }: ScoresInput & { onPrev: () => void }) => {
   const form = useGameInfoForm(formData);
-  const { mutate } = useGameMutation();
+  const { mutate: createGame } = useGameMutation();
+  const { mutate: updateGame } = useUpdateGameMutation();
   const navigate = useNavigate();
   const [tmpValue, onChangeTmpValue] = useState(0);
+  const { gameId } = useParams({
+    strict: false,
+  });
 
-  const onSubmit = async (data: CreateGameDto) => {
-    mutate(data, {
-      onError: (error) => {
-        console.log("onError", error);
-
-        toast.error(`Fail: ${error.message}`, {
-          style: {
-            backgroundColor: "#f44336",
-            color: "#fff",
+  const onSubmit = async (data: CreateGameDto | UpdateGameDto) => {
+    if (gameId) {
+      updateGame(
+        {
+          gameId,
+          updateGameDto: {
+            ...data,
           },
-        });
-      },
-      onSuccess: async () => {
-        form.reset();
+        },
+        {
+          onError: (error) => {
+            console.log("onError", error);
 
-        toast.success("Game has been created successfully", {
-          style: {
-            backgroundColor: "#4caf50",
-            color: "#fff",
+            toast.error(`Fail: ${error.message}`, {
+              style: {
+                backgroundColor: "#f44336",
+                color: "#fff",
+              },
+            });
           },
-        });
+          onSuccess: async () => {
+            form.reset();
 
-        navigate({
-          to: "/game",
-          replace: true,
-          search: {
-            matchType: data.matchType,
+            toast.success("Game has been created successfully", {
+              style: {
+                backgroundColor: "#4caf50",
+                color: "#fff",
+              },
+            });
+
+            navigate({
+              to: "/game",
+              replace: true,
+              search: {
+                matchType: data.matchType,
+              },
+            });
           },
-        });
-      },
-    });
+        }
+      );
+    } else {
+      createGame(data, {
+        onError: (error) => {
+          console.log("onError", error);
+
+          toast.error(`Fail: ${error.message}`, {
+            style: {
+              backgroundColor: "#f44336",
+              color: "#fff",
+            },
+          });
+        },
+        onSuccess: async () => {
+          form.reset();
+
+          toast.success("Game has been created successfully", {
+            style: {
+              backgroundColor: "#4caf50",
+              color: "#fff",
+            },
+          });
+
+          navigate({
+            to: "/game",
+            replace: true,
+            search: {
+              matchType: data.matchType,
+            },
+          });
+        },
+      });
+    }
   };
 
   return (
@@ -272,7 +318,7 @@ export const ScoreInputForm = ({ onPrev, ...formData }: ScoresInput & { onPrev: 
               <div className="h-20 w-20"></div>
 
               <Button type="submit" className="h-10 p-0">
-                게임 등록
+                {gameId ? "수정 완료" : "게임 등록"}
               </Button>
             </form>
           </Form>

@@ -21,6 +21,7 @@ import { Route as AuthTournamentImport } from './pages/_auth/tournament'
 import { Route as AuthAddImport } from './pages/_auth/add'
 import { Route as AuthProfileIndexImport } from './pages/_auth/profile/index'
 import { Route as AuthProfileResetPasswordImport } from './pages/_auth/profile/reset-password'
+import { Route as AuthGameGameIdImport } from './pages/_auth/game/$gameId'
 
 // Create/Update Routes
 
@@ -71,6 +72,11 @@ const AuthProfileIndexRoute = AuthProfileIndexImport.update({
 
 const AuthProfileResetPasswordRoute = AuthProfileResetPasswordImport.update({
   path: '/profile/reset-password',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthGameGameIdRoute = AuthGameGameIdImport.update({
+  path: '/game/$gameId',
   getParentRoute: () => AuthRoute,
 } as any)
 
@@ -134,6 +140,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutRankingImport
       parentRoute: typeof LayoutImport
     }
+    '/_auth/game/$gameId': {
+      id: '/_auth/game/$gameId'
+      path: '/game/$gameId'
+      fullPath: '/game/$gameId'
+      preLoaderRoute: typeof AuthGameGameIdImport
+      parentRoute: typeof AuthImport
+    }
     '/_auth/profile/reset-password': {
       id: '/_auth/profile/reset-password'
       path: '/profile/reset-password'
@@ -158,6 +171,7 @@ export const routeTree = rootRoute.addChildren({
   AuthRoute: AuthRoute.addChildren({
     AuthAddRoute,
     AuthTournamentRoute,
+    AuthGameGameIdRoute,
     AuthProfileResetPasswordRoute,
     AuthProfileIndexRoute,
   }),
@@ -187,6 +201,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/_auth/add",
         "/_auth/tournament",
+        "/_auth/game/$gameId",
         "/_auth/profile/reset-password",
         "/_auth/profile/"
       ]
@@ -216,6 +231,10 @@ export const routeTree = rootRoute.addChildren({
     "/_layout/ranking": {
       "filePath": "_layout/ranking.tsx",
       "parent": "/_layout"
+    },
+    "/_auth/game/$gameId": {
+      "filePath": "_auth/game/$gameId.tsx",
+      "parent": "/_auth"
     },
     "/_auth/profile/reset-password": {
       "filePath": "_auth/profile/reset-password.tsx",

@@ -19,21 +19,31 @@ export const CreateGameDto = z.object({
 });
 export type CreateGameDto = z.infer<typeof CreateGameDto>;
 
+export const UpdateGameDto = z.object({
+  homeTeam: z.array(z.string()),
+  awayTeam: z.array(z.string()),
+  homeScore: z.coerce.number().int().step(1).nonnegative().gte(0).lte(50),
+  awayScore: z.coerce.number().int().step(1).nonnegative().gte(0).lte(50),
+  matchType: MatchType,
+});
+export type UpdateGameDto = z.infer<typeof UpdateGameDto>;
+
 export const GameDto = z.object({
+  idx: z.number(),
   winTeam: z.array(PlayerDto),
   loseTeam: z.array(PlayerDto),
   winnerScore: z.number(),
   loserScore: z.number(),
   matchTime: z.coerce.date().transform((dateString, ctx) => {
     const date = new Date(dateString);
-    date.setHours(date.getHours() - (date.getTimezoneOffset() / 60));
+    date.setHours(date.getHours() - date.getTimezoneOffset() / 60);
     if (!z.date().safeParse(date).success) {
-        ctx.addIssue({
-            code: z.ZodIssueCode.invalid_date,
-        })
+      ctx.addIssue({
+        code: z.ZodIssueCode.invalid_date,
+      });
     }
     return date;
-}),
+  }),
   matchType: z.string(),
   point: z.number().nullable(),
 });
