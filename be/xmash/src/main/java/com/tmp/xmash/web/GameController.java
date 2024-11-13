@@ -15,15 +15,15 @@ import com.tmp.xmash.web.editor.GameTypeEditor;
 import com.tmp.xmash.web.editor.MatchTypeEditor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -73,7 +73,7 @@ public class GameController {
 
     @GetMapping("/games")
     public ResponseEntity<List<GameResultResponse>> getGameResult(
-            @Parameter(name = "matchType", description = "매치타입(단식, 복식)을 지정합니다.", required = true, in = ParameterIn.PATH) @RequestParam MatchType matchType
+            @Parameter(name = "matchType", description = "매치타입(단식, 복식)을 지정합니다.", required = true) @RequestParam MatchType matchType
     ) {
         GameService gameService = gameServiceFactory.getGameService(matchType);
 
