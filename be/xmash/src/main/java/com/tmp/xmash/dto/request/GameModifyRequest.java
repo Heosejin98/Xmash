@@ -7,12 +7,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record GameModifyRequest (
-        @Schema(description = "기존 승리 팀 id")
-        TeamRequest prevWinnerTeam,
-
-        @Schema(description = "기존 패배 팀 id ")
-        TeamRequest prevLoserTeam,
-
         @Schema(description = "변경 승리팀")
         TeamRequest homeTeam,
 
@@ -31,14 +25,6 @@ public record GameModifyRequest (
         @Schema(description = "경기 시간", example = "2024-11-09 11:00:00")
         LocalDateTime matchTime
 ) {
-
-    public List<String> prevWinnerUserIds() {
-        return List.of(prevWinnerTeam.userId1(), prevWinnerTeam.userId2());
-    }
-
-    public List<String> prevLoserUserIds() {
-        return List.of(prevLoserTeam.userId1(), prevLoserTeam.userId2());
-    }
 
     public List<String> homeUserIds() {
         return List.of(homeTeam.userId1(), homeTeam.userId2());

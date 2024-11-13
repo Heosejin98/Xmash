@@ -69,23 +69,23 @@ public class DoubleGameService implements GameService, GamePostAble {
         int prevLp = matchHistory.getLp();
 
         //Ranking 원복
-        resetRanking(gameModifyRequest, prevLp);
+        resetRanking(matchHistory);
         //MatchHistory 수정 값으로 update
         DoubleMatchEvaluator doubleMatchEvaluator = updateMatchHistory(gameModifyRequest, matchHistory);
         //Ranking 수정한 값에 따라 변동
         updateRanking(prevLp, doubleMatchEvaluator);
     }
 
-    private void resetRanking(GameModifyRequest gameModifyRequest, int prevLp) {
+    private void resetRanking(DoubleRankMatchHistory matchHistory) {
         DoubleMatchEvaluator doubleMatchEvaluator = new DoubleMatchEvaluator(
-                gameModifyRequest.prevWinnerUserIds(),
-                gameModifyRequest.prevLoserUserIds(),
+                List.of(matchHistory.getWinner1Id(), matchHistory.getWinner2Id()),
+                List.of(matchHistory.getLoser1Id(), matchHistory.getLoser2Id()),
                 0,
                 0
         );
         List<AppUser> matchUsers = userService.findByUserIdIn(doubleMatchEvaluator.getUserIds());
         RequestUserRanking prevRequestUserRanking = getRequestUserRanking(doubleMatchEvaluator, matchUsers);
-        rankingService.updateRanking(prevRequestUserRanking.winnerRankings(), prevRequestUserRanking.loserRankings(), prevLp * -1);
+        rankingService.updateRanking(prevRequestUserRanking.winnerRankings(), prevRequestUserRanking.loserRankings(), matchHistory.getLp() * -1);
     }
 
     private DoubleMatchEvaluator updateMatchHistory(GameModifyRequest gameModifyRequest, DoubleRankMatchHistory matchHistory) {

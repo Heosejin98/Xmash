@@ -66,23 +66,25 @@ public class SingleGameService implements GameService, GamePostAble {
         int prevLp = matchHistory.getLp();
 
         //Ranking 원복
-        resetRanking(gameModifyRequest, prevLp);
+        resetRanking(matchHistory);
         //MatchHistory 수정 값으로 update
         SingleMatchEvaluator singleMatchEvaluator = updateMatchHistory(gameModifyRequest, matchHistory);
         //Ranking 수정한 값에 따라 변동
         updateRanking(prevLp, singleMatchEvaluator);
     }
 
-    private void resetRanking(GameModifyRequest gameModifyRequest, int prevLp) {
+    private void resetRanking(SingleRankMatchHistory matchHistory) {
         SingleMatchEvaluator prevMatchEvaluator = new SingleMatchEvaluator(
-                gameModifyRequest.prevWinnerTeam().userId1(),
-                gameModifyRequest.prevLoserTeam().userId1(),
+                matchHistory.getWinnerId(),
+                matchHistory.getLoserId(),
                 0,
                 0
         );
         List<AppUser> matchUsers = userService.findByUserIdIn(prevMatchEvaluator.getUserIds());
         RequestUserRanking prevRequestUserRanking = getRequestUserRanking(prevMatchEvaluator, matchUsers);
-        rankingService.updateRanking(prevRequestUserRanking.winnerRankings(), prevRequestUserRanking.loserRankings(), prevLp * -1);
+        rankingService.updateRanking(prevRequestUserRanking.winnerRankings(),
+                prevRequestUserRanking.loserRankings(),
+                matchHistory.getLp() * -1);
     }
 
     private SingleMatchEvaluator updateMatchHistory(GameModifyRequest gameModifyRequest, SingleRankMatchHistory matchHistory) {
