@@ -8,7 +8,6 @@ import {
   AvatarImage,
   Button,
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
@@ -60,7 +59,8 @@ export function GameList() {
   const goToAmendPage = () => {
     if (!target) return;
     navigate({
-      to: `/game/${target.idx}`,
+      to: "/game/$gameId",
+      params: { gameId: target.idx.toString() },
       search: {
         matchType: target.matchType as MatchType,
         homeTeam: target.winTeam.map((p) => p.userId),
@@ -168,8 +168,11 @@ export function GameList() {
       <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
         <DrawerContent>
           <DrawerHeader>
-            <DrawerTitle>게임 수정</DrawerTitle>
-            <DrawerDescription>수정 하시겠습니까?</DrawerDescription>
+            <DrawerTitle>수정 하시겠습니까?</DrawerTitle>
+            <DrawerDescription>
+              {target?.winTeam.map((p) => p.userName).join(", ")} vs{" "}
+              {target?.loseTeam.map((p) => p.userName).join(", ")}
+            </DrawerDescription>
           </DrawerHeader>
           <DrawerFooter>
             <Button onClick={goToAmendPage}>수정</Button>
