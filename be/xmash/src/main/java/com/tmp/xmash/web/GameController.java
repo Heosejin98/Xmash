@@ -1,6 +1,5 @@
 package com.tmp.xmash.web;
 
-import com.tmp.xmash.dto.request.GameModifyRequest;
 import com.tmp.xmash.dto.request.GameResultRequest;
 import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.dto.response.TournamentGameResponse;
@@ -58,7 +57,7 @@ public class GameController {
     public ResponseEntity<Void> modifyGameResult(
             HttpSession session,
             @Parameter(name = "matchId", description = "match_history_id") long matchId,
-            @Parameter(name = "GameRequest", description = "게임 결과 등록 요청 데이터", required = true) @Valid @RequestBody GameModifyRequest gameModifyRequest
+            @Parameter(name = "GameRequest", description = "게임 결과 등록 요청 데이터", required = true) @Valid @RequestBody GameResultRequest gameModifyRequest
     ) {
         String userId = (String) session.getAttribute("userId");
         if (userId == null) {

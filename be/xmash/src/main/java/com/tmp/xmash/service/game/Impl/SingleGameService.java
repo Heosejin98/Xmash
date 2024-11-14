@@ -6,7 +6,7 @@ import com.tmp.xmash.db.repositroy.SingleRankMatchHistoryRepo;
 import com.tmp.xmash.domain.MatchEvaluator;
 import com.tmp.xmash.domain.RequestUserRanking;
 import com.tmp.xmash.domain.SingleMatchEvaluator;
-import com.tmp.xmash.dto.request.GameModifyRequest;
+import com.tmp.xmash.dto.request.GameResultRequest;
 import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.exption.BadRequestException;
 import com.tmp.xmash.service.RankingService;
@@ -56,9 +56,9 @@ public class SingleGameService implements GameService, GamePostAble {
     }
 
     @Override
-    public void modifyMatchHistory(GameModifyRequest gameModifyRequest, long matchId) {
+    public void modifyMatchHistory(GameResultRequest gameModifyRequest, long matchId) {
         LocalDateTime tenMinutesAgo = XmashTimeCreator.getCurrentTimeUTC().minusMinutes(10);
-
+        SingleMatchEvaluator singleMatchEvaluator = (SingleMatchEvaluator) gameModifyRequest.toMatchEvaluator();
         SingleRankMatchHistory matchHistory = singleMatchHistoryRepo.findById(matchId).orElseThrow();
         if (matchHistory.getMatchTime().isBefore(tenMinutesAgo)) {
             throw new BadRequestException("10분 이전 데이터는 수정할 수 없습니다.");
@@ -66,35 +66,13 @@ public class SingleGameService implements GameService, GamePostAble {
         int prevLp = matchHistory.getLp();
 
         //Ranking 원복
-        resetRanking(matchHistory);
-        //MatchHistory 수정 값으로 update
-        SingleMatchEvaluator singleMatchEvaluator = updateMatchHistory(gameModifyRequest, matchHistory);
-        //Ranking 수정한 값에 따라 변동
-        updateRanking(prevLp, singleMatchEvaluator);
-    }
-
-    private void resetRanking(SingleRankMatchHistory matchHistory) {
-        SingleMatchEvaluator prevMatchEvaluator = new SingleMatchEvaluator(
-                matchHistory.getWinnerId(),
-                matchHistory.getLoserId(),
-                0,
-                0
-        );
-        List<AppUser> matchUsers = userService.findByUserIdIn(prevMatchEvaluator.getUserIds());
-        RequestUserRanking prevRequestUserRanking = getRequestUserRanking(prevMatchEvaluator, matchUsers);
+        List<AppUser> oldMatchUsers = userService.findByUserIdIn(singleMatchEvaluator.getUserIds());
+        RequestUserRanking prevRequestUserRanking = getRequestUserRanking(singleMatchEvaluator, oldMatchUsers);
         rankingService.updateRanking(prevRequestUserRanking.winnerRankings(),
                 prevRequestUserRanking.loserRankings(),
                 matchHistory.getLp() * -1);
-    }
 
-    private SingleMatchEvaluator updateMatchHistory(GameModifyRequest gameModifyRequest, SingleRankMatchHistory matchHistory) {
-        //Match History Update
-        SingleMatchEvaluator singleMatchEvaluator = new SingleMatchEvaluator(
-                gameModifyRequest.homeTeam().userId1(),
-                gameModifyRequest.awayTeam().userId1(),
-                gameModifyRequest.homeScore(),
-                gameModifyRequest.awayScore()
-        );
+        //MatchHistory 수정 값으로 update
         SingleRankMatchHistory doubleRankMatchHistory = singleMatchEvaluator.resolveMatchWinner();
         matchHistory.updateMatchHistory( //기존 history 신규 객체로 Update
                 doubleRankMatchHistory.getWinnerId(),
@@ -103,12 +81,9 @@ public class SingleGameService implements GameService, GamePostAble {
                 doubleRankMatchHistory.getLoserScore()
         );
 
-        return singleMatchEvaluator;
-    }
-
-    private void updateRanking(int prevLp, SingleMatchEvaluator doubleMatchEvaluator) {
-        List<AppUser> matchUsers = userService.findByUserIdIn(doubleMatchEvaluator.getUserIds());
-        RequestUserRanking newRequestUserRanking = getRequestUserRanking(doubleMatchEvaluator, matchUsers);
+        //Ranking 수정한 값에 따라 변동
+        List<AppUser> newMatchUsers = userService.findByUserIdIn(singleMatchEvaluator.getUserIds());
+        RequestUserRanking newRequestUserRanking = getRequestUserRanking(singleMatchEvaluator, newMatchUsers);
         rankingService.updateRanking(newRequestUserRanking.winnerRankings(), newRequestUserRanking.loserRankings(), prevLp);
     }
 
