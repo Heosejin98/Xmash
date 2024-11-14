@@ -3,7 +3,6 @@ package com.tmp.xmash.dto.request;
 import com.tmp.xmash.type.MatchType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public record GameModifyRequest (
@@ -20,10 +19,7 @@ public record GameModifyRequest (
         int awayScore,
 
         @Schema(description = "단식, 복식", example = "double")
-        MatchType matchType,
-
-        @Schema(description = "경기 시간", example = "2024-11-09 11:00:00")
-        LocalDateTime matchTime
+        MatchType matchType
 ) {
 
     public List<String> homeUserIds() {

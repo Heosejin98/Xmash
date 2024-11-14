@@ -59,10 +59,10 @@ public class SingleGameService implements GameService, GamePostAble {
     public void modifyMatchHistory(GameModifyRequest gameModifyRequest, long matchId) {
         LocalDateTime tenMinutesAgo = XmashTimeCreator.getCurrentTimeUTC().minusMinutes(10);
 
-        if (gameModifyRequest.matchTime().isBefore(tenMinutesAgo)) {
+        SingleRankMatchHistory matchHistory = singleMatchHistoryRepo.findById(matchId).orElseThrow();
+        if (matchHistory.getMatchTime().isBefore(tenMinutesAgo)) {
             throw new BadRequestException("10분 이전 데이터는 수정할 수 없습니다.");
         }
-        SingleRankMatchHistory matchHistory = singleMatchHistoryRepo.findById(matchId).orElseThrow();
         int prevLp = matchHistory.getLp();
 
         //Ranking 원복
