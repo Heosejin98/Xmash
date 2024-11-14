@@ -3,8 +3,8 @@ package com.tmp.xmash.service.game;
 import com.tmp.xmash.db.entity.AppUser;
 import com.tmp.xmash.db.entity.UserRanking;
 import com.tmp.xmash.domain.MatchEvaluator;
-import com.tmp.xmash.dto.request.GameModifyRequest;
 import com.tmp.xmash.domain.RequestUserRanking;
+import com.tmp.xmash.dto.request.GameResultRequest;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public interface GamePostAble {
 
     boolean matchDone(MatchEvaluator gameResultRequest);
 
-    void modifyMatchHistory(GameModifyRequest matchEvaluator, long matchId);
+    void modifyMatchHistory(GameResultRequest matchEvaluator, long matchId);
 
     default RequestUserRanking getRequestUserRanking(MatchEvaluator doubleMatchEvaluator, List<AppUser> matchUsers) {
         List<AppUser> winner = doubleMatchEvaluator.getHomeUser(matchUsers);

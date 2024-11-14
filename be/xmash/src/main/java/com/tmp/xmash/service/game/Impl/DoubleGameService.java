@@ -1,32 +1,30 @@
 package com.tmp.xmash.service.game.Impl;
 
-import static java.util.function.UnaryOperator.identity;
-import static java.util.stream.Collectors.toMap;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-
-import com.tmp.xmash.domain.RequestUserRanking;
-import com.tmp.xmash.service.UserService;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.tmp.xmash.db.entity.AppUser;
 import com.tmp.xmash.db.entity.DoubleRankMatchHistory;
 import com.tmp.xmash.db.repositroy.DoubleRankMatchRepo;
 import com.tmp.xmash.domain.DoubleMatchEvaluator;
 import com.tmp.xmash.domain.MatchEvaluator;
-import com.tmp.xmash.dto.request.GameModifyRequest;
+import com.tmp.xmash.domain.RequestUserRanking;
+import com.tmp.xmash.dto.request.GameResultRequest;
 import com.tmp.xmash.dto.response.GameResultResponse;
 import com.tmp.xmash.exption.BadRequestException;
 import com.tmp.xmash.service.RankingService;
+import com.tmp.xmash.service.UserService;
 import com.tmp.xmash.service.game.GamePostAble;
 import com.tmp.xmash.service.game.GameService;
 import com.tmp.xmash.type.MatchType;
 import com.tmp.xmash.util.XmashTimeCreator;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.function.UnaryOperator.identity;
+import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
@@ -59,9 +57,9 @@ public class DoubleGameService implements GameService, GamePostAble {
     }
 
     @Override
-    public void modifyMatchHistory(GameModifyRequest gameModifyRequest, long matchId) {
+    public void modifyMatchHistory(GameResultRequest gameModifyRequest, long matchId) {
         LocalDateTime tenMinutesAgo = XmashTimeCreator.getCurrentTimeUTC().minusMinutes(10);
-
+        DoubleMatchEvaluator doubleMatchEvaluator = (DoubleMatchEvaluator) gameModifyRequest.toMatchEvaluator();
         DoubleRankMatchHistory matchHistory = doubleRankMatchRepo.findById(matchId).orElseThrow();
         if (matchHistory.getMatchTime().isBefore(tenMinutesAgo)) {
             throw new BadRequestException("10분 이전 데이터는 수정할 수 없습니다.");
@@ -70,33 +68,11 @@ public class DoubleGameService implements GameService, GamePostAble {
         int prevLp = matchHistory.getLp();
 
         //Ranking 원복
-        resetRanking(matchHistory);
-        //MatchHistory 수정 값으로 update
-        DoubleMatchEvaluator doubleMatchEvaluator = updateMatchHistory(gameModifyRequest, matchHistory);
-        //Ranking 수정한 값에 따라 변동
-        updateRanking(prevLp, doubleMatchEvaluator);
-    }
-
-    private void resetRanking(DoubleRankMatchHistory matchHistory) {
-        DoubleMatchEvaluator doubleMatchEvaluator = new DoubleMatchEvaluator(
-                List.of(matchHistory.getWinner1Id(), matchHistory.getWinner2Id()),
-                List.of(matchHistory.getLoser1Id(), matchHistory.getLoser2Id()),
-                0,
-                0
-        );
-        List<AppUser> matchUsers = userService.findByUserIdIn(doubleMatchEvaluator.getUserIds());
-        RequestUserRanking prevRequestUserRanking = getRequestUserRanking(doubleMatchEvaluator, matchUsers);
+        List<AppUser> oldMatchUsers = userService.findByUserIdIn(doubleMatchEvaluator.getUserIds());
+        RequestUserRanking prevRequestUserRanking = getRequestUserRanking(doubleMatchEvaluator, oldMatchUsers);
         rankingService.updateRanking(prevRequestUserRanking.winnerRankings(), prevRequestUserRanking.loserRankings(), matchHistory.getLp() * -1);
-    }
 
-    private DoubleMatchEvaluator updateMatchHistory(GameModifyRequest gameModifyRequest, DoubleRankMatchHistory matchHistory) {
-        //Match History Update
-        DoubleMatchEvaluator doubleMatchEvaluator = new DoubleMatchEvaluator(
-                gameModifyRequest.homeUserIds(),
-                gameModifyRequest.awayUserIds(),
-                gameModifyRequest.homeScore(),
-                gameModifyRequest.awayScore()
-        );
+        //MatchHistory 수정 값으로 update
         DoubleRankMatchHistory doubleRankMatchHistory = doubleMatchEvaluator.resolveRankMatchWinner();
         matchHistory.updateMatchHistory( //기존 history 신규 객체로 Update
                 doubleRankMatchHistory.getWinner1Id(),
@@ -107,12 +83,9 @@ public class DoubleGameService implements GameService, GamePostAble {
                 doubleRankMatchHistory.getLoserScore()
         );
 
-        return doubleMatchEvaluator;
-    }
-
-    private void updateRanking(int prevLp, DoubleMatchEvaluator doubleMatchEvaluator) {
-        List<AppUser> matchUsers = userService.findByUserIdIn(doubleMatchEvaluator.getUserIds());
-        RequestUserRanking newRequestUserRanking = getRequestUserRanking(doubleMatchEvaluator, matchUsers);
+        //Ranking 수정한 값에 따라 변동
+        List<AppUser> newMatchUsers = userService.findByUserIdIn(doubleMatchEvaluator.getUserIds());
+        RequestUserRanking newRequestUserRanking = getRequestUserRanking(doubleMatchEvaluator, newMatchUsers);
         rankingService.updateRanking(newRequestUserRanking.winnerRankings(), newRequestUserRanking.loserRankings(), prevLp);
     }
 
