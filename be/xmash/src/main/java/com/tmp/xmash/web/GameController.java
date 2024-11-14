@@ -14,6 +14,7 @@ import com.tmp.xmash.web.editor.GameTypeEditor;
 import com.tmp.xmash.web.editor.MatchTypeEditor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -56,7 +57,7 @@ public class GameController {
     @PatchMapping("/games/{matchId}")
     public ResponseEntity<Void> modifyGameResult(
             HttpSession session,
-            @Parameter(name = "matchId", description = "match_history_id") int matchId,
+            @Parameter(name = "matchId", description = "match_history_id", required = true, in = ParameterIn.PATH) @PathVariable long matchId,
             @Parameter(name = "GameRequest", description = "게임 결과 등록 요청 데이터", required = true) @Valid @RequestBody GameResultRequest gameModifyRequest
     ) {
         String userId = (String) session.getAttribute("userId");
