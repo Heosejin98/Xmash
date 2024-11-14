@@ -56,7 +56,7 @@ public class GameController {
     @PatchMapping("/games/{matchId}")
     public ResponseEntity<Void> modifyGameResult(
             HttpSession session,
-            @Parameter(name = "matchId", description = "match_history_id") long matchId,
+            @Parameter(name = "matchId", description = "match_history_id") int matchId,
             @Parameter(name = "GameRequest", description = "게임 결과 등록 요청 데이터", required = true) @Valid @RequestBody GameResultRequest gameModifyRequest
     ) {
         String userId = (String) session.getAttribute("userId");
