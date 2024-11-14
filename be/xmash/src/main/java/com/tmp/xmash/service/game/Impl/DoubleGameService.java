@@ -61,11 +61,12 @@ public class DoubleGameService implements GameService, GamePostAble {
     @Override
     public void modifyMatchHistory(GameModifyRequest gameModifyRequest, long matchId) {
         LocalDateTime tenMinutesAgo = XmashTimeCreator.getCurrentTimeUTC().minusMinutes(10);
-    
-        if (gameModifyRequest.matchTime().isBefore(tenMinutesAgo)) {
+
+        DoubleRankMatchHistory matchHistory = doubleRankMatchRepo.findById(matchId).orElseThrow();
+        if (matchHistory.getMatchTime().isBefore(tenMinutesAgo)) {
             throw new BadRequestException("10분 이전 데이터는 수정할 수 없습니다.");
         }
-        DoubleRankMatchHistory matchHistory = doubleRankMatchRepo.findById(matchId).orElseThrow();
+
         int prevLp = matchHistory.getLp();
 
         //Ranking 원복
