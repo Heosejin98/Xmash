@@ -6,7 +6,6 @@ server:
       cookie:
         max-age: 30d  # 30일
         name: JSESSIONID
-        domain: .xmash.shop
         http-only: true
         path: /
 
