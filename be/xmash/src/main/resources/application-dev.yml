@@ -8,7 +8,6 @@ server:
         name: JSESSIONID
         http-only: true
         path: /
-        same-site: none
 
 spring:
   application:
