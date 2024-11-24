@@ -41,7 +41,8 @@ public class AuthenticationController {
                         request.password(), 
                         request.email(),
                         request.userName(),
-                        request.gender());
+                        request.gender(),
+                        request.role());
 
         return ResponseEntity.ok().build();
     }

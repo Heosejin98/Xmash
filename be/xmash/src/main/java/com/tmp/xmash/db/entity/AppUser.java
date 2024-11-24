@@ -33,6 +33,9 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @Setter
+    private String role;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "app_user_user_ranking_map",  // 연관관계 테이블 이름 명시
@@ -49,12 +52,14 @@ public class AppUser {
                    String password,
                    String email,
                    Gender gender,
-                   String name) {
+                   String name,
+                   String role) {
         this.userId = userId;
         this.password = password;
         this.email = email;
         this.gender = gender;
         this.name = name;
+        this.role = role;
     }
 
     public void addUserRanking(UserRanking userRanking) {

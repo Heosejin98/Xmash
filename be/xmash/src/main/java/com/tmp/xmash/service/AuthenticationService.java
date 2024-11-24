@@ -7,6 +7,7 @@ import com.tmp.xmash.db.repositroy.UserRepository;
 import com.tmp.xmash.dto.response.UserProfileResponse;
 import com.tmp.xmash.exption.BadRequestException;
 import com.tmp.xmash.type.Gender;
+import com.tmp.xmash.type.RoleType;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,14 +40,16 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public void signUp(String userId, String password, String email, String name, Gender gender) {
+    public void signUp(String userId, String password, String email, String name,
+                       Gender gender, RoleType role) {
         // AppUser 생성
         AppUser appUser = new AppUser(
                 userId,
                 passwordEncoder.encode(password),
                 email,
                 gender,
-                name
+                name,
+                role.getRole()
         );
 
         // UserRanking 생성 (AppUser와 연관 관계 설정)
