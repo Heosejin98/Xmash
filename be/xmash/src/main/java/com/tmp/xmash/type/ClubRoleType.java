@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum RoleType {
+public enum ClubRoleType {
     @Schema(description = "동호회 회원")
     MEMBER("member"),
 
@@ -20,12 +20,13 @@ public enum RoleType {
     private final String role;
 
     @JsonCreator
-    public static RoleType fromValue(String value) {
-        for (RoleType roleType : RoleType.values()) {
-            if (roleType.name().equals(value)) {
-                return roleType;
-            }
-        }
-        throw new IllegalArgumentException("Unknown value" + value);
+    public static ClubRoleType fromValue(String value) {
+        return switch (value.toUpperCase()) {
+            case "MEMBER" -> ClubRoleType.MEMBER;
+            case "NON_MEMBER" -> ClubRoleType.NON_MEMBER;
+            case "GUEST" -> ClubRoleType.GUEST;
+            default -> throw new IllegalArgumentException("Unknown value " + value);
+        };
     }
+
 }

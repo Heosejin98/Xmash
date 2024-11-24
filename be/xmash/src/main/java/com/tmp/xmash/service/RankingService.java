@@ -5,13 +5,13 @@ import static java.util.stream.Collectors.toList;
 import com.tmp.xmash.db.entity.UserRanking;
 import com.tmp.xmash.db.repositroy.UserRankingRepository;
 import com.tmp.xmash.dto.response.RankingResponse;
+import com.tmp.xmash.type.ClubRoleType;
 import com.tmp.xmash.type.MatchType;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.tmp.xmash.type.RoleType;
 import lombok.AllArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
@@ -29,14 +29,14 @@ public class RankingService {
 
         if (matchType == MatchType.SINGLE) {
             return userRankingRepository.findAllByOrderByLpDesc().stream()
-                    .filter(user -> !user.getAppUser().getRole().equals(RoleType.GUEST.getRole()))
+                    .filter(user -> !user.getAppUser().getRole().equals(ClubRoleType.GUEST.getRole()))
                     .map(ranking -> RankingResponse.createSingleRanking(ranking, index.getAndIncrement()))
                     .collect(toList());
         }
 
         if (matchType == MatchType.DOUBLE) {
             return userRankingRepository.findAllByOrderByTeamLpDesc().stream()
-                    .filter(user -> !user.getAppUser().getRole().equals(RoleType.GUEST.getRole()))
+                    .filter(user -> !user.getAppUser().getRole().equals(ClubRoleType.GUEST.getRole()))
                     .map(ranking -> RankingResponse.createDoubleRanking(ranking, index.getAndIncrement()))
                     .collect(toList());
         }
