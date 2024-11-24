@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"> <!-- 문자 인코딩 설정 추가 -->
+    <title>회원 가입</title> <!-- 페이지 제목 추가 -->
+</head>
 <div th:fragment="content">
     <div class="container">
         <h2 class="mb-4">회원 가입</h2>
@@ -151,7 +155,7 @@
     }
 
     // 아이디 입력 필드 유효성 검사
-    document.getElementById('userName').addEventListener('input', function(e) {
+    document.getElementById('userId').addEventListener('input', function(e) {
         this.value = this.value.replace(/[^a-zA-Z0-9]/g, '');
     });
 
