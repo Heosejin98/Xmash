@@ -42,7 +42,7 @@ public class AuthenticationController {
                         request.email(),
                         request.userName(),
                         request.gender(),
-                        request.role());
+                        request.clubRole());
 
         return ResponseEntity.ok().build();
     }

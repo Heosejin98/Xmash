@@ -7,26 +7,23 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum ClubRoleType {
+public enum ClubRole {
     @Schema(description = "동호회 회원")
-    MEMBER("member"),
+    MEMBER,
 
     @Schema(description = "지속적으로 활동 중인 비회원")
-    NON_MEMBER("non_member"),
+    NON_MEMBER,
 
     @Schema(description = "임시 회원")
-    GUEST("guest");
-
-    private final String role;
+    GUEST;
 
     @JsonCreator
-    public static ClubRoleType fromValue(String value) {
-        return switch (value.toUpperCase()) {
-            case "MEMBER" -> ClubRoleType.MEMBER;
-            case "NON_MEMBER" -> ClubRoleType.NON_MEMBER;
-            case "GUEST" -> ClubRoleType.GUEST;
+    public static ClubRole fromValue(String value) {
+        return switch (value) {
+            case "MEMBER" -> ClubRole.MEMBER;
+            case "NON_MEMBER" -> ClubRole.NON_MEMBER;
+            case "GUEST" -> ClubRole.GUEST;
             default -> throw new IllegalArgumentException("Unknown value " + value);
         };
     }
-
 }

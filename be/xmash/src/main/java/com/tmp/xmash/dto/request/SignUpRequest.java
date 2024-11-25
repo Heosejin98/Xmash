@@ -1,8 +1,8 @@
 package com.tmp.xmash.dto.request;
 
 
+import com.tmp.xmash.type.ClubRole;
 import com.tmp.xmash.type.Gender;
-import com.tmp.xmash.type.ClubRoleType;
 
 /**
  *
@@ -14,7 +14,7 @@ public record SignUpRequest(
     String email,
     String userName,
     Gender gender,
-    ClubRoleType role
+    ClubRole clubRole
 ) {
 
 }

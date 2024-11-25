@@ -5,7 +5,7 @@ import static java.util.stream.Collectors.toList;
 import com.tmp.xmash.db.entity.UserRanking;
 import com.tmp.xmash.db.repositroy.UserRankingRepository;
 import com.tmp.xmash.dto.response.RankingResponse;
-import com.tmp.xmash.type.ClubRoleType;
+import com.tmp.xmash.type.ClubRole;
 import com.tmp.xmash.type.MatchType;
 import java.util.HashSet;
 import java.util.List;
@@ -29,14 +29,14 @@ public class RankingService {
 
         if (matchType == MatchType.SINGLE) {
             return userRankingRepository.findAllByOrderByLpDesc().stream()
-                    .filter(user -> !user.getAppUser().getRole().equals(ClubRoleType.GUEST.getRole()))
+                    .filter(ranking -> !ranking.getAppUser().getClubRole().equals(ClubRole.GUEST))
                     .map(ranking -> RankingResponse.createSingleRanking(ranking, index.getAndIncrement()))
                     .collect(toList());
         }
 
         if (matchType == MatchType.DOUBLE) {
             return userRankingRepository.findAllByOrderByTeamLpDesc().stream()
-                    .filter(user -> !user.getAppUser().getRole().equals(ClubRoleType.GUEST.getRole()))
+                    .filter(ranking -> !ranking.getAppUser().getClubRole().equals(ClubRole.GUEST))
                     .map(ranking -> RankingResponse.createDoubleRanking(ranking, index.getAndIncrement()))
                     .collect(toList());
         }

@@ -6,7 +6,7 @@ import com.tmp.xmash.db.repositroy.UserRankingRepository;
 import com.tmp.xmash.db.repositroy.UserRepository;
 import com.tmp.xmash.dto.response.UserProfileResponse;
 import com.tmp.xmash.exption.BadRequestException;
-import com.tmp.xmash.type.ClubRoleType;
+import com.tmp.xmash.type.ClubRole;
 import com.tmp.xmash.type.Gender;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,7 +41,7 @@ public class AuthenticationService {
 
     @Transactional
     public void signUp(String userId, String password, String email, String name,
-                       Gender gender, ClubRoleType role) {
+                       Gender gender, ClubRole clubRole) {
         // AppUser 생성
         AppUser appUser = new AppUser(
                 userId,
@@ -49,7 +49,7 @@ public class AuthenticationService {
                 email,
                 gender,
                 name,
-                role.getRole()
+                clubRole
         );
 
         // UserRanking 생성 (AppUser와 연관 관계 설정)

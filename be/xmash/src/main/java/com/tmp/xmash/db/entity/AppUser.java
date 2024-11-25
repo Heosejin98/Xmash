@@ -1,5 +1,6 @@
 package com.tmp.xmash.db.entity;
 
+import com.tmp.xmash.type.ClubRole;
 import com.tmp.xmash.type.Gender;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,18 +30,18 @@ public class AppUser {
 
     @Setter
     private String password;
-    
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Setter
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private ClubRole clubRole;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "app_user_user_ranking_map",  // 연관관계 테이블 이름 명시
             joinColumns = @JoinColumn(name = "app_user_id"),  // AppUser 외래 키
-                inverseJoinColumns = @JoinColumn(name = "user_ranking_id")  // UserRanking 외래 키
+            inverseJoinColumns = @JoinColumn(name = "user_ranking_id")  // UserRanking 외래 키
     )
     private List<UserRanking> userRankings = new ArrayList<>();
 
@@ -53,13 +54,13 @@ public class AppUser {
                    String email,
                    Gender gender,
                    String name,
-                   String role) {
+                   ClubRole clubRole) {
         this.userId = userId;
         this.password = password;
         this.email = email;
         this.gender = gender;
         this.name = name;
-        this.role = role;
+        this.clubRole = clubRole;
     }
 
     public void addUserRanking(UserRanking userRanking) {
