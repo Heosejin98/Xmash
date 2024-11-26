@@ -41,7 +41,8 @@ public class AuthenticationController {
                         request.password(), 
                         request.email(),
                         request.userName(),
-                        request.gender());
+                        request.gender(),
+                        request.clubRole());
 
         return ResponseEntity.ok().build();
     }
