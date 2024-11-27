@@ -1,10 +1,7 @@
 package com.tmp.xmash.type;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.Arrays;
-import java.util.List;
 import lombok.Getter;
 
 @Getter
@@ -19,24 +16,7 @@ public enum MatchType {
     DOUBLE;
 
     @JsonValue
-    public String toValue() {
+    public String toResponse() {
         return this.name().toLowerCase();
     }
-
-    @JsonCreator
-    public static MatchType fromValue(String value) {
-        for (MatchType matchType : MatchType.values()) {
-            if (matchType.toValue().equals(value)) {
-                return matchType;
-            }
-        }
-        throw new IllegalArgumentException("Unknown value: " + value);
-    }
-
-    public static List<String> getMatchTypes() {
-        return Arrays.stream(MatchType.values())
-                .map(MatchType::name)
-                .toList();
-    }
-
 }

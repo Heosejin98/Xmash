@@ -8,9 +8,7 @@ import com.tmp.xmash.service.game.GamePostAble;
 import com.tmp.xmash.service.game.GameService;
 import com.tmp.xmash.service.game.GameServiceFactory;
 import com.tmp.xmash.service.game.TournamentGameService;
-import com.tmp.xmash.type.GameType;
 import com.tmp.xmash.type.MatchType;
-import com.tmp.xmash.web.editor.GameTypeEditor;
 import com.tmp.xmash.web.editor.MatchTypeEditor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,7 +33,6 @@ public class GameController {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(GameType.class, new GameTypeEditor());
         binder.registerCustomEditor(MatchType.class, new MatchTypeEditor());
     }
 
