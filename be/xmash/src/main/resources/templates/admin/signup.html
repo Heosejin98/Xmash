@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"> <!-- 문자 인코딩 설정 추가 -->
+    <title>회원 가입</title> <!-- 페이지 제목 추가 -->
+</head>
 <div th:fragment="content">
     <div class="container">
         <h2 class="mb-4">회원 가입</h2>
@@ -50,6 +54,33 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">역할</label>
+                                <div class="d-flex gap-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                               name="clubRole" id="roleMember" value="MEMBER" required>
+                                        <label class="form-check-label" for="roleMember">
+                                            회원
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                               name="clubRole" id="roleNonMember" value="NON_MEMBER">
+                                        <label class="form-check-label" for="roleNonMember">
+                                            비회원
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                               name="clubRole" id="roleGuest" value="GUEST">
+                                        <label class="form-check-label" for="roleGuest">
+                                            임시 회원
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                             
                             <div class="mb-3">
                                 <label for="password" class="form-label">비밀번호</label>
@@ -64,7 +95,7 @@
                                        required
                                        placeholder="비밀번호를 다시 입력하세요">
                             </div>
-                            
+
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary">회원가입</button>
                             </div>
@@ -85,10 +116,10 @@
         const userName = document.getElementById('userName').value;
         const email = document.getElementById('email').value;
         const gender = document.querySelector('input[name="gender"]:checked')?.value;
+        const clubRole = document.querySelector('input[name="clubRole"]:checked')?.value;
         const password = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
-        const messageDiv = document.getElementById('resultMessage');
-        
+
         // 이메일 유효성 검사
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
@@ -99,6 +130,12 @@
         // 성별 선택 확인
         if (!gender) {
             showMessage('성별을 선택해주세요.', 'danger');
+            return;
+        }
+
+        // 역할 선택 확인
+        if (!clubRole) {
+            showMessage('역할을 선택해주세요.', 'danger');
             return;
         }
         
@@ -119,6 +156,7 @@
                     email: email,
                     userId: userId,
                     gender: gender,
+                    clubRole: clubRole,
                     password: password
                 })
             });
@@ -151,7 +189,7 @@
     }
 
     // 아이디 입력 필드 유효성 검사
-    document.getElementById('userName').addEventListener('input', function(e) {
+    document.getElementById('userId').addEventListener('input', function(e) {
         this.value = this.value.replace(/[^a-zA-Z0-9]/g, '');
     });
 

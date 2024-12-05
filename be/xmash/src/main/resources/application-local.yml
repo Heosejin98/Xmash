@@ -24,4 +24,4 @@ springdoc:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-    password: very!hard@pw
+    password: ${JASYPT_PASSWORD}  # 환경 변수로부터 암호화 키 읽기

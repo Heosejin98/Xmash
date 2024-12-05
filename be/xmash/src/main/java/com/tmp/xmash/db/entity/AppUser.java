@@ -1,5 +1,6 @@
 package com.tmp.xmash.db.entity;
 
+import com.tmp.xmash.type.ClubRole;
 import com.tmp.xmash.type.Gender;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,9 +30,12 @@ public class AppUser {
 
     @Setter
     private String password;
-    
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    @Enumerated(EnumType.STRING)
+    private ClubRole clubRole;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
@@ -46,12 +50,14 @@ public class AppUser {
                    String password,
                    String email,
                    Gender gender,
-                   String name) {
+                   String name,
+                   ClubRole clubRole) {
         this.userId = userId;
         this.password = password;
         this.email = email;
         this.gender = gender;
         this.name = name;
+        this.clubRole = clubRole;
     }
 
     public void addUserRanking(UserRanking userRanking) {
